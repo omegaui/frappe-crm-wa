@@ -1,0 +1,459 @@
+2026-02-12 21:39:59,217 WARNING database DDL Query made to DB:
+create table `tabCRM Products` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`product_code` varchar(140),
+`product_name` varchar(140),
+`qty` decimal(21,9) NOT NULL DEFAULT 1.0,
+`rate` decimal(21,9) NOT NULL DEFAULT 0.0,
+`discount_percentage` decimal(21,9) NOT NULL DEFAULT 0.0,
+`discount_amount` decimal(21,9) NOT NULL DEFAULT 0.0,
+`amount` decimal(21,9) NOT NULL DEFAULT 0.0,
+`net_amount` decimal(21,9) NOT NULL DEFAULT 0.0,
+`autocomplete` varchar(140),
+parent varchar(140),
+parentfield varchar(140),
+parenttype varchar(140),
+index parent(parent))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,246 WARNING database DDL Query made to DB:
+create table `tabCRM Rolling Response Time` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`response_time` decimal(21,9),
+`responded_on` datetime(6),
+`status` varchar(140),
+parent varchar(140),
+parentfield varchar(140),
+parenttype varchar(140),
+index parent(parent))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,278 WARNING database DDL Query made to DB:
+create table `tabCRM Service Day` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`workday` varchar(140),
+`start_time` time(6),
+`end_time` time(6),
+parent varchar(140),
+parentfield varchar(140),
+parenttype varchar(140),
+index parent(parent))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,361 WARNING database DDL Query made to DB:
+create table `tabCRM Service Level Agreement` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`apply_on` varchar(140),
+`sla_name` varchar(140) UNIQUE,
+`enabled` tinyint(4) NOT NULL DEFAULT 0,
+`default` tinyint(4) NOT NULL DEFAULT 0,
+`rolling_responses` tinyint(4) NOT NULL DEFAULT 0,
+`start_date` date,
+`end_date` date,
+`condition` longtext,
+`condition_json` longtext,
+`holiday_list` varchar(140),
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index creation(creation),
+index modified(modified))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,394 WARNING database DDL Query made to DB:
+create table `tabCRM Service Level Priority` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`default_priority` tinyint(4) NOT NULL DEFAULT 0,
+`priority` varchar(140),
+`first_response_time` decimal(21,9),
+parent varchar(140),
+parentfield varchar(140),
+parenttype varchar(140),
+index parent(parent))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,431 WARNING database DDL Query made to DB:
+create table `tabCRM Status Change Log` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`from` varchar(140),
+`to` varchar(140),
+`from_date` datetime(6),
+`to_date` datetime(6),
+`duration` decimal(21,9),
+`last_status_change_log` varchar(140),
+`from_type` varchar(140),
+`to_type` varchar(140),
+`log_owner` varchar(140),
+parent varchar(140),
+parentfield varchar(140),
+parenttype varchar(140),
+index parent(parent))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,465 WARNING database DDL Query made to DB:
+create sequence if not exists crm_task_id_seq nocache nocycle
+2026-02-12 21:39:59,477 WARNING database DDL Query made to DB:
+create table `tabCRM Task` (
+			name bigint primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`title` varchar(140),
+`priority` varchar(140),
+`start_date` date,
+`reference_doctype` varchar(140) DEFAULT 'CRM Lead',
+`reference_docname` varchar(140),
+`assigned_to` varchar(140),
+`status` varchar(140),
+`due_date` datetime(6),
+`description` longtext,
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index creation(creation),
+index modified(modified))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,515 WARNING database DDL Query made to DB:
+create table `tabCRM Telephony Agent` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`user` varchar(140) UNIQUE,
+`user_name` varchar(140),
+`mobile_no` varchar(140),
+`default_medium` varchar(140),
+`twilio` tinyint(4) NOT NULL DEFAULT 0,
+`twilio_number` varchar(140),
+`call_receiving_device` varchar(140) DEFAULT 'Computer',
+`exotel` tinyint(4) NOT NULL DEFAULT 0,
+`exotel_number` varchar(140),
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index creation(creation))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,544 WARNING database DDL Query made to DB:
+create table `tabCRM Telephony Phone` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`number` varchar(140),
+`is_primary` tinyint(4) NOT NULL DEFAULT 0,
+parent varchar(140),
+parentfield varchar(140),
+parenttype varchar(140),
+index parent(parent))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,586 WARNING database DDL Query made to DB:
+create table `tabCRM Territory` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`territory_name` varchar(140) UNIQUE,
+`territory_manager` varchar(140),
+`old_parent` varchar(140),
+`parent_crm_territory` varchar(140),
+`lft` int(11) NOT NULL DEFAULT 0,
+`rgt` int(11) NOT NULL DEFAULT 0,
+`is_group` tinyint(4) NOT NULL DEFAULT 0,
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index creation(creation),
+index modified(modified))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,659 WARNING database DDL Query made to DB:
+create sequence if not exists crm_view_settings_id_seq nocache nocycle
+2026-02-12 21:39:59,671 WARNING database DDL Query made to DB:
+create table `tabCRM View Settings` (
+			name bigint primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`label` varchar(140),
+`icon` varchar(140),
+`user` varchar(140),
+`is_standard` tinyint(4) NOT NULL DEFAULT 0,
+`is_default` tinyint(4) NOT NULL DEFAULT 0,
+`type` varchar(140) DEFAULT 'list',
+`dt` varchar(140),
+`route_name` varchar(140),
+`pinned` tinyint(4) NOT NULL DEFAULT 0,
+`public` tinyint(4) NOT NULL DEFAULT 0,
+`filters` longtext,
+`order_by` longtext,
+`load_default_columns` tinyint(4) NOT NULL DEFAULT 0,
+`columns` longtext,
+`rows` longtext,
+`group_by_field` varchar(140),
+`column_field` varchar(140),
+`title_field` varchar(140),
+`kanban_columns` longtext,
+`kanban_fields` longtext,
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index creation(creation),
+index modified(modified))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,729 WARNING database DDL Query made to DB:
+create table `tabFCRM Note` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`title` varchar(140),
+`content` longtext,
+`reference_doctype` varchar(140) DEFAULT 'CRM Lead',
+`reference_docname` varchar(140),
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index creation(creation),
+index modified(modified))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,834 WARNING database DDL Query made to DB:
+create table `tabFacebook Lead Form` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`page` varchar(140),
+`id` varchar(140) UNIQUE,
+`form_name` varchar(140),
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index creation(creation))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,868 WARNING database DDL Query made to DB:
+create table `tabFacebook Lead Form Question` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`label` varchar(140),
+`id` varchar(140),
+`key` varchar(140),
+`type` varchar(140),
+`mapped_to_crm_field` varchar(140),
+parent varchar(140),
+parentfield varchar(140),
+parenttype varchar(140),
+index parent(parent))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,901 WARNING database DDL Query made to DB:
+create table `tabFacebook Page` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`page_name` varchar(140),
+`account_id` varchar(140),
+`category` varchar(140),
+`id` varchar(140) UNIQUE,
+`access_token` text,
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index creation(creation))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,932 WARNING database DDL Query made to DB:
+create table `tabFailed Lead Sync Log` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`type` varchar(140) DEFAULT 'Failure',
+`source` varchar(140),
+`lead_data` longtext,
+`traceback` longtext,
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index creation(creation))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:39:59,977 WARNING database DDL Query made to DB:
+create table `tabLead Sync Source` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`type` varchar(140) DEFAULT 'Facebook',
+`access_token` text,
+`last_synced_at` datetime(6),
+`enabled` tinyint(4) NOT NULL DEFAULT 1,
+`background_sync_frequency` varchar(140) DEFAULT 'Hourly',
+`facebook_page` varchar(140),
+`facebook_lead_form` varchar(140) UNIQUE,
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index creation(creation))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
+2026-02-12 21:40:00,409 WARNING database DDL Query made to DB:
+ALTER TABLE `tabEmail Template` ADD COLUMN `enabled` tinyint(4) NOT NULL DEFAULT 0, ADD COLUMN `reference_doctype` varchar(140)
+2026-02-12 21:40:00,576 WARNING database DDL Query made to DB:
+ALTER TABLE `tabAssignment Rule` ADD COLUMN `assign_condition_json` longtext, ADD COLUMN `unassign_condition_json` longtext
+2026-02-12 21:47:45,925 WARNING database DDL Query made to DB:
+create table `tabWhatsApp Message` (
+			name varchar(140) primary key,
+			creation datetime(6),
+			modified datetime(6),
+			modified_by varchar(140),
+			owner varchar(140),
+			docstatus tinyint not null default '0',
+			idx int not null default '0',
+			`type` varchar(140),
+`content_type` varchar(140) DEFAULT 'text',
+`message_type` varchar(140),
+`status` varchar(140) DEFAULT 'sent',
+`from` varchar(140),
+`to` varchar(140),
+`message_id` varchar(140) UNIQUE,
+`message` longtext,
+`attach` text,
+`is_reply` tinyint(4) NOT NULL DEFAULT 0,
+`reply_to_message_id` varchar(140),
+`use_template` tinyint(4) NOT NULL DEFAULT 0,
+`template` varchar(140),
+`template_parameters` json,
+`template_header_parameters` json,
+`reference_doctype` varchar(140),
+`reference_name` varchar(140),
+`_user_tags` text,
+`_comments` text,
+`_assign` text,
+`_liked_by` text,
+index creation(creation))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			CHARACTER SET=utf8mb4
+			COLLATE=utf8mb4_unicode_ci
