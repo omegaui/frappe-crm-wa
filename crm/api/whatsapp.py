@@ -616,17 +616,48 @@ def send_chat_message(phone, message="", attach="", content_type="text", jid="")
 	sender_name = frappe.utils.get_fullname(frappe.session.user) or frappe.session.user
 
 	status = "sent"
+	message_id = ""
 
 	try:
 		if attach and content_type in ("image", "document", "video", "audio"):
-			send_file_via_bridge(send_to, attach, attach.split("/")[-1], message or "", sender_name=sender_name)
+			result = send_file_via_bridge(send_to, attach, attach.split("/")[-1], message or "", sender_name=sender_name)
+			message_id = (result or {}).get("message_id", "")
 		elif message:
-			send_message_via_bridge(send_to, message, sender_name=sender_name)
+			result = send_message_via_bridge(send_to, message, sender_name=sender_name)
+			message_id = (result or {}).get("message_id", "")
 	except Exception as e:
 		frappe.log_error(title="WhatsApp Bridge Send Error", message=str(e))
 		status = "failed"
 
-	# Notify all clients so the Chats page updates in real time
+	# Rich realtime event so Chats page can append instead of reload
+	now_iso = frappe.utils.now_datetime().isoformat()
+	frappe.publish_realtime("whatsapp_chat_update", {
+		"event_type": "new_message",
+		"chat_jid": jid or _phone_to_jid(phone),
+		"phone": phone,
+		"message": {
+			"name": message_id or frappe.generate_hash(length=10),
+			"type": "Outgoing",
+			"from": "",
+			"to": phone,
+			"message": message or "",
+			"message_id": message_id,
+			"content_type": content_type,
+			"message_type": "",
+			"status": status,
+			"creation": now_iso,
+			"attach": attach if content_type != "text" else "",
+			"is_reply": False,
+			"reply_to_message_id": "",
+			"from_name": sender_name,
+		},
+		"chat_update": {
+			"last_message": (message or "")[:100],
+			"last_message_time": now_iso,
+		},
+	})
+
+	# Legacy event for Activities component backward compatibility
 	frappe.publish_realtime("whatsapp_message", {"phone": phone})
 
 	return {"ok": True, "status": status}
@@ -674,7 +705,7 @@ def get_chat_lead(phone):
 
 
 @frappe.whitelist()
-def convert_chat_to_lead(phone, contact_name=""):
+def convert_chat_to_lead(phone, contact_name="", assigned_to=""):
 	"""Create a CRM Lead from a WhatsApp chat phone number."""
 	validate_access()
 
@@ -701,10 +732,13 @@ def convert_chat_to_lead(phone, contact_name=""):
 			)
 		source = "WhatsApp"
 
+	# Use the assigned staff as lead_owner if provided, otherwise current user
+	owner = assigned_to if assigned_to and frappe.db.exists("User", assigned_to) else frappe.session.user
+
 	lead_data = {
 		"first_name": first_name,
 		"last_name": last_name,
-		"lead_owner": frappe.session.user,
+		"lead_owner": owner,
 		"source": source,
 	}
 

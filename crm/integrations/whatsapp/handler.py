@@ -112,6 +112,42 @@ def webhook(**kwargs):
 	msg_doc.insert(ignore_permissions=True)
 	frappe.db.commit()
 
+	# Publish rich realtime event so Chats page can append instead of reload
+	settings_rt = get_bridge_settings()
+	bridge_url_rt = (settings_rt.bridge_url or "").rstrip("/")
+	media_path = data.get("media_path") or ""
+	attach_url = f"{bridge_url_rt}/media/{media_path}" if media_path else attach
+
+	frappe.publish_realtime(
+		"whatsapp_chat_update",
+		{
+			"event_type": "new_message",
+			"chat_jid": data.get("chat_jid", ""),
+			"phone": phone_number,
+			"message": {
+				"name": msg_doc.name,
+				"type": "Incoming",
+				"from": phone_number,
+				"to": "",
+				"message": data.get("content", ""),
+				"message_id": msg_id,
+				"content_type": content_type,
+				"message_type": "",
+				"status": "received",
+				"creation": data.get("timestamp", ""),
+				"attach": attach_url,
+				"is_reply": False,
+				"reply_to_message_id": "",
+				"from_name": data.get("sender_name", ""),
+			},
+			"chat_update": {
+				"last_message": (data.get("content", "") or "")[:100],
+				"last_message_time": data.get("timestamp", ""),
+			},
+		},
+		after_commit=False,
+	)
+
 	return {"ok": True, "name": msg_doc.name}
 
 

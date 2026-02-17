@@ -447,6 +447,7 @@ async function convertToLead() {
       params: {
         phone: selectedChat.value.phone,
         contact_name: selectedChat.value.contact_name || '',
+        assigned_to: selectedChat.value.assigned_to || '',
       },
       auto: true,
     }).promise
@@ -482,23 +483,38 @@ const chatList = createResource({
         lastSeenTimes.value.set(chat.jid, chat.last_message_time || '')
       } else if (
         chat.last_message_time &&
-        chat.last_message_time !== prev &&
-        chat.jid !== selectedJid.value
+        chat.last_message_time !== prev
       ) {
-        unreadJids.value.add(chat.jid)
-        unreadJids.value = new Set(unreadJids.value)
-        lastSeenTimes.value.set(chat.jid, chat.last_message_time)
+        if (chat.jid === selectedJid.value) {
+          // Selected chat has new messages — reload messages (fallback for missed socket events)
+          lastSeenTimes.value.set(chat.jid, chat.last_message_time)
+          shouldAutoScroll.value = isNearBottom()
+          chatMessages.reload()
+        } else {
+          unreadJids.value.add(chat.jid)
+          unreadJids.value = new Set(unreadJids.value)
+          lastSeenTimes.value.set(chat.jid, chat.last_message_time)
+        }
       }
     }
   },
 })
+
+const shouldAutoScroll = ref(true)
 
 // Chat messages resource - pulls from bridge via CRM backend
 const chatMessages = createResource({
   url: 'crm.api.whatsapp.get_chat_messages',
   params: { jid: '' },
   auto: false,
-  onSuccess: () => nextTick(() => scrollToBottom()),
+  onSuccess: () => {
+    if (shouldAutoScroll.value) {
+      nextTick(() => {
+        scrollToBottom()
+        shouldAutoScroll.value = false
+      })
+    }
+  },
 })
 
 // Client-side search filtering
@@ -521,22 +537,85 @@ function selectChat(chat) {
   unreadJids.value = new Set(unreadJids.value)
   // Record current time so we don't re-mark as unread
   lastSeenTimes.value.set(chat.jid, chat.last_message_time || '')
+  shouldAutoScroll.value = true
   chatMessages.update({ params: { jid: chat.jid } })
   chatMessages.reload()
 }
 
 function onMessageSent() {
-  // Small delay so bridge has time to store the outgoing message
-  setTimeout(() => {
-    chatMessages.reload()
-    chatList.reload()
-  }, 1000)
+  // The whatsapp_chat_update socket event handles appending the message.
 }
 
 function scrollToBottom() {
   if (messagesContainer.value) {
     const el = messagesContainer.value
     el.scrollTop = el.scrollHeight
+  }
+}
+
+function isNearBottom() {
+  const el = messagesContainer.value
+  if (!el) return true
+  return el.scrollHeight - el.scrollTop - el.clientHeight < 150
+}
+
+function updateChatListEntry(data) {
+  if (!chatList.data) return
+
+  const idx = chatList.data.findIndex(
+    (c) => c.jid === data.chat_jid || (data.phone && c.phone === data.phone),
+  )
+
+  if (idx === -1) {
+    // New conversation — full reload to get metadata from bridge
+    chatList.reload()
+    return
+  }
+
+  const chat = chatList.data[idx]
+
+  if (data.chat_update) {
+    chat.last_message = data.chat_update.last_message || chat.last_message
+    chat.last_message_time =
+      data.chat_update.last_message_time || chat.last_message_time
+  }
+
+  // Move chat to top of list
+  if (idx > 0) {
+    chatList.data.splice(idx, 1)
+    chatList.data.unshift(chat)
+  }
+
+  // Update lastSeenTimes if this is the selected chat
+  if (chat.jid === selectedJid.value) {
+    lastSeenTimes.value.set(chat.jid, chat.last_message_time || '')
+  }
+}
+
+function isForSelectedChat(data) {
+  if (!selectedJid.value) return false
+  return (
+    data.chat_jid === selectedJid.value ||
+    (data.phone && data.phone === selectedChat.value?.phone)
+  )
+}
+
+function appendMessageIfNew(message) {
+  if (!chatMessages.data || !message) return
+
+  // Dedup by message_id
+  const exists = chatMessages.data.some(
+    (m) =>
+      (m.message_id && m.message_id === message.message_id) ||
+      m.name === message.name,
+  )
+  if (exists) return
+
+  // Check scroll position BEFORE push (after push, DOM is taller and check is unreliable)
+  const shouldScroll = isNearBottom()
+  chatMessages.data.push(message)
+  if (shouldScroll) {
+    nextTick(() => scrollToBottom())
   }
 }
 
@@ -591,28 +670,32 @@ function formatMessage(text) {
   return msg
 }
 
-// Realtime updates via socket + polling fallback
-let pollInterval = null
+// Realtime updates via socket
+let syncInterval = null
 
 onMounted(() => {
-  $socket.on('whatsapp_message', () => {
-    chatList.reload()
-    if (selectedJid.value) {
-      chatMessages.reload()
+  $socket.on('whatsapp_chat_update', (data) => {
+    if (data.event_type === 'new_message') {
+      updateChatListEntry(data)
+
+      if (isForSelectedChat(data)) {
+        appendMessageIfNew(data.message)
+      } else if (data.chat_jid) {
+        unreadJids.value.add(data.chat_jid)
+        unreadJids.value = new Set(unreadJids.value)
+      }
     }
   })
 
-  // Poll every 5 seconds as fallback for realtime
-  pollInterval = setInterval(() => {
+  // 15s fallback sync for chat list — also triggers message reload
+  // for selected chat if new messages detected (covers missed socket events)
+  syncInterval = setInterval(() => {
     chatList.reload()
-    if (selectedJid.value) {
-      chatMessages.reload()
-    }
-  }, 5000)
+  }, 15000)
 })
 
 onBeforeUnmount(() => {
-  $socket.off('whatsapp_message')
-  if (pollInterval) clearInterval(pollInterval)
+  $socket.off('whatsapp_chat_update')
+  if (syncInterval) clearInterval(syncInterval)
 })
 </script>

@@ -199,6 +199,12 @@ const isDemoSite = ref(window.is_demo_site)
 
 const links = [
   {
+    label: 'Chats',
+    icon: WhatsAppIcon,
+    to: 'Chats',
+    condition: () => whatsappBridgeMode.value,
+  },
+  {
     label: 'Dashboard',
     icon: LucideLayoutDashboard,
     to: 'Dashboard',
@@ -214,16 +220,6 @@ const links = [
     to: 'Deals',
   },
   {
-    label: 'Contacts',
-    icon: ContactsIcon,
-    to: 'Contacts',
-  },
-  {
-    label: 'Organizations',
-    icon: OrganizationsIcon,
-    to: 'Organizations',
-  },
-  {
     label: 'Notes',
     icon: NoteIcon,
     to: 'Notes',
@@ -237,17 +233,6 @@ const links = [
     label: 'Calendar',
     icon: CalendarIcon,
     to: 'Calendar',
-  },
-  {
-    label: 'Call Logs',
-    icon: PhoneIcon,
-    to: 'Call Logs',
-  },
-  {
-    label: 'Chats',
-    icon: WhatsAppIcon,
-    to: 'Chats',
-    condition: () => whatsappBridgeMode.value,
   },
 ]
 
