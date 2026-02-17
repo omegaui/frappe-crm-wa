@@ -503,6 +503,7 @@ def get_chat_list(search=None):
 			"is_group": is_group,
 			"last_message_time": bc.get("last_message_time") or "",
 			"last_message": bc.get("last_message") or "",
+			"assigned_to": bc.get("assigned_to") or "",
 		})
 
 	return chats
@@ -591,7 +592,7 @@ def get_chat_messages(jid):
 			"attach": attach,
 			"is_reply": False,
 			"reply_to_message_id": "",
-			"from_name": bm.get("sender_name", "") if not bm.get("is_from_me") else _("You"),
+			"from_name": bm.get("sender_name", "") if not bm.get("is_from_me") else (bm.get("sender_name") or _("You")),
 		})
 
 	return messages
@@ -611,13 +612,16 @@ def send_chat_message(phone, message="", attach="", content_type="text", jid="")
 	# Fall back to phone number if no JID given
 	send_to = jid if jid else phone
 
+	# Pass the current user's full name so it appears on outgoing messages
+	sender_name = frappe.utils.get_fullname(frappe.session.user) or frappe.session.user
+
 	status = "sent"
 
 	try:
 		if attach and content_type in ("image", "document", "video", "audio"):
-			send_file_via_bridge(send_to, attach, attach.split("/")[-1], message or "")
+			send_file_via_bridge(send_to, attach, attach.split("/")[-1], message or "", sender_name=sender_name)
 		elif message:
-			send_message_via_bridge(send_to, message)
+			send_message_via_bridge(send_to, message, sender_name=sender_name)
 	except Exception as e:
 		frappe.log_error(title="WhatsApp Bridge Send Error", message=str(e))
 		status = "failed"
@@ -626,6 +630,32 @@ def send_chat_message(phone, message="", attach="", content_type="text", jid="")
 	frappe.publish_realtime("whatsapp_message", {"phone": phone})
 
 	return {"ok": True, "status": status}
+
+
+@frappe.whitelist()
+def assign_chat(jid, user=""):
+	"""Assign a CRM user to a WhatsApp chat. Only admins and managers can assign."""
+	validate_access()
+	if not any(role in ["System Manager", "Sales Manager"] for role in frappe.get_roles()):
+		frappe.throw(_("Only admins and managers can assign staff to chats."), frappe.PermissionError)
+
+	if not _use_bridge() or not jid:
+		return {"ok": False}
+
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+
+	try:
+		resp = requests.post(
+			f"{bridge_url}/chats/{jid}/assign",
+			json={"assigned_to": user or None},
+			timeout=10,
+		)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception as e:
+		frappe.log_error(title="WhatsApp Bridge: Failed to assign chat", message=str(e))
+		return {"ok": False}
 
 
 @frappe.whitelist()

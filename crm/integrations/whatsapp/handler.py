@@ -136,16 +136,19 @@ def save_media_file(base64_data, filename, doctype=None, docname=None):
 		return None
 
 
-def send_message_via_bridge(phone, message):
+def send_message_via_bridge(phone, message, sender_name=None):
 	"""Send a text message through the WhatsApp bridge."""
 	settings = get_bridge_settings()
 	url = f"{settings.bridge_url.rstrip('/')}/send"
-	resp = requests.post(url, json={"phone": phone, "message": message}, timeout=30)
+	payload = {"phone": phone, "message": message}
+	if sender_name:
+		payload["sender_name"] = sender_name
+	resp = requests.post(url, json=payload, timeout=30)
 	resp.raise_for_status()
 	return resp.json()
 
 
-def send_file_via_bridge(phone, file_url, filename, caption=""):
+def send_file_via_bridge(phone, file_url, filename, caption="", sender_name=None):
 	"""Send a file through the WhatsApp bridge."""
 	settings = get_bridge_settings()
 	url = f"{settings.bridge_url.rstrip('/')}/send-file-url"
@@ -153,16 +156,15 @@ def send_file_via_bridge(phone, file_url, filename, caption=""):
 	# Convert relative URLs to absolute
 	if file_url.startswith("/"):
 		file_url = site_url + file_url
-	resp = requests.post(
-		url,
-		json={
-			"phone": phone,
-			"file_url": file_url,
-			"filename": filename,
-			"caption": caption,
-		},
-		timeout=60,
-	)
+	payload = {
+		"phone": phone,
+		"file_url": file_url,
+		"filename": filename,
+		"caption": caption,
+	}
+	if sender_name:
+		payload["sender_name"] = sender_name
+	resp = requests.post(url, json=payload, timeout=60)
 	resp.raise_for_status()
 	return resp.json()
 

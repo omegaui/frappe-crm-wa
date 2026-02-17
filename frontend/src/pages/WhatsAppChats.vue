@@ -69,10 +69,17 @@
               <span class="truncate text-xs text-ink-gray-5">
                 {{ chat.last_message || chat.phone }}
               </span>
-              <span
-                v-if="unreadJids.has(chat.jid)"
-                class="ml-1 h-2.5 w-2.5 flex-shrink-0 rounded-full bg-green-500"
-              />
+              <div class="ml-1 flex flex-shrink-0 items-center gap-1">
+                <UserAvatar
+                  v-if="chat.assigned_to"
+                  :user="chat.assigned_to"
+                  size="xs"
+                />
+                <span
+                  v-if="unreadJids.has(chat.jid)"
+                  class="h-2.5 w-2.5 rounded-full bg-green-500"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -97,6 +104,48 @@
               {{ selectedChat?.phone }}
             </div>
           </div>
+          <!-- Assignment -->
+          <div class="relative">
+            <div
+              v-if="selectedChat?.assigned_to"
+              class="flex items-center gap-1.5"
+            >
+              <UserAvatar :user="selectedChat.assigned_to" size="md" />
+              <span class="text-xs text-ink-gray-6">
+                {{ getUser(selectedChat.assigned_to).full_name }}
+              </span>
+              <button
+                v-if="isManager()"
+                class="ml-0.5 rounded p-0.5 text-ink-gray-4 hover:bg-surface-gray-2 hover:text-ink-gray-6"
+                @click="unassignChat"
+              >
+                <FeatherIcon name="x" class="h-3 w-3" />
+              </button>
+            </div>
+            <div v-else-if="isManager()">
+              <Button
+                variant="ghost"
+                size="sm"
+                @click="showAssignDropdown = !showAssignDropdown"
+              >
+                <template #prefix>
+                  <FeatherIcon name="user-check" class="h-3.5 w-3.5" />
+                </template>
+                {{ __('Assign') }}
+              </Button>
+            </div>
+            <div
+              v-if="showAssignDropdown && isManager()"
+              class="absolute right-0 top-full z-10 mt-1 w-56 rounded-lg border bg-surface-white p-1 shadow-lg"
+            >
+              <Autocomplete
+                :options="crmUserOptions"
+                :placeholder="__('Search staff...')"
+                @update:modelValue="assignChatToUser"
+              />
+            </div>
+          </div>
+
           <template v-if="!selectedChat?.is_group">
             <router-link
               v-if="linkedDoc"
@@ -153,6 +202,12 @@
                 <div
                   v-if="msg.type === 'Incoming' && msg.from_name"
                   class="mb-1 text-xs font-semibold text-green-700"
+                >
+                  {{ msg.from_name }}
+                </div>
+                <div
+                  v-else-if="msg.type === 'Outgoing' && msg.from_name && msg.from_name !== __('You')"
+                  class="mb-1 text-xs font-semibold text-blue-600"
                 >
                   {{ msg.from_name }}
                 </div>
@@ -294,10 +349,13 @@ import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import ChatComposer from '@/components/ChatComposer.vue'
 import WhatsAppIcon from '@/components/Icons/WhatsAppIcon.vue'
 import CheckIcon from '@/components/Icons/CheckIcon.vue'
+import UserAvatar from '@/components/UserAvatar.vue'
 import { globalStore } from '@/stores/global'
+import { usersStore } from '@/stores/users'
 import { formatDate } from '@/utils'
 import {
   createResource,
+  Autocomplete,
   TextInput,
   FormControl,
   Dialog,
@@ -323,8 +381,46 @@ const unreadJids = ref(new Set())
 const lastSeenTimes = ref(new Map())
 
 const router = useRouter()
+const { getUser, users: usersResource, isManager } = usersStore()
 const linkedDoc = ref(null)
 const convertingToLead = ref(false)
+const showAssignDropdown = ref(false)
+
+const crmUserOptions = computed(() => {
+  const crmUsers = usersResource.data?.crmUsers || []
+  return crmUsers.map((u) => ({
+    label: u.full_name || u.name,
+    value: u.name,
+  }))
+})
+
+function assignChatToUser(option) {
+  showAssignDropdown.value = false
+  if (!selectedChat.value || !option) return
+  const user = option.value
+  createResource({
+    url: 'crm.api.whatsapp.assign_chat',
+    params: { jid: selectedJid.value, user },
+    auto: true,
+    onSuccess: () => {
+      selectedChat.value.assigned_to = user
+      chatList.reload()
+    },
+  })
+}
+
+function unassignChat() {
+  if (!selectedChat.value) return
+  createResource({
+    url: 'crm.api.whatsapp.assign_chat',
+    params: { jid: selectedJid.value, user: '' },
+    auto: true,
+    onSuccess: () => {
+      selectedChat.value.assigned_to = ''
+      chatList.reload()
+    },
+  })
+}
 
 // Check if the selected chat's phone is linked to a Lead/Deal
 const chatLeadCheck = createResource({
@@ -418,6 +514,7 @@ const filteredChats = computed(() => {
 })
 
 function selectChat(chat) {
+  showAssignDropdown.value = false
   selectedJid.value = chat.jid
   selectedChat.value = chat
   unreadJids.value.delete(chat.jid)

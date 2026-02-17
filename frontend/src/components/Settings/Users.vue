@@ -22,6 +22,10 @@
               onClick: () => (showAddExistingModal = true),
             },
             {
+              label: __('Create new user'),
+              onClick: () => (showCreateNewModal = true),
+            },
+            {
               label: __('Invite new user'),
               onClick: () => (activeSettingsPage = 'Invite User'),
             },
@@ -159,10 +163,15 @@
     v-if="showAddExistingModal"
     v-model="showAddExistingModal"
   />
+  <CreateNewUserModal
+    v-if="showCreateNewModal"
+    v-model="showCreateNewModal"
+  />
 </template>
 
 <script setup>
 import AddExistingUserModal from '@/components/Modals/AddExistingUserModal.vue'
+import CreateNewUserModal from '@/components/Modals/CreateNewUserModal.vue'
 import EmptyState from '@/components/ListViews/EmptyState.vue'
 import { activeSettingsPage } from '@/composables/settings'
 import { usersStore } from '@/stores/users'
@@ -181,6 +190,7 @@ import { ref, computed, onMounted } from 'vue'
 const { users, isAdmin, isManager } = usersStore()
 
 const showAddExistingModal = ref(false)
+const showCreateNewModal = ref(false)
 const searchRef = ref(null)
 const search = ref('')
 const currentRole = ref('All')

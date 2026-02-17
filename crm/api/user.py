@@ -104,6 +104,45 @@ def remove_roles(self, *roles):
 			self.get("roles").remove(existing_roles[role])
 
 
+@frappe.whitelist()
+def create_crm_user(email, first_name, last_name="", password="", role="Sales User"):
+	"""Create a new Frappe user with a password and assign a CRM role."""
+	frappe.only_for(["System Manager", "Sales Manager"], True)
+	is_system_manager = "System Manager" in frappe.get_roles()
+
+	if role == "System Manager" and not is_system_manager:
+		frappe.throw(_("Only System Managers can assign the System Manager role"), frappe.PermissionError)
+
+	if role == "Sales Manager" and not is_system_manager:
+		frappe.throw(_("Only System Managers can assign the Sales Manager role"), frappe.PermissionError)
+
+	if role not in ["System Manager", "Sales Manager", "Sales User"]:
+		frappe.throw(_("Invalid role"))
+
+	if not email or not first_name or not password:
+		frappe.throw(_("Email, first name, and password are required"))
+
+	if frappe.db.exists("User", email):
+		frappe.throw(_("User {0} already exists").format(email))
+
+	user = frappe.get_doc({
+		"doctype": "User",
+		"email": email,
+		"first_name": first_name,
+		"last_name": last_name,
+		"new_password": password,
+		"send_welcome_email": 0,
+		"user_type": "System User",
+	})
+	user.flags.no_welcome_mail = True
+	user.insert(ignore_permissions=True)
+
+	# Assign the CRM role
+	update_user_role(email, role)
+
+	return {"ok": True, "user": email}
+
+
 def update_module_in_user(user, module):
 	block_modules = frappe.get_all(
 		"Module Def",
