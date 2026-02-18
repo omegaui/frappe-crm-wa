@@ -504,6 +504,7 @@ def get_chat_list(search=None):
 			"last_message_time": bc.get("last_message_time") or "",
 			"last_message": bc.get("last_message") or "",
 			"assigned_to": bc.get("assigned_to") or "",
+			"photo_url": bc.get("photo_url") or "",
 		})
 
 	return chats
@@ -572,11 +573,13 @@ def get_chat_messages(jid):
 	# Transform bridge messages to CRM format
 	messages = []
 	for bm in bridge_messages:
-		# Build media URL from bridge
+		# Build media URL — proxy through Frappe so the client never needs direct bridge access
 		attach = ""
 		media_url = bm.get("media_url") or ""
 		if media_url:
-			attach = f"{bridge_url}{media_url}"
+			from urllib.parse import quote as _quote
+			filename = media_url.split("/")[-1]
+			attach = f"/api/method/crm.api.whatsapp.get_media?filename={_quote(filename)}"
 
 		messages.append({
 			"name": bm.get("id", ""),
@@ -599,7 +602,33 @@ def get_chat_messages(jid):
 
 
 @frappe.whitelist()
-def send_chat_message(phone, message="", attach="", content_type="text", jid=""):
+def get_media(filename):
+	"""Proxy a media file from the WhatsApp bridge server so clients don't need direct bridge access."""
+	validate_access()
+	if not filename or not _use_bridge():
+		frappe.throw(_("Not found"), frappe.DoesNotExistError)
+
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+
+	from urllib.parse import quote as _quote
+	try:
+		resp = requests.get(f"{bridge_url}/media/{_quote(str(filename))}", timeout=30)
+		resp.raise_for_status()
+	except Exception:
+		frappe.throw(_("Media file not found"), frappe.DoesNotExistError)
+
+	content_type = resp.headers.get("Content-Type", "application/octet-stream")
+	frappe.response.type = "download"
+	frappe.response.filename = filename
+	frappe.response.filecontent = resp.content
+	frappe.response.content_type = content_type
+	# Serve inline so images/video/audio display directly in the browser
+	frappe.response.display_content_as = "inline"
+
+
+@frappe.whitelist()
+def send_chat_message(phone, message="", attach="", content_type="text", jid="", reply_to=""):
 	"""Send a WhatsApp message from the Chats page."""
 	validate_access()
 
@@ -660,7 +689,7 @@ def send_chat_message(phone, message="", attach="", content_type="text", jid="")
 	# Legacy event for Activities component backward compatibility
 	frappe.publish_realtime("whatsapp_message", {"phone": phone})
 
-	return {"ok": True, "status": status}
+	return {"ok": True, "status": status, "message_id": message_id}
 
 
 @frappe.whitelist()
@@ -751,6 +780,44 @@ def convert_chat_to_lead(phone, contact_name="", assigned_to=""):
 	lead.insert(ignore_permissions=True)
 
 	return {"doctype": "CRM Lead", "name": lead.name, "already_exists": False}
+
+
+@frappe.whitelist()
+def get_profile_photo(jid):
+	"""Fetch WhatsApp profile photo URL for a given JID via the bridge."""
+	validate_access()
+	if not jid or not _use_bridge():
+		return {"url": None}
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+	try:
+		from urllib.parse import quote
+		resp = requests.get(f"{bridge_url}/chats/{quote(jid, safe='')}/photo", timeout=10)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception:
+		return {"url": None}
+
+
+@frappe.whitelist()
+def delete_chat_message(jid, message_id):
+	"""Delete a message from the bridge's local store."""
+	validate_access()
+	if not jid or not message_id or not _use_bridge():
+		return {"ok": False}
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+	try:
+		from urllib.parse import quote
+		resp = requests.delete(
+			f"{bridge_url}/chats/{quote(jid, safe='')}/messages/{quote(message_id, safe='')}",
+			timeout=10,
+		)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception as e:
+		frappe.log_error(title="WhatsApp Bridge: Failed to delete message", message=str(e))
+		return {"ok": False}
 
 
 def parse_template_parameters(string, parameters):

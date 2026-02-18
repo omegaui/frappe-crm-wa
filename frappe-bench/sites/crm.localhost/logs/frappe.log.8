@@ -1,0 +1,291 @@
+2026-02-17 08:35:15,270 ERROR frappe Unable to load translations
+Site: crm.localhost
+Form Dict: {}
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/caching.py", line 65, in wrapper
+    return _cache[func][args_key]
+           ~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ((), <object object at 0x7fcb66734eb0>, frozenset({('_ensure_on_bench', True)}))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/app.py", line 102, in application
+    init_request(request)
+    ~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/app.py", line 178, in init_request
+    frappe.init(site, sites_path=_sites_path, force=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/__init__.py", line 205, in init
+    setup_module_map(include_all_apps=not (frappe.request or frappe.job or frappe.flags.in_migrate))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/__init__.py", line 1035, in setup_module_map
+    apps = get_installed_apps(_ensure_on_bench=True)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/caching.py", line 71, in wrapper
+    return_val = func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/__init__.py", line 915, in get_installed_apps
+    installed = orjson.loads(db.get_global("installed_apps") or "[]")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/database/database.py", line 1136, in get_global
+    return self.get_default(key, user)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/database/database.py", line 1140, in get_default
+    d = self.get_defaults(key, parent)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/database/database.py", line 1156, in get_defaults
+    defaults = frappe.defaults.get_defaults_for(parent)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/defaults.py", line 249, in get_defaults_for
+    .run(as_dict=True)
+     ~~~^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/query_builder/utils.py", line 131, in execute_query
+    result = frappe.local.db.sql(query, params, *args, **kwargs)  # nosemgrep
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/database/database.py", line 272, in sql
+    self.execute_query(query, values)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/database/database.py", line 372, in execute_query
+    return self._cursor.execute(query, values)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/MySQLdb/cursors.py", line 179, in execute
+    res = self._query(mogrified_query)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/MySQLdb/cursors.py", line 330, in _query
+    db.query(q)
+    ~~~~~~~~^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/MySQLdb/connections.py", line 280, in query
+    _mysql.connection.query(self, query)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+MySQLdb.ProgrammingError: (1146, "Table '_87b2526e1b735cca.tabDefaultValue' doesn't exist")
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/caching.py", line 65, in wrapper
+    return _cache[func][args_key]
+           ~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ((), <object object at 0x7fcb66734eb0>, frozenset({('_ensure_on_bench', True)}))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/translate.py", line 164, in get_all_translations
+    return frappe.cache.hget(MERGED_TRANSLATION_KEY, lang, generator=_merge_translations)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/redis_wrapper.py", line 253, in hget
+    value = generator()
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/translate.py", line 152, in _merge_translations
+    all_translations.update(get_translations_from_apps(lang))
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/translate.py", line 179, in get_translations_from_apps
+    for app in apps or frappe.get_installed_apps(_ensure_on_bench=True):
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/caching.py", line 71, in wrapper
+    return_val = func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/__init__.py", line 915, in get_installed_apps
+    installed = orjson.loads(db.get_global("installed_apps") or "[]")
+                             ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/database/database.py", line 1136, in get_global
+    return self.get_default(key, user)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/database/database.py", line 1140, in get_default
+    d = self.get_defaults(key, parent)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/database/database.py", line 1156, in get_defaults
+    defaults = frappe.defaults.get_defaults_for(parent)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/defaults.py", line 249, in get_defaults_for
+    .run(as_dict=True)
+     ~~~^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/query_builder/utils.py", line 131, in execute_query
+    result = frappe.local.db.sql(query, params, *args, **kwargs)  # nosemgrep
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/database/database.py", line 272, in sql
+    self.execute_query(query, values)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/database/database.py", line 372, in execute_query
+    return self._cursor.execute(query, values)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/MySQLdb/cursors.py", line 179, in execute
+    res = self._query(mogrified_query)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/MySQLdb/cursors.py", line 330, in _query
+    db.query(q)
+    ~~~~~~~~^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/MySQLdb/connections.py", line 280, in query
+    _mysql.connection.query(self, query)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+MySQLdb.ProgrammingError: (1146, "Table '_87b2526e1b735cca.tabDefaultValue' doesn't exist")
+2026-02-17 08:58:40,123 ERROR frappe Failed to capture exception
+Site: crm.localhost
+Form Dict: {}
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/caching.py", line 65, in wrapper
+    return _cache[func][args_key]
+           ~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ()
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/apps.py", line 40, in get_apps
+    if has_permission_path and not frappe.get_attr(has_permission_path)():
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/crm/crm/api/__init__.py", line 64, in check_app_permission
+    allowed_modules = frappe.utils.modules.get_modules_from_all_apps_for_user()
+                      ^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'frappe.utils' has no attribute 'modules'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/sentry.py", line 117, in capture_exception
+    set_scope(scope)
+    ~~~~~~~~~^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/sentry.py", line 59, in set_scope
+    waitdiff = datetime.utcnow() - job.enqueued_at
+               ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+TypeError: can't subtract offset-naive and offset-aware datetimes
+2026-02-17 09:07:14,823 ERROR frappe New Exception collected in error log
+Site: crm.localhost
+Form Dict: {'id': '3EB08497A4B55CFEAADA93', 'chat_jid': '918858493997@s.whatsapp.net', 'sender': '918858493997@s.whatsapp.net', 'sender_name': 'Administrator', 'content': 'Hello', 'timestamp': '2026-02-17T09:07:12.000Z', 'is_from_me': True, 'content_type': 'text', 'cmd': 'crm.integrations.whatsapp.handler.webhook'}
+2026-02-17 09:07:26,126 ERROR frappe New Exception collected in error log
+Site: crm.localhost
+Form Dict: {'id': '3EB04CC4B7515173F9D626', 'chat_jid': '133766823596052@lid', 'sender': '133766823596052@lid', 'sender_name': 'アルハム', 'content': 'reply', 'timestamp': '2026-02-17T09:07:25.000Z', 'is_from_me': False, 'content_type': 'text', 'cmd': 'crm.integrations.whatsapp.handler.webhook'}
+2026-02-17 09:08:02,546 ERROR frappe New Exception collected in error log
+Site: crm.localhost
+Form Dict: {'id': '3EB052ABB216B4CD23D82E', 'chat_jid': '133766823596052@lid', 'sender': '133766823596052@lid', 'sender_name': 'Administrator', 'content': 'Hello sir', 'timestamp': '2026-02-17T09:08:01.000Z', 'is_from_me': True, 'content_type': 'text', 'cmd': 'crm.integrations.whatsapp.handler.webhook'}
+2026-02-17 09:22:19,600 ERROR frappe Failed to capture exception
+Site: crm.localhost
+Form Dict: {}
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/desk/doctype/notification_log/notification_log.py", line 41, in after_insert
+    send_notification_email(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/desk/doctype/notification_log/notification_log.py", line 138, in send_notification_email
+    frappe.sendmail(
+    ~~~~~~~~~~~~~~~^
+    	recipients=user.email,
+     ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	now=frappe.in_test,
+     ^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/__init__.py", line 251, in sendmail
+    q = builder.process(send_now=False)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_queue/email_queue.py", line 772, in process
+    queue_data = self.as_dict(include_recipients=False)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_queue/email_queue.py", line 820, in as_dict
+    email_account = self.get_outgoing_email_account()
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_queue/email_queue.py", line 667, in get_outgoing_email_account
+    self._email_account = EmailAccount.find_outgoing(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+    	match_by_doctype=self.reference_doctype, match_by_email=self._sender, _raise_error=True
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_account/email_account.py", line 44, in wrapper_cache_email_account
+    matched_accounts = func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_account/email_account.py", line 432, in find_outgoing
+    frappe.throw(
+    ~~~~~~~~~~~~^
+    	_("Please setup default outgoing Email Account from Tools > Email Account"),
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    	frappe.OutgoingEmailError,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/messages.py", line 148, in throw
+    msgprint(
+    ~~~~~~~~^
+    	msg,
+     ^^^^
+    ...<6 lines>...
+    	primary_action=primary_action,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/messages.py", line 109, in msgprint
+    _raise_exception()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/messages.py", line 58, in _raise_exception
+    raise exc
+frappe.exceptions.OutgoingEmailError: Please setup default outgoing Email Account from Tools > Email Account
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/sentry.py", line 117, in capture_exception
+    set_scope(scope)
+    ~~~~~~~~~^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/sentry.py", line 59, in set_scope
+    waitdiff = datetime.utcnow() - job.enqueued_at
+               ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+TypeError: can't subtract offset-naive and offset-aware datetimes
+2026-02-17 09:23:44,887 ERROR frappe Failed to capture exception
+Site: crm.localhost
+Form Dict: {}
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/desk/doctype/notification_log/notification_log.py", line 41, in after_insert
+    send_notification_email(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/desk/doctype/notification_log/notification_log.py", line 138, in send_notification_email
+    frappe.sendmail(
+    ~~~~~~~~~~~~~~~^
+    	recipients=user.email,
+     ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	now=frappe.in_test,
+     ^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/__init__.py", line 251, in sendmail
+    q = builder.process(send_now=False)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_queue/email_queue.py", line 772, in process
+    queue_data = self.as_dict(include_recipients=False)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_queue/email_queue.py", line 820, in as_dict
+    email_account = self.get_outgoing_email_account()
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_queue/email_queue.py", line 667, in get_outgoing_email_account
+    self._email_account = EmailAccount.find_outgoing(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+    	match_by_doctype=self.reference_doctype, match_by_email=self._sender, _raise_error=True
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_account/email_account.py", line 44, in wrapper_cache_email_account
+    matched_accounts = func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_account/email_account.py", line 432, in find_outgoing
+    frappe.throw(
+    ~~~~~~~~~~~~^
+    	_("Please setup default outgoing Email Account from Tools > Email Account"),
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    	frappe.OutgoingEmailError,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/messages.py", line 148, in throw
+    msgprint(
+    ~~~~~~~~^
+    	msg,
+     ^^^^
+    ...<6 lines>...
+    	primary_action=primary_action,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/messages.py", line 109, in msgprint
+    _raise_exception()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/messages.py", line 58, in _raise_exception
+    raise exc
+frappe.exceptions.OutgoingEmailError: Please setup default outgoing Email Account from Tools > Email Account
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/sentry.py", line 117, in capture_exception
+    set_scope(scope)
+    ~~~~~~~~~^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/sentry.py", line 59, in set_scope
+    waitdiff = datetime.utcnow() - job.enqueued_at
+               ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+TypeError: can't subtract offset-naive and offset-aware datetimes
+2026-02-18 06:10:55,315 ERROR frappe New Exception collected in error log
+Site: crm.localhost
+Form Dict: {'id': '3EB0D4276B83BA47C1A2C7', 'chat_jid': '133766823596052@lid', 'sender': '133766823596052@lid', 'sender_name': 'Administrator', 'content': 'Hello', 'timestamp': '2026-02-18T06:10:54.000Z', 'is_from_me': True, 'content_type': 'text', 'cmd': 'crm.integrations.whatsapp.handler.webhook'}
+2026-02-18 06:11:05,030 ERROR frappe New Exception collected in error log
+Site: crm.localhost
+Form Dict: {'id': '3EB06BCBD49FC659B6BB12', 'chat_jid': '133766823596052@lid', 'sender': '133766823596052@lid', 'sender_name': 'Administrator', 'content': 'Hello', 'timestamp': '2026-02-18T06:11:04.000Z', 'is_from_me': True, 'content_type': 'text', 'cmd': 'crm.integrations.whatsapp.handler.webhook'}

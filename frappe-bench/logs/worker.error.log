@@ -1502,3 +1502,42 @@
   child_pid = os.fork()
 /home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py:1602: DeprecationWarning: This process (pid=109972) is multi-threaded, use of fork() may lead to deadlocks in the child.
   child_pid = os.fork()
+Traceback (most recent call last):
+  File "/home/omegaui/.local/bin/bench", line 8, in <module>
+    sys.exit(cli())
+  File "/home/omegaui/.local/lib/python3.10/site-packages/bench/cli.py", line 135, in cli
+    frappe_cmd()
+  File "/home/omegaui/.local/lib/python3.10/site-packages/bench/cli.py", line 201, in frappe_cmd
+    os.execv(f, [f] + ["-m", "frappe.utils.bench_helper", "frappe"] + sys.argv[1:])
+FileNotFoundError: [Errno 2] No such file or directory
+2026-02-17 08:23:40,120 Worker 107abf3c4a36480aa8d316c76972ce6d: could not connect to Redis instance: Error 111 connecting to 127.0.0.1:11000. Connection refused. retrying in 2 seconds...
+2026-02-17 08:25:02,204 Worker 2fdbb6d141214b90a8e6db9536f6f66c: could not connect to Redis instance: Error 111 connecting to 127.0.0.1:11000. Connection refused. retrying in 2 seconds...
+2026-02-17 08:31:51,877 Worker 26255aff8b7b4bf7a96792f7f53cb4e9: could not connect to Redis instance: Error 111 connecting to 127.0.0.1:11000. Connection refused. retrying in 2 seconds...
+2026-02-17 08:35:15,659 Worker e26b073b2f1b4d28835e409e7bc489a6: could not connect to Redis instance: Error 111 connecting to 127.0.0.1:11000. Connection refused. retrying in 2 seconds...
+/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py:1602: DeprecationWarning: This process (pid=31006) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  child_pid = os.fork()
+/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/sentry.py:59: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  waitdiff = datetime.utcnow() - job.enqueued_at
+/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py:1602: DeprecationWarning: This process (pid=39842) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  child_pid = os.fork()
+/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py:1602: DeprecationWarning: This process (pid=39842) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  child_pid = os.fork()
+/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py:1602: DeprecationWarning: This process (pid=39842) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  child_pid = os.fork()
+/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py:1602: DeprecationWarning: This process (pid=39842) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  child_pid = os.fork()
+/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py:1602: DeprecationWarning: This process (pid=39842) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  child_pid = os.fork()
+/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/sentry.py:59: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  waitdiff = datetime.utcnow() - job.enqueued_at
+/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py:1602: DeprecationWarning: This process (pid=39842) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  child_pid = os.fork()
+/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/sentry.py:59: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  waitdiff = datetime.utcnow() - job.enqueued_at
+2026-02-18 05:57:53,023 Worker bc7bae1b76534745ad539dce94291d1f: could not connect to Redis instance: Error 111 connecting to 127.0.0.1:11000. Connection refused. retrying in 2 seconds...
+2026-02-18 06:09:24,408 Worker bd81836c49cc4d65a86f3fbb519519de: could not connect to Redis instance: Error 111 connecting to 127.0.0.1:11000. Connection refused. retrying in 2 seconds...
+2026-02-18 06:34:27,107 Worker 50d62726313a40a2bc2125bc4f51e59f: could not connect to Redis instance: Error 111 connecting to 127.0.0.1:11000. Connection refused. retrying in 2 seconds...
+2026-02-18 07:16:51,809 Worker 84c5e13f054f4169a95ed800da28e049: could not connect to Redis instance: Error 111 connecting to 127.0.0.1:11000. Connection refused. retrying in 2 seconds...
+2026-02-18 07:42:43,088 Worker db7ab8aa359143a5ab1caf360c325100: could not connect to Redis instance: Error 111 connecting to 127.0.0.1:11000. Connection refused. retrying in 2 seconds...
+2026-02-18 07:57:33,239 Worker 4424f059d9154398add0975d8e29767c: could not connect to Redis instance: Error 111 connecting to 127.0.0.1:11000. Connection refused. retrying in 2 seconds...
+2026-02-18 08:06:19,747 Worker b64d71ced6a04defa38513be58ec445f: could not connect to Redis instance: Error 111 connecting to 127.0.0.1:11000. Connection refused. retrying in 2 seconds...

@@ -1,5 +1,8 @@
 import base64
 import hmac
+import mimetypes
+import os
+from urllib.parse import unquote
 
 import frappe
 import requests
@@ -185,11 +188,37 @@ def send_message_via_bridge(phone, message, sender_name=None):
 
 
 def send_file_via_bridge(phone, file_url, filename, caption="", sender_name=None):
-	"""Send a file through the WhatsApp bridge."""
+	"""Send a file through the WhatsApp bridge.
+
+	Reads the file directly from Frappe's filesystem (handles both public and
+	private files without requiring HTTP auth) and sends the bytes as base64 to
+	the bridge's /send-file-data endpoint.  Falls back to the URL-based endpoint
+	for external URLs that the bridge can fetch on its own.
+	"""
 	settings = get_bridge_settings()
-	url = f"{settings.bridge_url.rstrip('/')}/send-file-url"
+	bridge_base = settings.bridge_url.rstrip("/")
+
+	# Try to read the file directly from the Frappe site filesystem.
+	file_bytes = _read_frappe_file_bytes(file_url)
+
+	if file_bytes is not None:
+		decoded_filename = unquote(filename)
+		mime_type = mimetypes.guess_type(decoded_filename)[0] or "application/octet-stream"
+		payload = {
+			"phone": phone,
+			"data_base64": base64.b64encode(file_bytes).decode("ascii"),
+			"filename": decoded_filename,
+			"mimetype": mime_type,
+			"caption": caption,
+		}
+		if sender_name:
+			payload["sender_name"] = sender_name
+		resp = requests.post(f"{bridge_base}/send-file-data", json=payload, timeout=60)
+		resp.raise_for_status()
+		return resp.json()
+
+	# Fallback: external/unknown URL — let the bridge download it directly.
 	site_url = frappe.utils.get_url()
-	# Convert relative URLs to absolute
 	if file_url.startswith("/"):
 		file_url = site_url + file_url
 	payload = {
@@ -200,9 +229,28 @@ def send_file_via_bridge(phone, file_url, filename, caption="", sender_name=None
 	}
 	if sender_name:
 		payload["sender_name"] = sender_name
-	resp = requests.post(url, json=payload, timeout=60)
+	resp = requests.post(f"{bridge_base}/send-file-url", json=payload, timeout=60)
 	resp.raise_for_status()
 	return resp.json()
+
+
+def _read_frappe_file_bytes(file_url):
+	"""Return raw bytes for a Frappe file URL, or None if unresolvable."""
+	try:
+		if file_url.startswith("/private/files/"):
+			rel = file_url[len("/private/files/"):]
+			full_path = frappe.get_site_path("private", "files", rel)
+		elif file_url.startswith("/files/"):
+			rel = file_url[len("/files/"):]
+			full_path = frappe.get_site_path("public", "files", rel)
+		else:
+			return None
+		if os.path.exists(full_path):
+			with open(full_path, "rb") as f:
+				return f.read()
+	except Exception:
+		frappe.log_error(title="WhatsApp Bridge: Failed to read file", message=frappe.get_traceback())
+	return None
 
 
 @frappe.whitelist()

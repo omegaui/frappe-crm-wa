@@ -1,5 +1,6 @@
 {
  "background_workers": 1,
+ "default_site": "crm.localhost",
  "file_watcher_port": 6787,
  "frappe_user": "omegaui",
  "gunicorn_workers": 17,

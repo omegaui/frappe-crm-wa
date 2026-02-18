@@ -3287,3 +3287,1330 @@
 2026-02-17 12:30:04,512 Result is kept for 600 seconds
 2026-02-17 12:31:29,963 Worker b3b657cfe0c840e5b7c799c6d91f2195 [PID 109972]: warm shut down requested
 2026-02-17 12:31:29,966 Worker b3b657cfe0c840e5b7c799c6d91f2195: unsubscribing from channel rq:pubsub:b3b657cfe0c840e5b7c799c6d91f2195
+2026-02-17 07:37:23,738 Worker 2d40dfec77614cad9e761b09c275a991: started with PID 10722, version 2.6.1
+2026-02-17 07:37:23,738 Worker 2d40dfec77614cad9e761b09c275a991: subscribing to channel rq:pubsub:2d40dfec77614cad9e761b09c275a991
+2026-02-17 07:37:23,762 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-17 07:37:23,770 Worker 2d40dfec77614cad9e761b09c275a991: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 07:37:23,794 Worker 2d40dfec77614cad9e761b09c275a991: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 07:37:23,815 Worker 2d40dfec77614cad9e761b09c275a991: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 07:37:34,906 Worker 2d40dfec77614cad9e761b09c275a991 [PID 10722]: warm shut down requested
+2026-02-17 07:37:34,924 Worker 2d40dfec77614cad9e761b09c275a991: unsubscribing from channel rq:pubsub:2d40dfec77614cad9e761b09c275a991
+2026-02-17 08:23:06,334 Worker 107abf3c4a36480aa8d316c76972ce6d: started with PID 15882, version 2.6.1
+2026-02-17 08:23:06,338 Worker 107abf3c4a36480aa8d316c76972ce6d: subscribing to channel rq:pubsub:107abf3c4a36480aa8d316c76972ce6d
+2026-02-17 08:23:06,379 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-17 08:23:06,380 Worker 107abf3c4a36480aa8d316c76972ce6d: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 08:23:06,398 Worker 107abf3c4a36480aa8d316c76972ce6d: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 08:23:06,415 Worker 107abf3c4a36480aa8d316c76972ce6d: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 08:23:40,108 Worker 107abf3c4a36480aa8d316c76972ce6d [PID 15882]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 855, in connect_check_health
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/retry.py", line 116, in call_with_retry
+    return do()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 856, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1306, in _connect
+    raise err
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1290, in _connect
+    sock.connect(socket_address)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1687, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/utils.py", line 196, in wrapper
+    return func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 2603, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 846, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 863, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 104 connecting to 127.0.0.1:11000. Connection reset by peer.
+
+Error 104 connecting to 127.0.0.1:11000. Connection reset by peer.
+
+WARNING: currentsite.txt is not supported anymore for setting default site. Use following command to set it as default site.
+$ bench use crm.localhost
+
+2026-02-17 08:24:52,110 Worker 2fdbb6d141214b90a8e6db9536f6f66c: started with PID 16786, version 2.6.1
+2026-02-17 08:24:52,110 Worker 2fdbb6d141214b90a8e6db9536f6f66c: subscribing to channel rq:pubsub:2fdbb6d141214b90a8e6db9536f6f66c
+2026-02-17 08:24:52,141 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-17 08:24:52,142 Worker 2fdbb6d141214b90a8e6db9536f6f66c: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 08:24:52,147 Worker 2fdbb6d141214b90a8e6db9536f6f66c: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 08:24:52,148 Worker 2fdbb6d141214b90a8e6db9536f6f66c: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 08:25:02,168 Worker 2fdbb6d141214b90a8e6db9536f6f66c [PID 16786]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1133, in read_response
+    response = self._parser.read_response(disable_decoding=disable_decoding)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/_parsers/hiredis.py", line 163, in read_response
+    self.read_from_socket()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/_parsers/hiredis.py", line 110, in read_from_socket
+    bufflen = self._sock.recv_into(self._buffer)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1687, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/utils.py", line 196, in wrapper
+    return func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 2603, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 846, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 869, in connect_check_health
+    self.on_connect_check_health(check_health=check_health)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 994, in on_connect_check_health
+    self.read_response()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1141, in read_response
+    raise ConnectionError(f"Error while reading from {host_error} : {e.args}")
+redis.exceptions.ConnectionError: Error while reading from 127.0.0.1:11000 : (104, 'Connection reset by peer')
+
+Error while reading from 127.0.0.1:11000 : (104, 'Connection reset by peer')
+
+WARNING: currentsite.txt is not supported anymore for setting default site. Use following command to set it as default site.
+$ bench use crm.localhost
+
+2026-02-17 08:25:22,431 Worker 9b60e89b553a4b18ad5a7151134de1c2: started with PID 17160, version 2.6.1
+2026-02-17 08:25:22,431 Worker 9b60e89b553a4b18ad5a7151134de1c2: subscribing to channel rq:pubsub:9b60e89b553a4b18ad5a7151134de1c2
+2026-02-17 08:25:22,474 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-17 08:25:22,486 Worker 9b60e89b553a4b18ad5a7151134de1c2: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 08:25:22,505 Worker 9b60e89b553a4b18ad5a7151134de1c2: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 08:25:22,534 Worker 9b60e89b553a4b18ad5a7151134de1c2: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 08:25:45,059 Worker 9b60e89b553a4b18ad5a7151134de1c2 [PID 17160]: warm shut down requested
+2026-02-17 08:25:45,077 Worker 9b60e89b553a4b18ad5a7151134de1c2: unsubscribing from channel rq:pubsub:9b60e89b553a4b18ad5a7151134de1c2
+2026-02-17 08:25:55,747 Worker 76af207e1a5f4e75b20998888888a81b: started with PID 17667, version 2.6.1
+2026-02-17 08:25:55,747 Worker 76af207e1a5f4e75b20998888888a81b: subscribing to channel rq:pubsub:76af207e1a5f4e75b20998888888a81b
+2026-02-17 08:25:55,775 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-17 08:25:55,782 Worker 76af207e1a5f4e75b20998888888a81b: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 08:25:55,806 Worker 76af207e1a5f4e75b20998888888a81b: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 08:25:55,816 Worker 76af207e1a5f4e75b20998888888a81b: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 08:26:37,646 Worker 76af207e1a5f4e75b20998888888a81b [PID 17667]: warm shut down requested
+2026-02-17 08:26:37,666 Worker 76af207e1a5f4e75b20998888888a81b: unsubscribing from channel rq:pubsub:76af207e1a5f4e75b20998888888a81b
+2026-02-17 08:31:15,681 Worker 6793d7133def4c93a4eed6f63b3d3b2b: started with PID 18951, version 2.6.1
+2026-02-17 08:31:15,681 Worker 6793d7133def4c93a4eed6f63b3d3b2b: subscribing to channel rq:pubsub:6793d7133def4c93a4eed6f63b3d3b2b
+2026-02-17 08:31:15,682 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-17 08:31:15,683 Worker 6793d7133def4c93a4eed6f63b3d3b2b: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 08:31:15,685 Worker 6793d7133def4c93a4eed6f63b3d3b2b: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 08:31:15,687 Worker 6793d7133def4c93a4eed6f63b3d3b2b: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 08:31:18,386 Worker 6793d7133def4c93a4eed6f63b3d3b2b [PID 18951]: warm shut down requested
+2026-02-17 08:31:18,397 Worker 6793d7133def4c93a4eed6f63b3d3b2b: unsubscribing from channel rq:pubsub:6793d7133def4c93a4eed6f63b3d3b2b
+2026-02-17 08:31:27,070 Worker 26255aff8b7b4bf7a96792f7f53cb4e9: started with PID 19249, version 2.6.1
+2026-02-17 08:31:27,070 Worker 26255aff8b7b4bf7a96792f7f53cb4e9: subscribing to channel rq:pubsub:26255aff8b7b4bf7a96792f7f53cb4e9
+2026-02-17 08:31:27,078 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-17 08:31:27,089 Worker 26255aff8b7b4bf7a96792f7f53cb4e9: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 08:31:27,131 Worker 26255aff8b7b4bf7a96792f7f53cb4e9: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 08:31:27,158 Worker 26255aff8b7b4bf7a96792f7f53cb4e9: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 08:31:51,834 Worker 26255aff8b7b4bf7a96792f7f53cb4e9 [PID 19249]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1133, in read_response
+    response = self._parser.read_response(disable_decoding=disable_decoding)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/_parsers/hiredis.py", line 163, in read_response
+    self.read_from_socket()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/_parsers/hiredis.py", line 110, in read_from_socket
+    bufflen = self._sock.recv_into(self._buffer)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1693, in execute
+    return conn.retry.call_with_retry(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        lambda: execute(conn, stack, raise_on_error),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        lambda error: self._disconnect_raise_on_watching(conn, error),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/retry.py", line 123, in call_with_retry
+    raise error
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/retry.py", line 116, in call_with_retry
+    return do()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1694, in <lambda>
+    lambda: execute(conn, stack, raise_on_error),
+            ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1541, in _execute_transaction
+    self.parse_response(connection, "_")
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1630, in parse_response
+    result = Redis.parse_response(self, connection, command_name, **options)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 691, in parse_response
+    response = connection.read_response()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1141, in read_response
+    raise ConnectionError(f"Error while reading from {host_error} : {e.args}")
+redis.exceptions.ConnectionError: Error while reading from 127.0.0.1:11000 : (104, 'Connection reset by peer')
+
+Error while reading from 127.0.0.1:11000 : (104, 'Connection reset by peer')
+2026-02-17 08:32:54,899 Worker e26b073b2f1b4d28835e409e7bc489a6: started with PID 20045, version 2.6.1
+2026-02-17 08:32:54,900 Worker e26b073b2f1b4d28835e409e7bc489a6: subscribing to channel rq:pubsub:e26b073b2f1b4d28835e409e7bc489a6
+2026-02-17 08:32:54,926 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-17 08:32:54,938 Worker e26b073b2f1b4d28835e409e7bc489a6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 08:32:54,994 Worker e26b073b2f1b4d28835e409e7bc489a6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 08:32:55,013 Worker e26b073b2f1b4d28835e409e7bc489a6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 08:35:15,636 Worker e26b073b2f1b4d28835e409e7bc489a6 [PID 20045]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1074, in send_packed_command
+    self._sock.sendall(item)
+    ~~~~~~~~~~~~~~~~~~^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1687, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/utils.py", line 196, in wrapper
+    return func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 2603, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 846, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 869, in connect_check_health
+    self.on_connect_check_health(check_health=check_health)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 987, in on_connect_check_health
+    self.send_command(
+    ~~~~~~~~~~~~~~~~~^
+        "CLIENT",
+        ^^^^^^^^^
+    ...<3 lines>...
+        check_health=check_health,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1096, in send_command
+    self.send_packed_command(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._command_packer.pack(*args),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        check_health=kwargs.get("check_health", True),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1085, in send_packed_command
+    raise ConnectionError(f"Error {errno} while writing to socket. {errmsg}.")
+redis.exceptions.ConnectionError: Error 104 while writing to socket. Connection reset by peer.
+
+Error 104 while writing to socket. Connection reset by peer.
+2026-02-17 08:38:30,766 Worker c741f3489bed4508bbd6e731d5c7cbae: started with PID 22386, version 2.6.1
+2026-02-17 08:38:30,766 Worker c741f3489bed4508bbd6e731d5c7cbae: subscribing to channel rq:pubsub:c741f3489bed4508bbd6e731d5c7cbae
+2026-02-17 08:38:30,768 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-17 08:38:30,768 Worker c741f3489bed4508bbd6e731d5c7cbae: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 08:38:30,770 Worker c741f3489bed4508bbd6e731d5c7cbae: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 08:38:30,771 Worker c741f3489bed4508bbd6e731d5c7cbae: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 08:39:03,425 Worker c741f3489bed4508bbd6e731d5c7cbae [PID 22386]: warm shut down requested
+2026-02-17 08:39:03,434 Worker c741f3489bed4508bbd6e731d5c7cbae: unsubscribing from channel rq:pubsub:c741f3489bed4508bbd6e731d5c7cbae
+2026-02-17 08:51:03,146 Worker 43431433ca1e446b9c79721b66591325: started with PID 26803, version 2.6.1
+2026-02-17 08:51:03,146 Worker 43431433ca1e446b9c79721b66591325: subscribing to channel rq:pubsub:43431433ca1e446b9c79721b66591325
+2026-02-17 08:51:03,151 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-17 08:51:03,155 Worker 43431433ca1e446b9c79721b66591325: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 08:51:03,162 Worker 43431433ca1e446b9c79721b66591325: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 08:51:03,165 Worker 43431433ca1e446b9c79721b66591325: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 08:55:40,082 Worker 43431433ca1e446b9c79721b66591325 [PID 26803]: warm shut down requested
+2026-02-17 08:55:40,084 Worker 43431433ca1e446b9c79721b66591325: unsubscribing from channel rq:pubsub:43431433ca1e446b9c79721b66591325
+2026-02-17 08:55:54,428 Worker ed9399e97c274feb8a5d6b9cf3de94ec: started with PID 29734, version 2.6.1
+2026-02-17 08:55:54,428 Worker ed9399e97c274feb8a5d6b9cf3de94ec: subscribing to channel rq:pubsub:ed9399e97c274feb8a5d6b9cf3de94ec
+2026-02-17 08:55:54,436 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-17 08:55:54,437 Worker ed9399e97c274feb8a5d6b9cf3de94ec: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 08:55:54,439 Worker ed9399e97c274feb8a5d6b9cf3de94ec: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 08:55:54,440 Worker ed9399e97c274feb8a5d6b9cf3de94ec: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 08:56:46,326 Worker ed9399e97c274feb8a5d6b9cf3de94ec [PID 29734]: warm shut down requested
+2026-02-17 08:56:46,374 Worker ed9399e97c274feb8a5d6b9cf3de94ec: unsubscribing from channel rq:pubsub:ed9399e97c274feb8a5d6b9cf3de94ec
+2026-02-17 08:58:22,918 Worker 5330ef25e5c747298e2b424e77717661: started with PID 31006, version 2.6.1
+2026-02-17 08:58:22,918 Worker 5330ef25e5c747298e2b424e77717661: subscribing to channel rq:pubsub:5330ef25e5c747298e2b424e77717661
+2026-02-17 08:58:22,946 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-17 08:58:22,954 Worker 5330ef25e5c747298e2b424e77717661: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 08:58:23,006 Worker 5330ef25e5c747298e2b424e77717661: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 08:58:23,023 Worker 5330ef25e5c747298e2b424e77717661: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 08:58:38,770 home-omegaui-Projects-crm-frappe-bench:long: frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.search.website_search.build_index_for_all_routes', kwargs={}, method=<function build_index_for_all_routes at 0x7f296914a560>, site='crm.localhost', user='Administrator') (crm.localhost||8bcf36d8-581b-496b-a26e-2f9bee0c5258)
+Retrieving Routes                   : [=                                       ] 3%Retrieving Routes                   : [==                                      ] 6%Retrieving Routes                   : [===                                     ] 9%Retrieving Routes                   : [=====                                   ] 12%Retrieving Routes                   : [======                                  ] 16%Retrieving Routes                   : [=======                                 ] 19%Retrieving Routes                   : [=========                               ] 22%Retrieving Routes                   : [==========                              ] 25%Retrieving Routes                   : [===========                             ] 29%Retrieving Routes                   : [============                            ] 32%Retrieving Routes                   : [==============                          ] 35%Retrieving Routes                   : [===============                         ] 38%Retrieving Routes                   : [================                        ] 41%Retrieving Routes                   : [==================                      ] 45%Retrieving Routes                   : [===================                     ] 48%Retrieving Routes                   : [====================                    ] 51%Retrieving Routes                   : [=====================                   ] 54%Retrieving Routes                   : [=======================                 ] 58%Retrieving Routes                   : [========================                ] 61%Retrieving Routes                   : [=========================               ] 64%Retrieving Routes                   : [===========================             ] 67%Retrieving Routes                   : [============================            ] 70%Retrieving Routes                   : [=============================           ] 74%Retrieving Routes                   : [==============================          ] 77%Retrieving Routes                   : [================================        ] 80%Retrieving Routes                   : [=================================       ] 83%Retrieving Routes                   : [==================================      ] 87%Retrieving Routes                   : [====================================    ] 90%Retrieving Routes                   : [=====================================   ] 93%Retrieving Routes                   : [======================================  ] 96%Retrieving Routes                   : [========================================] 100%
+Building Index                      : [=                                       ] 3%Building Index                      : [==                                      ] 6%Building Index                      : [===                                     ] 9%Building Index                      : [=====                                   ] 12%Building Index                      : [======                                  ] 16%Building Index                      : [=======                                 ] 19%Building Index                      : [=========                               ] 22%Building Index                      : [==========                              ] 25%Building Index                      : [===========                             ] 29%Building Index                      : [============                            ] 32%Building Index                      : [==============                          ] 35%Building Index                      : [===============                         ] 38%Building Index                      : [================                        ] 41%Building Index                      : [==================                      ] 45%Building Index                      : [===================                     ] 48%Building Index                      : [====================                    ] 51%Building Index                      : [=====================                   ] 54%Building Index                      : [=======================                 ] 58%Building Index                      : [========================                ] 61%Building Index                      : [=========================               ] 64%Building Index                      : [===========================             ] 67%Building Index                      : [============================            ] 70%Building Index                      : [=============================           ] 74%Building Index                      : [==============================          ] 77%Building Index                      : [================================        ] 80%Building Index                      : [=================================       ] 83%Building Index                      : [==================================      ] 87%Building Index                      : [====================================    ] 90%Building Index                      : [=====================================   ] 93%Building Index                      : [======================================  ] 96%Building Index                      : [========================================] 100%2026-02-17 08:58:42,679 Successfully completed frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.search.website_search.build_index_for_all_routes', kwargs={}, method=<function build_index_for_all_routes at 0x7f296914a560>, site='crm.localhost', user='Administrator') job in 0:00:03.428338s on worker 5330ef25e5c747298e2b424e77717661
+2026-02-17 08:58:42,679 home-omegaui-Projects-crm-frappe-bench:long: Job OK (crm.localhost||8bcf36d8-581b-496b-a26e-2f9bee0c5258)
+2026-02-17 08:58:42,679 Result is kept for 600 seconds
+2026-02-17 08:58:47,066 Worker 5330ef25e5c747298e2b424e77717661 [PID 31006]: warm shut down requested
+2026-02-17 08:58:47,092 Worker 5330ef25e5c747298e2b424e77717661: unsubscribing from channel rq:pubsub:5330ef25e5c747298e2b424e77717661
+2026-02-17 09:00:32,023 Worker b2b8d9fd8dec4695964fbebd83cf9574: started with PID 32746, version 2.6.1
+2026-02-17 09:00:32,024 Worker b2b8d9fd8dec4695964fbebd83cf9574: subscribing to channel rq:pubsub:b2b8d9fd8dec4695964fbebd83cf9574
+2026-02-17 09:00:32,032 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-17 09:00:32,037 Worker b2b8d9fd8dec4695964fbebd83cf9574: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 09:00:32,045 Worker b2b8d9fd8dec4695964fbebd83cf9574: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 09:00:32,051 Worker b2b8d9fd8dec4695964fbebd83cf9574: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 09:10:25,519 Worker b2b8d9fd8dec4695964fbebd83cf9574 [PID 32746]: warm shut down requested
+2026-02-17 09:10:25,528 Worker b2b8d9fd8dec4695964fbebd83cf9574: unsubscribing from channel rq:pubsub:b2b8d9fd8dec4695964fbebd83cf9574
+2026-02-17 09:10:36,703 Worker bc7bae1b76534745ad539dce94291d1f: started with PID 39842, version 2.6.1
+2026-02-17 09:10:36,703 Worker bc7bae1b76534745ad539dce94291d1f: subscribing to channel rq:pubsub:bc7bae1b76534745ad539dce94291d1f
+2026-02-17 09:10:36,739 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-17 09:10:36,748 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 09:10:36,773 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 09:10:36,799 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 09:13:55,202 home-omegaui-Projects-crm-frappe-bench:default: frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.core.doctype.user.user.create_contact', kwargs={'user': <User: doctype=User sankalp@billingfast.com>, 'ignore_mandatory': ..., method='frappe.core.doctype.user.user.create_contact', site='crm.localhost', user='Administrator') (crm.localhost||ba41ffae-109f-4849-8245-d78f5567c973)
+2026-02-17 09:13:57,080 Successfully completed frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.core.doctype.user.user.create_contact', kwargs={'user': <User: doctype=User sankalp@billingfast.com>, 'ignore_mandatory': ..., method='frappe.core.doctype.user.user.create_contact', site='crm.localhost', user='Administrator') job in 0:00:01.547568s on worker bc7bae1b76534745ad539dce94291d1f
+2026-02-17 09:13:57,080 home-omegaui-Projects-crm-frappe-bench:default: Job OK (crm.localhost||ba41ffae-109f-4849-8245-d78f5567c973)
+2026-02-17 09:13:57,080 Result is kept for 600 seconds
+2026-02-17 09:13:57,091 home-omegaui-Projects-crm-frappe-bench:default: frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.core.doctype.user.user.update_gravatar', kwargs={'name': 'sankalp@billingfast.com'}, method='frappe.core.doctype.user.user.update_gravatar', site='crm.localhost', user='Administrator') (crm.localhost||59b73dda-bde3-42a4-b6da-69830e1e300f)
+2026-02-17 09:13:57,597 Successfully completed frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.core.doctype.user.user.update_gravatar', kwargs={'name': 'sankalp@billingfast.com'}, method='frappe.core.doctype.user.user.update_gravatar', site='crm.localhost', user='Administrator') job in 0:00:00.495556s on worker bc7bae1b76534745ad539dce94291d1f
+2026-02-17 09:13:57,597 home-omegaui-Projects-crm-frappe-bench:default: Job OK (crm.localhost||59b73dda-bde3-42a4-b6da-69830e1e300f)
+2026-02-17 09:13:57,597 Result is kept for 600 seconds
+2026-02-17 09:13:57,605 home-omegaui-Projects-crm-frappe-bench:default: frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.core.doctype.user.user.create_contact', kwargs={'user': <User: doctype=User sankalp@billingfast.com>, 'ignore_mandatory': ..., method='frappe.core.doctype.user.user.create_contact', site='crm.localhost', user='Administrator') (crm.localhost||08485f2a-1686-4d9b-831d-a092fae21ee2)
+2026-02-17 09:13:58,734 Successfully completed frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.core.doctype.user.user.create_contact', kwargs={'user': <User: doctype=User sankalp@billingfast.com>, 'ignore_mandatory': ..., method='frappe.core.doctype.user.user.create_contact', site='crm.localhost', user='Administrator') job in 0:00:00.834860s on worker bc7bae1b76534745ad539dce94291d1f
+2026-02-17 09:13:58,734 home-omegaui-Projects-crm-frappe-bench:default: Job OK (crm.localhost||08485f2a-1686-4d9b-831d-a092fae21ee2)
+2026-02-17 09:13:58,734 Result is kept for 600 seconds
+2026-02-17 09:13:58,745 home-omegaui-Projects-crm-frappe-bench:default: frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.core.doctype.user.user.update_gravatar', kwargs={'name': 'sankalp@billingfast.com'}, method='frappe.core.doctype.user.user.update_gravatar', site='crm.localhost', user='Administrator') (crm.localhost||3a5c08c1-22cf-4cbb-9808-64e1fea3f27d)
+2026-02-17 09:13:59,216 Successfully completed frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.core.doctype.user.user.update_gravatar', kwargs={'name': 'sankalp@billingfast.com'}, method='frappe.core.doctype.user.user.update_gravatar', site='crm.localhost', user='Administrator') job in 0:00:00.462221s on worker bc7bae1b76534745ad539dce94291d1f
+2026-02-17 09:13:59,217 home-omegaui-Projects-crm-frappe-bench:default: Job OK (crm.localhost||3a5c08c1-22cf-4cbb-9808-64e1fea3f27d)
+2026-02-17 09:13:59,217 Result is kept for 600 seconds
+2026-02-17 09:20:44,313 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 09:20:44,315 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 09:20:44,317 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 09:22:18,819 home-omegaui-Projects-crm-frappe-bench:default: frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.desk.doctype.notification_log.notification_log.make_notification_lo..., kwargs={'doc': {'type': 'Assignment', 'document_type': 'CRM Lead', 'subject': '<st..., method='frappe.desk.doctype.notification_log.notification_log.make_notification_lo..., site='crm.localhost', user='Administrator') (crm.localhost||1b7c0897-0cea-4fd2-8dd9-0c6450e19b72)
+2026-02-17 09:22:19,635 Successfully completed frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.desk.doctype.notification_log.notification_log.make_notification_lo..., kwargs={'doc': {'type': 'Assignment', 'document_type': 'CRM Lead', 'subject': '<st..., method='frappe.desk.doctype.notification_log.notification_log.make_notification_lo..., site='crm.localhost', user='Administrator') job in 0:00:00.800288s on worker bc7bae1b76534745ad539dce94291d1f
+2026-02-17 09:22:19,635 home-omegaui-Projects-crm-frappe-bench:default: Job OK (crm.localhost||1b7c0897-0cea-4fd2-8dd9-0c6450e19b72)
+2026-02-17 09:22:19,635 Result is kept for 600 seconds
+2026-02-17 09:23:44,119 home-omegaui-Projects-crm-frappe-bench:default: frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.desk.doctype.notification_log.notification_log.make_notification_lo..., kwargs={'doc': {'type': 'Assignment', 'document_type': 'CRM Lead', 'subject': '<st..., method='frappe.desk.doctype.notification_log.notification_log.make_notification_lo..., site='crm.localhost', user='Administrator') (crm.localhost||2c12dded-67e7-4f0b-b99e-e614a944aed1)
+2026-02-17 09:23:44,920 Successfully completed frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.desk.doctype.notification_log.notification_log.make_notification_lo..., kwargs={'doc': {'type': 'Assignment', 'document_type': 'CRM Lead', 'subject': '<st..., method='frappe.desk.doctype.notification_log.notification_log.make_notification_lo..., site='crm.localhost', user='Administrator') job in 0:00:00.789600s on worker bc7bae1b76534745ad539dce94291d1f
+2026-02-17 09:23:44,920 home-omegaui-Projects-crm-frappe-bench:default: Job OK (crm.localhost||2c12dded-67e7-4f0b-b99e-e614a944aed1)
+2026-02-17 09:23:44,920 Result is kept for 600 seconds
+2026-02-17 09:37:15,028 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 09:37:15,030 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 09:37:15,031 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 09:50:45,118 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 09:50:45,119 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 09:50:45,120 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 10:04:15,161 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 10:04:15,162 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 10:04:15,164 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 10:17:45,324 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 10:17:45,326 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 10:17:45,328 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 10:31:15,488 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 10:31:15,492 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 10:31:15,493 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 10:44:45,641 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 10:44:45,642 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 10:44:45,644 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 10:58:15,680 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 10:58:15,682 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 10:58:15,683 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 11:11:45,746 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 11:11:45,747 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 11:11:45,748 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 11:25:15,819 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 11:25:15,820 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 11:25:15,821 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 11:38:45,921 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 11:38:45,922 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 11:38:45,924 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 11:52:16,028 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 11:52:16,030 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 11:52:16,031 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 12:05:46,074 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 12:05:46,076 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 12:05:46,077 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 12:19:16,144 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 12:19:16,146 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 12:19:16,147 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 12:32:46,211 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 12:32:46,213 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 12:32:46,214 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 12:46:16,326 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 12:46:16,328 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 12:46:16,329 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 12:59:46,392 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 12:59:46,393 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 12:59:46,394 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 13:13:16,445 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 13:13:16,446 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 13:13:16,447 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 13:26:46,599 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 13:26:46,601 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 13:26:46,603 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 13:40:16,750 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 13:40:16,752 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 13:40:16,753 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 13:53:46,803 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 13:53:46,804 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 13:53:46,806 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 14:07:16,861 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 14:07:16,862 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 14:07:16,863 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 14:20:46,939 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 14:20:46,940 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 14:20:46,942 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 14:34:17,069 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 14:34:17,071 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 14:34:17,072 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 14:47:47,158 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 14:47:47,159 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 14:47:47,161 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 15:01:17,234 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 15:01:17,235 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 15:01:17,236 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 15:14:47,397 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 15:14:47,398 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 15:14:47,399 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 15:28:17,473 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 15:28:17,474 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 15:28:17,475 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 15:41:47,493 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 15:41:47,495 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 15:41:47,496 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 15:55:17,624 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 15:55:17,626 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 15:55:17,627 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 16:08:47,726 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 16:08:47,727 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 16:08:47,728 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 16:22:17,865 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 16:22:17,867 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 16:22:17,868 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 16:35:47,959 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 16:35:47,960 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 16:35:47,961 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 16:49:18,005 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 16:49:18,007 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 16:49:18,008 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 17:02:48,135 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 17:02:48,136 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 17:02:48,137 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 17:16:18,167 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 17:16:18,168 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 17:16:18,169 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 17:29:48,271 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 17:29:48,273 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 17:29:48,274 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 17:43:18,461 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 17:43:18,462 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 17:43:18,463 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 17:56:48,589 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 17:56:48,592 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 17:56:48,593 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 18:10:18,729 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 18:10:18,730 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 18:10:18,732 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 18:23:48,867 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 18:23:48,868 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 18:23:48,869 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 18:37:19,032 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 18:37:19,033 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 18:37:19,034 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 18:50:49,103 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 18:50:49,104 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 18:50:49,106 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 19:04:19,241 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 19:04:19,243 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 19:04:19,244 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 19:17:49,276 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 19:17:49,277 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 19:17:49,278 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 19:31:19,353 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 19:31:19,355 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 19:31:19,356 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 19:44:49,525 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 19:44:49,526 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 19:44:49,527 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 19:58:19,647 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 19:58:19,648 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 19:58:19,649 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 20:11:49,715 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 20:11:49,716 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 20:11:49,717 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 20:25:19,744 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 20:25:19,745 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 20:25:19,746 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 20:38:49,809 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 20:38:49,810 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 20:38:49,811 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 20:52:19,874 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 20:52:19,876 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 20:52:19,877 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 21:05:49,980 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 21:05:49,981 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 21:05:49,982 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 21:19:20,032 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 21:19:20,033 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 21:19:20,034 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 21:32:50,151 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 21:32:50,152 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 21:32:50,153 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 21:46:20,323 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 21:46:20,324 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 21:46:20,325 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 21:59:50,380 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 21:59:50,381 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 21:59:50,383 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 22:13:20,482 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 22:13:20,483 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 22:13:20,484 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 22:26:50,588 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 22:26:50,589 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 22:26:50,590 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 22:40:20,663 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 22:40:20,664 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 22:40:20,665 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 22:53:50,747 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 22:53:50,749 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 22:53:50,751 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 23:07:20,880 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 23:07:20,881 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 23:07:20,883 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 23:20:50,998 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 23:20:51,000 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 23:20:51,001 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 23:34:21,072 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 23:34:21,073 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 23:34:21,074 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-17 23:47:51,212 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-17 23:47:51,215 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-17 23:47:51,217 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 00:01:21,361 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 00:01:21,363 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 00:01:21,364 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 00:14:51,392 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 00:14:51,393 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 00:14:51,394 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 00:28:21,487 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 00:28:21,488 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 00:28:21,489 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 00:41:51,625 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 00:41:51,627 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 00:41:51,628 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 00:55:21,739 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 00:55:21,740 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 00:55:21,741 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 01:08:51,925 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 01:08:51,927 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 01:08:51,927 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 01:22:22,030 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 01:22:22,032 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 01:22:22,033 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 01:35:52,121 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 01:35:52,122 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 01:35:52,123 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 01:49:22,183 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 01:49:22,185 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 01:49:22,186 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 02:02:52,361 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 02:02:52,363 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 02:02:52,364 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 02:16:22,456 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 02:16:22,457 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 02:16:22,458 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 02:29:52,494 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 02:29:52,496 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 02:29:52,497 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 02:43:22,598 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 02:43:22,600 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 02:43:22,601 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 02:56:52,637 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 02:56:52,638 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 02:56:52,639 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 03:10:22,673 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 03:10:22,674 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 03:10:22,675 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 03:23:52,745 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 03:23:52,747 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 03:23:52,748 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 03:37:22,863 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 03:37:22,865 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 03:37:22,866 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 03:50:52,910 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 03:50:52,912 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 03:50:52,913 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 04:04:23,013 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 04:04:23,014 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 04:04:23,015 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 04:17:53,168 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 04:17:53,169 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 04:17:53,170 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 04:31:23,213 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 04:31:23,215 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 04:31:23,216 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 04:44:53,390 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 04:44:53,392 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 04:44:53,393 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 04:58:23,519 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 04:58:23,521 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 04:58:23,522 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 05:11:53,546 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 05:11:53,547 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 05:11:53,549 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 05:25:23,676 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 05:25:23,677 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 05:25:23,679 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 05:38:53,863 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 05:38:53,864 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 05:38:53,865 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 05:52:24,093 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 05:52:24,157 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 05:52:24,161 Worker bc7bae1b76534745ad539dce94291d1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 05:57:52,963 Worker bc7bae1b76534745ad539dce94291d1f [PID 39842]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 855, in connect_check_health
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/retry.py", line 116, in call_with_retry
+    return do()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 856, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1306, in _connect
+    raise err
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1290, in _connect
+    sock.connect(socket_address)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1687, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/utils.py", line 196, in wrapper
+    return func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 2603, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 846, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 863, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:11000. Connection refused.
+
+Error 111 connecting to 127.0.0.1:11000. Connection refused.
+2026-02-18 05:58:23,810 Worker bd81836c49cc4d65a86f3fbb519519de: started with PID 104920, version 2.6.1
+2026-02-18 05:58:23,811 Worker bd81836c49cc4d65a86f3fbb519519de: subscribing to channel rq:pubsub:bd81836c49cc4d65a86f3fbb519519de
+2026-02-18 05:58:23,872 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-18 05:58:23,878 Worker bd81836c49cc4d65a86f3fbb519519de: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 05:58:23,902 Worker bd81836c49cc4d65a86f3fbb519519de: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 05:58:23,927 Worker bd81836c49cc4d65a86f3fbb519519de: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 06:09:24,245 Worker bd81836c49cc4d65a86f3fbb519519de [PID 104920]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 855, in connect_check_health
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/retry.py", line 116, in call_with_retry
+    return do()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 856, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1306, in _connect
+    raise err
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1290, in _connect
+    sock.connect(socket_address)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1687, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/utils.py", line 196, in wrapper
+    return func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 2603, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 846, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 863, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:11000. Connection refused.
+
+Error 111 connecting to 127.0.0.1:11000. Connection refused.
+2026-02-18 06:10:44,126 Worker 50d62726313a40a2bc2125bc4f51e59f: started with PID 114031, version 2.6.1
+2026-02-18 06:10:44,127 Worker 50d62726313a40a2bc2125bc4f51e59f: subscribing to channel rq:pubsub:50d62726313a40a2bc2125bc4f51e59f
+2026-02-18 06:10:44,130 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-18 06:10:44,135 Worker 50d62726313a40a2bc2125bc4f51e59f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 06:10:44,168 Worker 50d62726313a40a2bc2125bc4f51e59f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 06:10:44,184 Worker 50d62726313a40a2bc2125bc4f51e59f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 06:24:14,366 Worker 50d62726313a40a2bc2125bc4f51e59f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 06:24:14,368 Worker 50d62726313a40a2bc2125bc4f51e59f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 06:24:14,369 Worker 50d62726313a40a2bc2125bc4f51e59f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 06:34:27,084 Worker 50d62726313a40a2bc2125bc4f51e59f [PID 114031]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 855, in connect_check_health
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/retry.py", line 116, in call_with_retry
+    return do()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 856, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1306, in _connect
+    raise err
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1290, in _connect
+    sock.connect(socket_address)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1687, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/utils.py", line 196, in wrapper
+    return func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 2603, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 846, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 863, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:11000. Connection refused.
+
+Error 111 connecting to 127.0.0.1:11000. Connection refused.
+2026-02-18 06:34:34,312 Worker 84c5e13f054f4169a95ed800da28e049: started with PID 127824, version 2.6.1
+2026-02-18 06:34:34,312 Worker 84c5e13f054f4169a95ed800da28e049: subscribing to channel rq:pubsub:84c5e13f054f4169a95ed800da28e049
+2026-02-18 06:34:34,313 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-18 06:34:34,314 Worker 84c5e13f054f4169a95ed800da28e049: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 06:34:34,316 Worker 84c5e13f054f4169a95ed800da28e049: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 06:34:34,330 Worker 84c5e13f054f4169a95ed800da28e049: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 06:48:04,459 Worker 84c5e13f054f4169a95ed800da28e049: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 06:48:04,462 Worker 84c5e13f054f4169a95ed800da28e049: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 06:48:04,464 Worker 84c5e13f054f4169a95ed800da28e049: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 07:01:34,691 Worker 84c5e13f054f4169a95ed800da28e049: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 07:01:34,753 Worker 84c5e13f054f4169a95ed800da28e049: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 07:01:34,757 Worker 84c5e13f054f4169a95ed800da28e049: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 07:15:04,865 Worker 84c5e13f054f4169a95ed800da28e049: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 07:15:04,873 Worker 84c5e13f054f4169a95ed800da28e049: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 07:15:04,876 Worker 84c5e13f054f4169a95ed800da28e049: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 07:16:51,814 Worker 84c5e13f054f4169a95ed800da28e049 [PID 127824]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 855, in connect_check_health
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/retry.py", line 116, in call_with_retry
+    return do()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 856, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1306, in _connect
+    raise err
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1290, in _connect
+    sock.connect(socket_address)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1687, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/utils.py", line 196, in wrapper
+    return func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 2603, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 846, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 863, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:11000. Connection refused.
+
+Error 111 connecting to 127.0.0.1:11000. Connection refused.
+2026-02-18 07:16:59,206 Worker db7ab8aa359143a5ab1caf360c325100: started with PID 141035, version 2.6.1
+2026-02-18 07:16:59,206 Worker db7ab8aa359143a5ab1caf360c325100: subscribing to channel rq:pubsub:db7ab8aa359143a5ab1caf360c325100
+2026-02-18 07:16:59,208 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-18 07:16:59,209 Worker db7ab8aa359143a5ab1caf360c325100: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 07:16:59,210 Worker db7ab8aa359143a5ab1caf360c325100: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 07:16:59,212 Worker db7ab8aa359143a5ab1caf360c325100: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 07:30:29,277 Worker db7ab8aa359143a5ab1caf360c325100: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 07:30:29,279 Worker db7ab8aa359143a5ab1caf360c325100: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 07:30:29,280 Worker db7ab8aa359143a5ab1caf360c325100: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 07:42:43,049 Worker db7ab8aa359143a5ab1caf360c325100 [PID 141035]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 855, in connect_check_health
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/retry.py", line 116, in call_with_retry
+    return do()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 856, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1306, in _connect
+    raise err
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1290, in _connect
+    sock.connect(socket_address)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1687, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/utils.py", line 196, in wrapper
+    return func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 2603, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 846, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 863, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:11000. Connection refused.
+
+Error 111 connecting to 127.0.0.1:11000. Connection refused.
+2026-02-18 07:42:50,569 Worker 4424f059d9154398add0975d8e29767c: started with PID 162288, version 2.6.1
+2026-02-18 07:42:50,571 Worker 4424f059d9154398add0975d8e29767c: subscribing to channel rq:pubsub:4424f059d9154398add0975d8e29767c
+2026-02-18 07:42:50,578 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-18 07:42:50,582 Worker 4424f059d9154398add0975d8e29767c: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 07:42:50,614 Worker 4424f059d9154398add0975d8e29767c: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 07:42:50,643 Worker 4424f059d9154398add0975d8e29767c: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 07:56:21,200 Worker 4424f059d9154398add0975d8e29767c: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 07:56:21,855 Worker 4424f059d9154398add0975d8e29767c: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 07:56:21,879 Worker 4424f059d9154398add0975d8e29767c: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 07:57:33,140 Worker 4424f059d9154398add0975d8e29767c [PID 162288]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 855, in connect_check_health
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/retry.py", line 116, in call_with_retry
+    return do()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 856, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1306, in _connect
+    raise err
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1290, in _connect
+    sock.connect(socket_address)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1687, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/utils.py", line 196, in wrapper
+    return func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 2603, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 846, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 863, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:11000. Connection refused.
+
+Error 111 connecting to 127.0.0.1:11000. Connection refused.
+2026-02-18 07:57:40,838 Worker b64d71ced6a04defa38513be58ec445f: started with PID 170724, version 2.6.1
+2026-02-18 07:57:40,838 Worker b64d71ced6a04defa38513be58ec445f: subscribing to channel rq:pubsub:b64d71ced6a04defa38513be58ec445f
+2026-02-18 07:57:40,866 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-18 07:57:40,870 Worker b64d71ced6a04defa38513be58ec445f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 07:57:40,890 Worker b64d71ced6a04defa38513be58ec445f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 07:57:40,903 Worker b64d71ced6a04defa38513be58ec445f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 08:06:19,744 Worker b64d71ced6a04defa38513be58ec445f [PID 170724]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 855, in connect_check_health
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/retry.py", line 116, in call_with_retry
+    return do()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 856, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1306, in _connect
+    raise err
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1290, in _connect
+    sock.connect(socket_address)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1687, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/utils.py", line 196, in wrapper
+    return func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 2603, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 846, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 863, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:11000. Connection refused.
+
+Error 111 connecting to 127.0.0.1:11000. Connection refused.
+2026-02-18 08:06:29,162 Worker 9ee60bba599b4c919ab18413d1352c6e: started with PID 177933, version 2.6.1
+2026-02-18 08:06:29,162 Worker 9ee60bba599b4c919ab18413d1352c6e: subscribing to channel rq:pubsub:9ee60bba599b4c919ab18413d1352c6e
+2026-02-18 08:06:29,166 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-18 08:06:29,168 Worker 9ee60bba599b4c919ab18413d1352c6e: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 08:06:29,175 Worker 9ee60bba599b4c919ab18413d1352c6e: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 08:06:29,184 Worker 9ee60bba599b4c919ab18413d1352c6e: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long

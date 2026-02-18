@@ -22,9 +22,17 @@
   <div class="flex items-end gap-2 px-3 py-2.5 sm:px-10">
     <div class="flex h-8 items-center gap-2">
       <FileUploader @success="(file) => uploadFile(file)">
-        <template v-slot="{ openFileSelector }">
+        <template v-slot="{ openFileSelector, uploading, progress }">
           <div class="flex items-center space-x-2">
-            <Dropdown :options="uploadOptions(openFileSelector)">
+            <div
+              v-if="uploading"
+              class="flex items-center gap-1.5 text-xs text-ink-gray-5"
+              :title="__('Uploading...')"
+            >
+              <LoadingIndicator class="h-3.5 w-3.5" />
+              <span>{{ progress }}%</span>
+            </div>
+            <Dropdown v-else :options="uploadOptions(openFileSelector)">
               <FeatherIcon
                 name="plus"
                 class="size-4.5 cursor-pointer text-ink-gray-5"
@@ -67,20 +75,20 @@
 import IconPicker from '@/components/IconPicker.vue'
 import SmileIcon from '@/components/Icons/SmileIcon.vue'
 import {
-  createResource,
   Textarea,
   FileUploader,
   Dropdown,
-  toast,
+  LoadingIndicator,
 } from 'frappe-ui'
 import { ref, watch } from 'vue'
 
-const props = defineProps({
+defineProps({
   phone: String,
   jid: String,
 })
 
-const emit = defineEmits(['sent'])
+// Single event: parent owns the API call and optimistic update
+const emit = defineEmits(['submit'])
 
 const reply = defineModel('reply')
 
@@ -94,38 +102,28 @@ const attachUrl = ref('')
 function uploadFile(file) {
   attachUrl.value = file.file_url
   fileType.value = fileType.value || 'document'
-  sendWhatsAppMessage()
+  submit()
 }
 
 function sendTextMessage(event) {
   if (event.shiftKey) return
-  sendWhatsAppMessage()
+  submit()
   textareaRef.value.el?.blur()
-  content.value = ''
 }
 
-async function sendWhatsAppMessage() {
-  const args = {
-    phone: props.phone,
-    jid: props.jid || '',
-    message: content.value,
-    attach: attachUrl.value || '',
-    content_type: fileType.value || 'text',
-    reply_to: reply.value?.name || '',
-  }
+function submit() {
+  const message = content.value
+  const content_type = fileType.value || 'text'
+  const attach = attachUrl.value || ''
+  const reply_to = reply.value?.name || ''
+
+  // Reset composer state before emitting so UI clears instantly
   content.value = ''
   fileType.value = ''
   attachUrl.value = ''
   reply.value = {}
-  createResource({
-    url: 'crm.api.whatsapp.send_chat_message',
-    params: args,
-    auto: true,
-    onSuccess: () => emit('sent'),
-    onError: (error) => {
-      toast.error(error.messages?.[0] || __('Failed to send WhatsApp message'))
-    },
-  })
+
+  emit('submit', { message, content_type, attach, reply_to })
 }
 
 function uploadOptions(openFileSelector) {

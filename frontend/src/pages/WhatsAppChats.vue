@@ -52,9 +52,15 @@
           @click="selectChat(chat)"
         >
           <div
-            class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-surface-gray-3 text-ink-gray-5"
+            class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-surface-gray-3 text-ink-gray-5 overflow-hidden"
           >
-            <FeatherIcon name="user" class="h-5 w-5" />
+            <img
+              v-if="chat.photo_url"
+              :src="chat.photo_url"
+              class="h-10 w-10 rounded-full object-cover"
+              @error="chat.photo_url = ''"
+            />
+            <FeatherIcon v-else name="user" class="h-5 w-5" />
           </div>
           <div class="flex-1 overflow-hidden">
             <div class="flex items-center justify-between">
@@ -92,9 +98,15 @@
         <!-- Chat Header -->
         <div class="flex items-center gap-3 border-b px-4 py-2.5">
           <div
-            class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-surface-gray-3 text-ink-gray-5"
+            class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-surface-gray-3 text-ink-gray-5 overflow-hidden"
           >
-            <FeatherIcon name="user" class="h-4 w-4" />
+            <img
+              v-if="selectedChatPhoto"
+              :src="selectedChatPhoto"
+              class="h-9 w-9 rounded-full object-cover"
+              @error="selectedChatPhoto = ''"
+            />
+            <FeatherIcon v-else name="user" class="h-4 w-4" />
           </div>
           <div class="flex-1">
             <div class="text-sm font-medium text-ink-gray-9">
@@ -179,17 +191,18 @@
           class="flex flex-1 flex-col overflow-y-auto px-3 py-4 sm:px-10"
         >
           <div
-            v-if="chatMessages.loading && !chatMessages.data?.length"
+            v-if="chatMessages.loading && !messages.length"
             class="flex flex-1 items-center justify-center"
           >
             <LoadingIndicator class="h-5 w-5" />
           </div>
-          <div v-else-if="chatMessages.data?.length">
+          <div v-else-if="messages.length">
             <div
-              v-for="msg in chatMessages.data"
-              :key="msg.name"
+              v-for="msg in messages"
+              :key="msg._tempId || msg.name"
               class="mb-3 flex gap-2"
               :class="msg.type === 'Outgoing' ? 'flex-row-reverse' : ''"
+              @contextmenu.prevent="showContextMenu($event, msg)"
             >
               <div
                 class="relative max-w-[75%] rounded-lg p-2.5 text-sm shadow-sm"
@@ -255,8 +268,13 @@
                   <span class="text-2xs text-ink-gray-4">
                     {{ formatMsgTime(msg.creation) }}
                   </span>
+                  <FeatherIcon
+                    v-if="msg._pending"
+                    name="clock"
+                    class="h-3 w-3 text-ink-gray-3"
+                  />
                   <CheckIcon
-                    v-if="msg.type === 'Outgoing'"
+                    v-else-if="msg.type === 'Outgoing'"
                     class="h-3.5 w-3.5 text-ink-gray-4"
                   />
                 </div>
@@ -276,7 +294,7 @@
         <ChatComposer
           :phone="selectedChat?.phone || ''"
           :jid="selectedJid || ''"
-          @sent="onMessageSent"
+          @submit="handleComposerSubmit"
         />
       </template>
 
@@ -341,6 +359,24 @@
       </button>
     </div>
   </Teleport>
+
+  <!-- Message Context Menu -->
+  <Teleport to="body">
+    <div
+      v-if="contextMenu.visible"
+      class="fixed z-50 min-w-[140px] rounded-lg border bg-surface-white py-1 shadow-lg"
+      :style="{ top: contextMenu.y + 'px', left: contextMenu.x + 'px' }"
+      @click.stop
+    >
+      <button
+        class="flex w-full items-center gap-2 px-3 py-2 text-sm text-ink-red-3 hover:bg-surface-gray-2"
+        @click="confirmDeleteMessage"
+      >
+        <FeatherIcon name="trash-2" class="h-3.5 w-3.5" />
+        {{ __('Delete') }}
+      </button>
+    </div>
+  </Teleport>
 </template>
 
 <script setup>
@@ -379,6 +415,10 @@ const newChatPhone = ref('')
 const fullscreenImage = ref(null)
 const unreadJids = ref(new Set())
 const lastSeenTimes = ref(new Map())
+// Single reactive source for all displayed messages (loaded + optimistic pending)
+const messages = ref([])
+const selectedChatPhoto = ref('')
+const contextMenu = ref({ visible: false, x: 0, y: 0, msg: null })
 
 const router = useRouter()
 const { getUser, users: usersResource, isManager } = usersStore()
@@ -507,7 +547,10 @@ const chatMessages = createResource({
   url: 'crm.api.whatsapp.get_chat_messages',
   params: { jid: '' },
   auto: false,
-  onSuccess: () => {
+  onSuccess: (data) => {
+    // Preserve any in-flight pending messages so they don't flicker on reload
+    const pending = messages.value.filter((m) => m._pending)
+    messages.value = [...(data || []), ...pending]
     if (shouldAutoScroll.value) {
       nextTick(() => {
         scrollToBottom()
@@ -538,12 +581,93 @@ function selectChat(chat) {
   // Record current time so we don't re-mark as unread
   lastSeenTimes.value.set(chat.jid, chat.last_message_time || '')
   shouldAutoScroll.value = true
+  messages.value = []
   chatMessages.update({ params: { jid: chat.jid } })
   chatMessages.reload()
+  // Start with cached photo from chat list, then fetch fresh
+  selectedChatPhoto.value = chat.photo_url || ''
+  fetchProfilePhoto(chat.jid)
 }
 
-function onMessageSent() {
-  // The whatsapp_chat_update socket event handles appending the message.
+function fetchProfilePhoto(jid) {
+  createResource({
+    url: 'crm.api.whatsapp.get_profile_photo',
+    params: { jid },
+    auto: true,
+    onSuccess: (data) => {
+      if (data?.url && selectedJid.value === jid) {
+        selectedChatPhoto.value = data.url
+        // Also update the chat list entry
+        const chatEntry = chatList.data?.find((c) => c.jid === jid)
+        if (chatEntry) chatEntry.photo_url = data.url
+      }
+    },
+  })
+}
+
+function handleComposerSubmit({ message, content_type, attach, reply_to }) {
+  const tempId = `_p_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`
+  const createdAt = Date.now()
+
+  // Add optimistic pending message immediately — before any async work
+  const pendingMsg = {
+    name: tempId,
+    _tempId: tempId,
+    _pending: true,
+    _createdAt: createdAt,
+    type: 'Outgoing',
+    from: '',
+    to: selectedChat.value?.phone || '',
+    message,
+    message_id: '',
+    content_type,
+    message_type: '',
+    status: 'pending',
+    creation: new Date().toISOString(),
+    attach: attach || '',
+    is_reply: false,
+    reply_to_message_id: '',
+    from_name: window.frappe?.boot?.user?.full_name || __('You'),
+  }
+  const shouldScroll = isNearBottom()
+  messages.value.push(pendingMsg)
+  if (shouldScroll) nextTick(() => scrollToBottom())
+
+  // Now fire the API call
+  createResource({
+    url: 'crm.api.whatsapp.send_chat_message',
+    params: {
+      phone: selectedChat.value?.phone || '',
+      jid: selectedJid.value || '',
+      message,
+      attach,
+      content_type,
+      reply_to: reply_to || '',
+    },
+    auto: true,
+    onSuccess: (data) => {
+      const message_id = data?.message_id || ''
+      const elapsed = Date.now() - createdAt
+      const confirm = () => {
+        const i = messages.value.findIndex((m) => m._tempId === tempId)
+        if (i !== -1) {
+          messages.value.splice(i, 1, {
+            ...pendingMsg,
+            _pending: false,
+            message_id,
+            name: message_id || tempId,
+          })
+        }
+      }
+      if (elapsed < PENDING_MIN_MS) setTimeout(confirm, PENDING_MIN_MS - elapsed)
+      else confirm()
+    },
+    onError: (error) => {
+      toast.error(error.messages?.[0] || __('Failed to send WhatsApp message'))
+      const i = messages.value.findIndex((m) => m._tempId === tempId)
+      if (i !== -1) messages.value.splice(i, 1)
+    },
+  })
 }
 
 function scrollToBottom() {
@@ -600,23 +724,87 @@ function isForSelectedChat(data) {
   )
 }
 
-function appendMessageIfNew(message) {
-  if (!chatMessages.data || !message) return
+// Minimum time (ms) a pending message must be visible so the clock icon is seen
+const PENDING_MIN_MS = 600
 
-  // Dedup by message_id
-  const exists = chatMessages.data.some(
+function appendMessageIfNew(message) {
+  if (!message) return
+
+  if (message.type === 'Outgoing') {
+    const pendingIdx = messages.value.findIndex(
+      (m) =>
+        m._pending &&
+        m.content_type === message.content_type &&
+        m.message === message.message &&
+        (message.content_type === 'text' || m.attach === message.attach),
+    )
+    if (pendingIdx !== -1) {
+      const pending = messages.value[pendingIdx]
+      const elapsed = Date.now() - (pending._createdAt || 0)
+
+      const confirm = () => {
+        const i = messages.value.findIndex((m) => m._tempId === pending._tempId)
+        if (i !== -1) {
+          // Replace pending in-place so it stays at the same scroll position
+          messages.value.splice(i, 1, { ...message, _pending: false })
+        }
+      }
+
+      if (elapsed < PENDING_MIN_MS) {
+        setTimeout(confirm, PENDING_MIN_MS - elapsed)
+      } else {
+        confirm()
+      }
+      return
+    }
+  }
+
+  // Dedup by message_id / name (guards against duplicate socket events or already-confirmed sends)
+  const exists = messages.value.some(
     (m) =>
       (m.message_id && m.message_id === message.message_id) ||
-      m.name === message.name,
+      (m.name === message.name && !m._pending),
   )
   if (exists) return
 
-  // Check scroll position BEFORE push (after push, DOM is taller and check is unreliable)
   const shouldScroll = isNearBottom()
-  chatMessages.data.push(message)
-  if (shouldScroll) {
-    nextTick(() => scrollToBottom())
+  messages.value.push(message)
+  if (shouldScroll) nextTick(() => scrollToBottom())
+}
+
+function showContextMenu(event, msg) {
+  if (msg._pending) return // don't allow delete of pending messages
+  contextMenu.value = {
+    visible: true,
+    x: Math.min(event.clientX, window.innerWidth - 160),
+    y: Math.min(event.clientY, window.innerHeight - 80),
+    msg,
   }
+}
+
+function hideContextMenu() {
+  contextMenu.value.visible = false
+  contextMenu.value.msg = null
+}
+
+function confirmDeleteMessage() {
+  const msg = contextMenu.value.msg
+  hideContextMenu()
+  if (!msg || !selectedJid.value) return
+  createResource({
+    url: 'crm.api.whatsapp.delete_chat_message',
+    params: { jid: selectedJid.value, message_id: msg.message_id || msg.name },
+    auto: true,
+    onSuccess: () => {
+      const idx = messages.value.findIndex(
+        (m) => m.name === msg.name || m.message_id === msg.message_id,
+      )
+      if (idx !== -1) messages.value.splice(idx, 1)
+    },
+    onError: () => {
+      toast.error(__('Failed to delete message'))
+    },
+  })
 }
 
 function startNewChat() {
@@ -674,6 +862,11 @@ function formatMessage(text) {
 let syncInterval = null
 
 onMounted(() => {
+  document.addEventListener('click', hideContextMenu)
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') hideContextMenu()
+  })
+
   $socket.on('whatsapp_chat_update', (data) => {
     if (data.event_type === 'new_message') {
       updateChatListEntry(data)
@@ -697,5 +890,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   $socket.off('whatsapp_chat_update')
   if (syncInterval) clearInterval(syncInterval)
+  document.removeEventListener('click', hideContextMenu)
 })
 </script>
