@@ -402,3 +402,44 @@
 2026-02-18 08:06:27,536 INFO /home/omegaui/.local/bin/bench worker
 2026-02-18 08:06:27,567 INFO /home/omegaui/.local/bin/bench schedule
 2026-02-18 08:06:27,679 INFO /home/omegaui/.local/bin/bench serve --port 8000
+2026-02-18 08:09:17,792 INFO /home/omegaui/.local/bin/bench --site crm.localhost clear-cache
+2026-02-18 08:09:19,574 INFO /home/omegaui/.local/bin/bench build --app crm --force
+2026-02-18 08:12:15,028 INFO /home/omegaui/.local/bin/bench start
+2026-02-18 08:12:15,870 INFO /home/omegaui/.local/bin/bench worker
+2026-02-18 08:12:16,151 INFO /home/omegaui/.local/bin/bench serve --port 8000
+2026-02-18 08:12:16,155 INFO /home/omegaui/.local/bin/bench watch
+2026-02-18 08:12:16,200 INFO /home/omegaui/.local/bin/bench schedule
+2026-02-18 08:13:05,201 INFO /home/omegaui/.local/bin/bench --site crm.localhost console --quiet
+2026-02-18 08:17:58,677 INFO /home/omegaui/.local/bin/bench --site crm.localhost clear-cache
+2026-02-18 08:20:00,594 INFO /home/omegaui/.local/bin/bench start
+2026-02-18 08:20:01,275 INFO /home/omegaui/.local/bin/bench watch
+2026-02-18 08:20:01,290 INFO /home/omegaui/.local/bin/bench worker
+2026-02-18 08:20:01,403 INFO /home/omegaui/.local/bin/bench serve --port 8000
+2026-02-18 08:20:01,428 INFO /home/omegaui/.local/bin/bench schedule
+2026-02-18 08:29:25,132 INFO /home/omegaui/.local/bin/bench start
+2026-02-18 08:29:25,789 INFO /home/omegaui/.local/bin/bench serve --port 8000
+2026-02-18 08:29:25,832 INFO /home/omegaui/.local/bin/bench worker
+2026-02-18 08:29:25,953 INFO /home/omegaui/.local/bin/bench watch
+2026-02-18 08:29:25,962 INFO /home/omegaui/.local/bin/bench schedule
+2026-02-18 08:38:56,482 INFO /home/omegaui/.local/bin/bench start
+2026-02-18 08:38:57,287 INFO /home/omegaui/.local/bin/bench schedule
+2026-02-18 08:38:57,314 INFO /home/omegaui/.local/bin/bench serve --port 8000
+2026-02-18 08:38:57,294 INFO /home/omegaui/.local/bin/bench watch
+2026-02-18 08:38:57,326 INFO /home/omegaui/.local/bin/bench worker
+2026-02-18 08:39:47,320 INFO /home/omegaui/.local/bin/bench start
+2026-02-18 08:39:48,027 INFO /home/omegaui/.local/bin/bench schedule
+2026-02-18 08:39:48,099 INFO /home/omegaui/.local/bin/bench serve --port 8000
+2026-02-18 08:39:48,158 INFO /home/omegaui/.local/bin/bench watch
+2026-02-18 08:39:48,166 INFO /home/omegaui/.local/bin/bench worker
+2026-02-18 08:56:34,415 INFO /home/omegaui/.local/bin/bench start
+2026-02-18 08:56:35,031 INFO /home/omegaui/.local/bin/bench worker
+2026-02-18 08:56:35,219 INFO /home/omegaui/.local/bin/bench serve --port 8000
+2026-02-18 08:56:35,248 INFO /home/omegaui/.local/bin/bench schedule
+2026-02-18 08:56:35,263 INFO /home/omegaui/.local/bin/bench watch
+2026-02-19 06:05:22,980 INFO /home/omegaui/.local/bin/bench --site crm.localhost clear-cache
+2026-02-19 06:05:35,643 INFO /home/omegaui/.local/bin/bench build --app crm --force
+2026-02-19 06:08:21,535 INFO /home/omegaui/.local/bin/bench start
+2026-02-19 06:08:22,355 INFO /home/omegaui/.local/bin/bench watch
+2026-02-19 06:08:22,417 INFO /home/omegaui/.local/bin/bench schedule
+2026-02-19 06:08:22,473 INFO /home/omegaui/.local/bin/bench serve --port 8000
+2026-02-19 06:08:22,533 INFO /home/omegaui/.local/bin/bench worker

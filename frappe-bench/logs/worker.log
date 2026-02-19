@@ -4614,3 +4614,574 @@ Error 111 connecting to 127.0.0.1:11000. Connection refused.
 2026-02-18 08:06:29,168 Worker 9ee60bba599b4c919ab18413d1352c6e: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
 2026-02-18 08:06:29,175 Worker 9ee60bba599b4c919ab18413d1352c6e: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
 2026-02-18 08:06:29,184 Worker 9ee60bba599b4c919ab18413d1352c6e: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 08:11:39,811 Worker 9ee60bba599b4c919ab18413d1352c6e [PID 177933]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 855, in connect_check_health
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/retry.py", line 116, in call_with_retry
+    return do()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 856, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1306, in _connect
+    raise err
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1290, in _connect
+    sock.connect(socket_address)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1687, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/utils.py", line 196, in wrapper
+    return func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 2603, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 846, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 863, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:11000. Connection refused.
+
+Error 111 connecting to 127.0.0.1:11000. Connection refused.
+2026-02-18 08:12:17,813 Worker a0eb8bc625f14e808d5773f3acd13e1f: started with PID 184646, version 2.6.1
+2026-02-18 08:12:17,815 Worker a0eb8bc625f14e808d5773f3acd13e1f: subscribing to channel rq:pubsub:a0eb8bc625f14e808d5773f3acd13e1f
+2026-02-18 08:12:17,819 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-18 08:12:17,820 Worker a0eb8bc625f14e808d5773f3acd13e1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 08:12:17,823 Worker a0eb8bc625f14e808d5773f3acd13e1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 08:12:17,833 Worker a0eb8bc625f14e808d5773f3acd13e1f: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 08:19:58,866 Worker a0eb8bc625f14e808d5773f3acd13e1f [PID 184646]: warm shut down requested
+2026-02-18 08:19:58,891 Worker a0eb8bc625f14e808d5773f3acd13e1f: unsubscribing from channel rq:pubsub:a0eb8bc625f14e808d5773f3acd13e1f
+2026-02-18 08:20:02,782 Worker 7be244b8b36d455ab3fa39db0feb7120: started with PID 193622, version 2.6.1
+2026-02-18 08:20:02,782 Worker 7be244b8b36d455ab3fa39db0feb7120: subscribing to channel rq:pubsub:7be244b8b36d455ab3fa39db0feb7120
+2026-02-18 08:20:02,814 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-18 08:20:02,822 Worker 7be244b8b36d455ab3fa39db0feb7120: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 08:20:02,836 Worker 7be244b8b36d455ab3fa39db0feb7120: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 08:20:02,838 Worker 7be244b8b36d455ab3fa39db0feb7120: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 08:29:17,859 Worker 7be244b8b36d455ab3fa39db0feb7120 [PID 193622]: warm shut down requested
+2026-02-18 08:29:17,876 Worker 7be244b8b36d455ab3fa39db0feb7120: unsubscribing from channel rq:pubsub:7be244b8b36d455ab3fa39db0feb7120
+2026-02-18 08:29:27,317 Worker d5f1312517244b4fa688187d97f4c4dd: started with PID 199508, version 2.6.1
+2026-02-18 08:29:27,326 Worker d5f1312517244b4fa688187d97f4c4dd: subscribing to channel rq:pubsub:d5f1312517244b4fa688187d97f4c4dd
+2026-02-18 08:29:27,337 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-18 08:29:27,338 Worker d5f1312517244b4fa688187d97f4c4dd: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 08:29:27,340 Worker d5f1312517244b4fa688187d97f4c4dd: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 08:29:27,342 Worker d5f1312517244b4fa688187d97f4c4dd: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 08:34:52,238 Worker d5f1312517244b4fa688187d97f4c4dd [PID 199508]: warm shut down requested
+2026-02-18 08:34:52,239 Worker d5f1312517244b4fa688187d97f4c4dd: unsubscribing from channel rq:pubsub:d5f1312517244b4fa688187d97f4c4dd
+2026-02-18 08:38:58,897 Worker ae2b16ffc76544f29f1962cc8939f170: started with PID 204634, version 2.6.1
+2026-02-18 08:38:58,897 Worker ae2b16ffc76544f29f1962cc8939f170: subscribing to channel rq:pubsub:ae2b16ffc76544f29f1962cc8939f170
+2026-02-18 08:38:58,901 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-18 08:38:58,902 Worker ae2b16ffc76544f29f1962cc8939f170: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 08:38:58,904 Worker ae2b16ffc76544f29f1962cc8939f170: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 08:38:58,906 Worker ae2b16ffc76544f29f1962cc8939f170: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 08:39:37,019 Worker ae2b16ffc76544f29f1962cc8939f170 [PID 204634]: warm shut down requested
+2026-02-18 08:39:37,042 Worker ae2b16ffc76544f29f1962cc8939f170: unsubscribing from channel rq:pubsub:ae2b16ffc76544f29f1962cc8939f170
+2026-02-18 08:39:49,566 Worker a0206ec6063f41e6872dbaff97debb0a: started with PID 205919, version 2.6.1
+2026-02-18 08:39:49,566 Worker a0206ec6063f41e6872dbaff97debb0a: subscribing to channel rq:pubsub:a0206ec6063f41e6872dbaff97debb0a
+2026-02-18 08:39:49,567 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-18 08:39:49,568 Worker a0206ec6063f41e6872dbaff97debb0a: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 08:39:49,570 Worker a0206ec6063f41e6872dbaff97debb0a: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 08:39:49,572 Worker a0206ec6063f41e6872dbaff97debb0a: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 08:53:19,633 Worker a0206ec6063f41e6872dbaff97debb0a: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 08:53:19,634 Worker a0206ec6063f41e6872dbaff97debb0a: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 08:53:19,636 Worker a0206ec6063f41e6872dbaff97debb0a: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 08:56:00,745 Worker a0206ec6063f41e6872dbaff97debb0a [PID 205919]: warm shut down requested
+2026-02-18 08:56:00,775 Worker a0206ec6063f41e6872dbaff97debb0a: unsubscribing from channel rq:pubsub:a0206ec6063f41e6872dbaff97debb0a
+2026-02-18 08:56:36,422 Worker 859b22f4b7964156a69663a9bc61bec6: started with PID 217416, version 2.6.1
+2026-02-18 08:56:36,423 Worker 859b22f4b7964156a69663a9bc61bec6: subscribing to channel rq:pubsub:859b22f4b7964156a69663a9bc61bec6
+2026-02-18 08:56:36,448 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-18 08:56:36,462 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 08:56:36,486 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 08:56:36,526 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 09:10:06,674 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 09:10:06,676 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 09:10:06,678 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 09:23:36,738 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 09:23:36,740 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 09:23:36,742 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 09:37:06,911 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 09:37:06,912 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 09:37:06,913 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 09:50:36,980 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 09:50:36,981 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 09:50:36,983 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 10:04:07,109 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 10:04:07,111 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 10:04:07,112 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 10:17:37,216 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 10:17:37,217 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 10:17:37,218 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 10:31:07,327 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 10:31:07,328 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 10:31:07,330 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 10:44:37,415 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 10:44:37,417 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 10:44:37,418 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 10:58:07,534 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 10:58:07,536 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 10:58:07,537 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 11:11:37,652 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 11:11:37,654 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 11:11:37,655 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 11:25:07,797 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 11:25:07,799 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 11:25:07,800 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 11:30:51,317 home-omegaui-Projects-crm-frappe-bench:default: frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.desk.doctype.notification_log.notification_log.make_notification_lo..., kwargs={'doc': {'type': 'Assignment', 'document_type': 'CRM Lead', 'subject': '<st..., method='frappe.desk.doctype.notification_log.notification_log.make_notification_lo..., site='crm.localhost', user='Administrator') (crm.localhost||97ed6638-3f9d-4523-aa8c-0168f511fe1d)
+2026-02-18 11:30:52,134 Successfully completed frappe.utils.background_jobs.execute_job(event=None, is_async=True, job_name='frappe.desk.doctype.notification_log.notification_log.make_notification_lo..., kwargs={'doc': {'type': 'Assignment', 'document_type': 'CRM Lead', 'subject': '<st..., method='frappe.desk.doctype.notification_log.notification_log.make_notification_lo..., site='crm.localhost', user='Administrator') job in 0:00:00.773545s on worker 859b22f4b7964156a69663a9bc61bec6
+2026-02-18 11:30:52,135 home-omegaui-Projects-crm-frappe-bench:default: Job OK (crm.localhost||97ed6638-3f9d-4523-aa8c-0168f511fe1d)
+2026-02-18 11:30:52,135 Result is kept for 600 seconds
+2026-02-18 11:37:37,165 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 11:37:37,167 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 11:37:37,168 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 11:51:07,216 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 11:51:07,218 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 11:51:07,220 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 12:04:37,279 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 12:04:37,281 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 12:04:37,282 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 12:18:07,388 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 12:18:07,390 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 12:18:07,392 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 12:31:37,481 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 12:31:37,483 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 12:31:37,485 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 12:45:07,622 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 12:45:07,623 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 12:45:07,625 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 12:58:37,733 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 12:58:37,734 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 12:58:37,735 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 13:12:07,825 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 13:12:07,827 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 13:12:07,829 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 13:25:37,983 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 13:25:37,984 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 13:25:37,986 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 13:39:08,060 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 13:39:08,061 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 13:39:08,063 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 13:52:38,210 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 13:52:38,211 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 13:52:38,212 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 14:06:08,307 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 14:06:08,309 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 14:06:08,311 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 14:19:38,423 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 14:19:38,424 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 14:19:38,425 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 14:33:08,530 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 14:33:08,531 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 14:33:08,532 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 14:46:38,610 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 14:46:38,612 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 14:46:38,613 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 15:00:08,772 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 15:00:08,773 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 15:00:08,774 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 15:13:38,836 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 15:13:38,838 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 15:13:38,839 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 15:27:08,948 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 15:27:08,949 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 15:27:08,950 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 15:40:39,118 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 15:40:39,119 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 15:40:39,120 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 15:54:09,162 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 15:54:09,167 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 15:54:09,168 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 16:07:39,262 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 16:07:39,264 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 16:07:39,265 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 16:21:09,343 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 16:21:09,344 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 16:21:09,345 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 16:34:39,468 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 16:34:39,469 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 16:34:39,470 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 16:48:09,534 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 16:48:09,535 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 16:48:09,536 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 17:01:39,601 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 17:01:39,603 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 17:01:39,604 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 17:15:09,707 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 17:15:09,709 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 17:15:09,710 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 17:28:39,793 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 17:28:39,794 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 17:28:39,796 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 17:42:09,897 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 17:42:09,898 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 17:42:09,899 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 17:55:40,004 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 17:55:40,005 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 17:55:40,007 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 18:09:10,200 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 18:09:10,203 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 18:09:10,204 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 18:22:40,362 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 18:22:40,363 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 18:22:40,364 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 18:36:10,516 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 18:36:10,518 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 18:36:10,520 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 18:49:40,655 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 18:49:40,656 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 18:49:40,658 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 19:03:10,756 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 19:03:10,757 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 19:03:10,759 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 19:16:40,867 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 19:16:40,868 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 19:16:40,869 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 19:30:10,932 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 19:30:10,933 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 19:30:10,934 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 19:43:41,020 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 19:43:41,021 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 19:43:41,022 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 19:57:11,119 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 19:57:11,121 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 19:57:11,122 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 20:10:41,189 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 20:10:41,190 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 20:10:41,191 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 20:24:11,285 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 20:24:11,286 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 20:24:11,287 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 20:37:41,383 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 20:37:41,384 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 20:37:41,385 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 20:51:11,480 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 20:51:11,481 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 20:51:11,482 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 21:04:41,606 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 21:04:41,607 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 21:04:41,608 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 21:18:11,676 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 21:18:11,677 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 21:18:11,678 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 21:31:41,800 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 21:31:41,801 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 21:31:41,802 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 21:45:11,943 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 21:45:11,944 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 21:45:11,945 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 21:58:41,965 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 21:58:41,967 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 21:58:41,968 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 22:12:12,143 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 22:12:12,145 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 22:12:12,146 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 22:25:42,252 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 22:25:42,253 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 22:25:42,254 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 22:39:12,371 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 22:39:12,372 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 22:39:12,374 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 22:52:42,516 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 22:52:42,517 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 22:52:42,518 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 23:06:12,668 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 23:06:12,669 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 23:06:12,670 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 23:19:42,770 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 23:19:42,771 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 23:19:42,772 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 23:33:12,869 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 23:33:12,870 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 23:33:12,872 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-18 23:46:42,984 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-18 23:46:42,985 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-18 23:46:42,986 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 00:00:13,045 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 00:00:13,046 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 00:00:13,047 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 00:13:43,122 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 00:13:43,123 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 00:13:43,124 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 00:27:13,192 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 00:27:13,193 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 00:27:13,194 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 00:40:43,263 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 00:40:43,264 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 00:40:43,265 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 00:54:13,409 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 00:54:13,411 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 00:54:13,412 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 01:07:43,537 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 01:07:43,538 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 01:07:43,539 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 01:21:13,627 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 01:21:13,629 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 01:21:13,630 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 01:34:43,651 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 01:34:43,652 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 01:34:43,654 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 01:48:13,706 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 01:48:13,708 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 01:48:13,709 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 02:01:43,778 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 02:01:43,779 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 02:01:43,780 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 02:15:13,930 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 02:15:13,931 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 02:15:13,932 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 02:28:43,946 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 02:28:43,947 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 02:28:43,948 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 02:42:13,996 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 02:42:13,997 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 02:42:13,998 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 02:55:44,052 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 02:55:44,054 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 02:55:44,055 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 03:09:14,150 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 03:09:14,151 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 03:09:14,153 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 03:22:44,272 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 03:22:44,274 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 03:22:44,275 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 03:36:14,400 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 03:36:14,401 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 03:36:14,402 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 03:49:44,464 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 03:49:44,465 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 03:49:44,466 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 04:03:14,573 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 04:03:14,574 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 04:03:14,575 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 04:16:44,766 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 04:16:44,768 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 04:16:44,769 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 04:30:14,853 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 04:30:14,854 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 04:30:14,855 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 04:43:44,932 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 04:43:44,934 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 04:43:44,935 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 04:57:15,023 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 04:57:15,024 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 04:57:15,026 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 05:10:45,173 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 05:10:45,175 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 05:10:45,177 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 05:24:15,262 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 05:24:15,264 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 05:24:15,266 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 05:37:45,336 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 05:37:45,337 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 05:37:45,338 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 05:51:15,506 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 05:51:15,581 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 05:51:15,585 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 06:04:45,723 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 06:04:45,737 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 06:04:45,740 Worker 859b22f4b7964156a69663a9bc61bec6: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 06:04:53,700 Worker 859b22f4b7964156a69663a9bc61bec6 [PID 217416]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 855, in connect_check_health
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/retry.py", line 116, in call_with_retry
+    return do()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 856, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1306, in _connect
+    raise err
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1290, in _connect
+    sock.connect(socket_address)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1687, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/utils.py", line 196, in wrapper
+    return func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 2603, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 846, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 863, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:11000. Connection refused.
+
+Error 111 connecting to 127.0.0.1:11000. Connection refused.
+2026-02-19 06:08:24,263 Worker f347cda33525413db9e31636286eb79a: started with PID 262161, version 2.6.1
+2026-02-19 06:08:24,265 Worker f347cda33525413db9e31636286eb79a: subscribing to channel rq:pubsub:f347cda33525413db9e31636286eb79a
+2026-02-19 06:08:24,272 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-19 06:08:24,280 Worker f347cda33525413db9e31636286eb79a: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 06:08:24,291 Worker f347cda33525413db9e31636286eb79a: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 06:08:24,293 Worker f347cda33525413db9e31636286eb79a: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 06:21:54,403 Worker f347cda33525413db9e31636286eb79a: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 06:21:54,405 Worker f347cda33525413db9e31636286eb79a: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 06:21:54,407 Worker f347cda33525413db9e31636286eb79a: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 06:29:04,996 Worker f347cda33525413db9e31636286eb79a [PID 262161]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1133, in read_response
+    response = self._parser.read_response(disable_decoding=disable_decoding)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/_parsers/hiredis.py", line 163, in read_response
+    self.read_from_socket()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/_parsers/hiredis.py", line 110, in read_from_socket
+    bufflen = self._sock.recv_into(self._buffer)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1687, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/utils.py", line 196, in wrapper
+    return func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 2603, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 846, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 869, in connect_check_health
+    self.on_connect_check_health(check_health=check_health)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 994, in on_connect_check_health
+    self.read_response()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1141, in read_response
+    raise ConnectionError(f"Error while reading from {host_error} : {e.args}")
+redis.exceptions.ConnectionError: Error while reading from 127.0.0.1:11000 : (104, 'Connection reset by peer')
+
+Error while reading from 127.0.0.1:11000 : (104, 'Connection reset by peer')

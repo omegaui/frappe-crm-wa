@@ -329,10 +329,18 @@
           :label="__('Phone Number')"
           :placeholder="__('+91 98765 43210')"
         />
+        <FormControl
+          v-model="newChatMessage"
+          type="textarea"
+          :label="__('Message')"
+          :placeholder="__('Type your first message...')"
+          rows="3"
+        />
         <Button
           variant="solid"
           :label="__('Start Chat')"
-          :disabled="!newChatPhone"
+          :disabled="!newChatPhone || !newChatMessage.trim() || sendingNewChat"
+          :loading="sendingNewChat"
           @click="startNewChat"
         />
       </div>
@@ -412,6 +420,8 @@ const messagesContainer = ref(null)
 
 const showNewChatDialog = ref(false)
 const newChatPhone = ref('')
+const newChatMessage = ref('')
+const sendingNewChat = ref(false)
 const fullscreenImage = ref(null)
 const unreadJids = ref(new Set())
 const lastSeenTimes = ref(new Map())
@@ -813,10 +823,37 @@ function startNewChat() {
   if (!phone.startsWith('+')) {
     phone = '+' + phone
   }
-  const jid = phone.replace('+', '') + '@s.whatsapp.net'
-  showNewChatDialog.value = false
-  newChatPhone.value = ''
-  selectChat({ jid, phone, contact_name: '' })
+  const message = newChatMessage.value.trim()
+  if (!message) return
+
+  sendingNewChat.value = true
+  const capturedPhone = phone
+
+  createResource({
+    url: 'crm.api.whatsapp.send_chat_message',
+    params: { phone, message },
+    auto: true,
+    onSuccess: async (data) => {
+      const chatJid = data?.chat_jid || ''
+      showNewChatDialog.value = false
+      newChatPhone.value = ''
+      newChatMessage.value = ''
+      sendingNewChat.value = false
+
+      // Reload chat list so the bridge-created chat appears
+      await chatList.reload()
+      const chat = chatList.data?.find((c) => c.jid === chatJid)
+      if (chat) {
+        selectChat(chat)
+      } else {
+        selectChat({ jid: chatJid, phone: capturedPhone, contact_name: '' })
+      }
+    },
+    onError: (error) => {
+      sendingNewChat.value = false
+      toast.error(error.messages?.[0] || __('Failed to send message'))
+    },
+  })
 }
 
 function toLocalStr(dateStr) {

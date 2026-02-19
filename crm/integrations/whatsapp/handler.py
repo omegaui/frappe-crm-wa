@@ -59,7 +59,7 @@ def webhook(**kwargs):
 	"""
 	validate_webhook_secret()
 
-	data = frappe.parse_json(frappe.request.data)
+	data = frappe.form_dict
 
 	# Skip messages sent by us (outgoing messages we already tracked)
 	if data.get("is_from_me"):

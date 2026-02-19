@@ -66,7 +66,12 @@
       :placeholder="__('Type your message here...')"
       @focus="rows = 6"
       @blur="rows = 1"
-      @keydown.enter.stop="(e) => sendTextMessage(e)"
+    />
+    <Button
+      variant="solid"
+      icon="send"
+      class="mb-0.5 shrink-0"
+      @click="submit()"
     />
   </div>
 </template>
@@ -103,12 +108,6 @@ function uploadFile(file) {
   attachUrl.value = file.file_url
   fileType.value = fileType.value || 'document'
   submit()
-}
-
-function sendTextMessage(event) {
-  if (event.shiftKey) return
-  submit()
-  textareaRef.value.el?.blur()
 }
 
 function submit() {

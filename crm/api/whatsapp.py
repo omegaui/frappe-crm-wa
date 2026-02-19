@@ -646,14 +646,17 @@ def send_chat_message(phone, message="", attach="", content_type="text", jid="",
 
 	status = "sent"
 	message_id = ""
+	chat_jid = jid or _phone_to_jid(phone)
 
 	try:
 		if attach and content_type in ("image", "document", "video", "audio"):
 			result = send_file_via_bridge(send_to, attach, attach.split("/")[-1], message or "", sender_name=sender_name)
 			message_id = (result or {}).get("message_id", "")
+			chat_jid = (result or {}).get("chat_jid", "") or chat_jid
 		elif message:
 			result = send_message_via_bridge(send_to, message, sender_name=sender_name)
 			message_id = (result or {}).get("message_id", "")
+			chat_jid = (result or {}).get("chat_jid", "") or chat_jid
 	except Exception as e:
 		frappe.log_error(title="WhatsApp Bridge Send Error", message=str(e))
 		status = "failed"
@@ -662,7 +665,7 @@ def send_chat_message(phone, message="", attach="", content_type="text", jid="",
 	now_iso = frappe.utils.now_datetime().isoformat()
 	frappe.publish_realtime("whatsapp_chat_update", {
 		"event_type": "new_message",
-		"chat_jid": jid or _phone_to_jid(phone),
+		"chat_jid": chat_jid,
 		"phone": phone,
 		"message": {
 			"name": message_id or frappe.generate_hash(length=10),
@@ -689,7 +692,7 @@ def send_chat_message(phone, message="", attach="", content_type="text", jid="",
 	# Legacy event for Activities component backward compatibility
 	frappe.publish_realtime("whatsapp_message", {"phone": phone})
 
-	return {"ok": True, "status": status, "message_id": message_id}
+	return {"ok": True, "status": status, "message_id": message_id, "chat_jid": chat_jid}
 
 
 @frappe.whitelist()
