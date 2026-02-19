@@ -5185,3 +5185,91 @@ Traceback (most recent call last):
 redis.exceptions.ConnectionError: Error while reading from 127.0.0.1:11000 : (104, 'Connection reset by peer')
 
 Error while reading from 127.0.0.1:11000 : (104, 'Connection reset by peer')
+2026-02-19 08:41:39,826 Worker 1a5e1b5de5434f70be8d69c4f8dab1c8: started with PID 290443, version 2.6.1
+2026-02-19 08:41:39,835 Worker 1a5e1b5de5434f70be8d69c4f8dab1c8: subscribing to channel rq:pubsub:1a5e1b5de5434f70be8d69c4f8dab1c8
+2026-02-19 08:41:39,867 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-19 08:41:39,878 Worker 1a5e1b5de5434f70be8d69c4f8dab1c8: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 08:41:39,911 Worker 1a5e1b5de5434f70be8d69c4f8dab1c8: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 08:41:39,946 Worker 1a5e1b5de5434f70be8d69c4f8dab1c8: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long
+2026-02-19 08:46:40,686 Worker 1a5e1b5de5434f70be8d69c4f8dab1c8 [PID 290443]: warm shut down requested
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 855, in connect_check_health
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/retry.py", line 116, in call_with_retry
+    return do()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 856, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1306, in _connect
+    raise err
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 1290, in _connect
+    sock.connect(socket_address)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/bench_helper.py", line 48, in invoke
+    return super().invoke(ctx)
+           ~~~~~~~~~~~~~~^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/commands/scheduler.py", line 206, in start_worker
+    start_worker(
+    ~~~~~~~~~~~~^
+    	queue,
+     ^^^^^^
+    ...<4 lines>...
+    	strategy=strategy,
+     ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/background_jobs.py", line 353, in start_worker
+    worker.work(
+    ~~~~~~~~~~~^
+    	logging_level=logging_level,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	with_scheduler=False,
+     ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 631, in work
+    self.teardown()
+    ~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 1150, in teardown
+    self.register_death()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/rq/worker.py", line 885, in register_death
+    p.execute()
+    ~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/client.py", line 1687, in execute
+    conn = self.connection_pool.get_connection()
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/utils.py", line 196, in wrapper
+    return func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 2603, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 846, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/env/lib/python3.14/site-packages/redis/connection.py", line 863, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:11000. Connection refused.
+
+Error 111 connecting to 127.0.0.1:11000. Connection refused.
+2026-02-19 08:46:51,225 Worker 4e8676b4b9c2457d952a660d54e9020c: started with PID 295746, version 2.6.1
+2026-02-19 08:46:51,226 Worker 4e8676b4b9c2457d952a660d54e9020c: subscribing to channel rq:pubsub:4e8676b4b9c2457d952a660d54e9020c
+2026-02-19 08:46:51,232 *** Listening on home-omegaui-Projects-crm-frappe-bench:short, home-omegaui-Projects-crm-frappe-bench:default, home-omegaui-Projects-crm-frappe-bench:long...
+2026-02-19 08:46:51,234 Worker 4e8676b4b9c2457d952a660d54e9020c: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:short
+2026-02-19 08:46:51,254 Worker 4e8676b4b9c2457d952a660d54e9020c: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:default
+2026-02-19 08:46:51,294 Worker 4e8676b4b9c2457d952a660d54e9020c: cleaning registries for queue: home-omegaui-Projects-crm-frappe-bench:long

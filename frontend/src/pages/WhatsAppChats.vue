@@ -99,6 +99,8 @@
         <div class="flex items-center gap-3 border-b px-4 py-2.5">
           <div
             class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-surface-gray-3 text-ink-gray-5 overflow-hidden"
+            :class="{ 'cursor-pointer': selectedChatPhoto }"
+            @click="selectedChatPhoto && openImageFullscreen(selectedChatPhoto)"
           >
             <img
               v-if="selectedChatPhoto"
@@ -110,10 +112,10 @@
           </div>
           <div class="flex-1">
             <div class="text-sm font-medium text-ink-gray-9">
-              {{ selectedChat?.contact_name || selectedChat?.phone || __('Unknown') }}
+              {{ selectedChat?.contact_name || selectedChatPhone || __('Unknown') }}
             </div>
-            <div v-if="selectedChat?.phone" class="text-xs text-ink-gray-4">
-              {{ selectedChat?.phone }}
+            <div v-if="selectedChatPhone" class="text-xs text-ink-gray-5">
+              {{ selectedChatPhone }}
             </div>
           </div>
           <!-- Assignment -->
@@ -435,6 +437,17 @@ const { getUser, users: usersResource, isManager } = usersStore()
 const linkedDoc = ref(null)
 const convertingToLead = ref(false)
 const showAssignDropdown = ref(false)
+
+const selectedChatPhone = computed(() => {
+  if (!selectedChat.value) return ''
+  if (selectedChat.value.phone) return selectedChat.value.phone
+  // Derive phone from JID for @s.whatsapp.net contacts
+  const jid = selectedJid.value || ''
+  if (jid.endsWith('@s.whatsapp.net')) {
+    return '+' + jid.split('@')[0].split(':')[0]
+  }
+  return ''
+})
 
 const crmUserOptions = computed(() => {
   const crmUsers = usersResource.data?.crmUsers || []
@@ -884,9 +897,40 @@ function formatMsgTime(dateStr) {
   return formatDate(toLocalStr(dateStr), 'hh:mm a')
 }
 
+// Build a digits→name map from the chat list for resolving @mentions
+// Maps both phone digits (919876543210) and JID prefixes (215414101512439 for @lid) to names
+const mentionNameMap = computed(() => {
+  const map = new Map()
+  if (!chatList.data) return map
+  for (const chat of chatList.data) {
+    if (!chat.contact_name || chat.is_group) continue
+    // Map phone digits → name
+    if (chat.phone) {
+      const digits = chat.phone.replace(/[+\s-]/g, '')
+      if (digits) map.set(digits, chat.contact_name)
+    }
+    // Map JID prefix → name (covers @lid JIDs like 215414101512439@lid)
+    if (chat.jid && chat.jid.includes('@')) {
+      const jidPrefix = chat.jid.split('@')[0].split(':')[0]
+      if (jidPrefix && !map.has(jidPrefix)) {
+        map.set(jidPrefix, chat.contact_name)
+      }
+    }
+  }
+  return map
+})
+
 function formatMessage(text) {
   if (!text) return ''
   let msg = text
+  // Resolve @mentions: @919876543210 or @215414101512439 (LID) → @ContactName
+  msg = msg.replace(/@(\d{7,18})/g, (match, digits) => {
+    const name = mentionNameMap.value.get(digits)
+    if (name) {
+      return `<span class="font-semibold text-blue-600">@${name}</span>`
+    }
+    return match
+  })
   msg = msg.replace(/\*(.*?)\*/g, '<b>$1</b>')
   msg = msg.replace(/_(.*?)_/g, '<i>$1</i>')
   msg = msg.replace(/~(.*?)~/g, '<s>$1</s>')
