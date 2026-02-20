@@ -640,8 +640,9 @@ const chatList = createResource({
           unreadJids.value.add(chat.jid)
           unreadJids.value = new Set(unreadJids.value)
           lastSeenTimes.value.set(chat.jid, chat.last_message_time)
-          // Desktop notification for incoming messages detected via polling
+          // Desktop notification + sound for incoming messages detected via polling
           if (!chat.last_message_is_from_me) {
+            playNotificationSound()
             showDesktopNotification({
               chat_jid: chat.jid,
               phone: chat.phone,
@@ -1090,6 +1091,33 @@ function formatMessage(text) {
   return msg
 }
 
+// Notification sound using Web Audio API (no file needed)
+let _audioCtx = null
+function playNotificationSound() {
+  try {
+    if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+    const ctx = _audioCtx
+    const now = ctx.currentTime
+    // Two-tone chime (like WhatsApp)
+    const playTone = (freq, start, dur) => {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'sine'
+      osc.frequency.value = freq
+      gain.gain.setValueAtTime(0.3, start)
+      gain.gain.exponentialRampToValueAtTime(0.01, start + dur)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.start(start)
+      osc.stop(start + dur)
+    }
+    playTone(880, now, 0.15)
+    playTone(1320, now + 0.12, 0.15)
+  } catch (_) {
+    // Audio not available
+  }
+}
+
 // Desktop notifications for incoming messages
 function requestNotificationPermission() {
   if ('Notification' in window && Notification.permission === 'default') {
@@ -1138,8 +1166,9 @@ onMounted(() => {
       } else if (data.chat_jid) {
         unreadJids.value.add(data.chat_jid)
         unreadJids.value = new Set(unreadJids.value)
-        // Desktop notification for unseen incoming messages
+        // Desktop notification + sound for unseen incoming messages
         if (data.message?.type === 'Incoming') {
+          playNotificationSound()
           showDesktopNotification(data)
         }
       }
