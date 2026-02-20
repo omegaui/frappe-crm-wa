@@ -1097,6 +1097,10 @@ function playNotificationSound() {
   try {
     if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)()
     const ctx = _audioCtx
+    // Resume suspended AudioContext (browsers require user interaction first)
+    if (ctx.state === 'suspended') {
+      ctx.resume()
+    }
     const now = ctx.currentTime
     // Two-tone chime (like WhatsApp)
     const playTone = (freq, start, dur) => {
@@ -1104,15 +1108,15 @@ function playNotificationSound() {
       const gain = ctx.createGain()
       osc.type = 'sine'
       osc.frequency.value = freq
-      gain.gain.setValueAtTime(0.3, start)
+      gain.gain.setValueAtTime(0.45, start)
       gain.gain.exponentialRampToValueAtTime(0.01, start + dur)
       osc.connect(gain)
       gain.connect(ctx.destination)
       osc.start(start)
       osc.stop(start + dur)
     }
-    playTone(880, now, 0.15)
-    playTone(1320, now + 0.12, 0.15)
+    playTone(880, now, 0.18)
+    playTone(1320, now + 0.15, 0.18)
   } catch (_) {
     // Audio not available
   }
