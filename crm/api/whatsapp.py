@@ -507,6 +507,9 @@ def get_chat_list(search=None):
 			"last_message_sender_name": bc.get("last_message_sender_name") or "",
 			"assigned_to": bc.get("assigned_to") or "",
 			"photo_url": bc.get("photo_url") or "",
+			"user_status": bc.get("user_status") or "",
+			"plan": bc.get("plan") or "",
+			"shop_type": bc.get("shop_type") or "",
 		})
 
 	return chats
@@ -873,6 +876,239 @@ def merge_duplicate_chats():
 	except Exception as e:
 		frappe.log_error(title="WhatsApp Bridge: Failed to merge duplicate chats", message=str(e))
 		return {"ok": False, "merged": 0}
+
+
+@frappe.whitelist()
+def get_chat_tags(jid):
+	"""Get tags for a WhatsApp chat."""
+	validate_access()
+	if not jid or not _use_bridge():
+		return {"user_status": "", "plan": "", "shop_type": ""}
+
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+
+	try:
+		from urllib.parse import quote
+		resp = requests.get(f"{bridge_url}/chats/{quote(jid, safe='')}/tags", timeout=10)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception:
+		return {"user_status": "", "plan": "", "shop_type": ""}
+
+
+@frappe.whitelist()
+def set_chat_tags(jid, user_status=None, plan=None, shop_type=None):
+	"""Set tags for a WhatsApp chat."""
+	validate_access()
+	if not jid or not _use_bridge():
+		return {"ok": False}
+
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+
+	body = {}
+	if user_status is not None:
+		body["user_status"] = user_status
+	if plan is not None:
+		body["plan"] = plan
+	if shop_type is not None:
+		body["shop_type"] = shop_type
+
+	try:
+		from urllib.parse import quote
+		resp = requests.put(
+			f"{bridge_url}/chats/{quote(jid, safe='')}/tags",
+			json=body,
+			timeout=10,
+		)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception as e:
+		frappe.log_error(title="WhatsApp Bridge: Failed to set tags", message=str(e))
+		return {"ok": False}
+
+
+@frappe.whitelist()
+def get_chat_notes(jid):
+	"""Get notes for a WhatsApp chat."""
+	validate_access()
+	if not jid or not _use_bridge():
+		return []
+
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+
+	try:
+		from urllib.parse import quote
+		resp = requests.get(f"{bridge_url}/chats/{quote(jid, safe='')}/notes", timeout=10)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception:
+		return []
+
+
+@frappe.whitelist()
+def add_chat_note(jid, content):
+	"""Add a note to a WhatsApp chat."""
+	validate_access()
+	if not jid or not content or not _use_bridge():
+		return {"ok": False}
+
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+
+	try:
+		from urllib.parse import quote
+		resp = requests.post(
+			f"{bridge_url}/chats/{quote(jid, safe='')}/notes",
+			json={"content": content, "created_by": frappe.session.user},
+			timeout=10,
+		)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception as e:
+		frappe.log_error(title="WhatsApp Bridge: Failed to add note", message=str(e))
+		return {"ok": False}
+
+
+@frappe.whitelist()
+def update_chat_note(jid, note_id, content):
+	"""Update a note on a WhatsApp chat."""
+	validate_access()
+	if not jid or not note_id or not content or not _use_bridge():
+		return {"ok": False}
+
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+
+	try:
+		from urllib.parse import quote
+		resp = requests.put(
+			f"{bridge_url}/chats/{quote(jid, safe='')}/notes/{note_id}",
+			json={"content": content, "updated_by": frappe.session.user},
+			timeout=10,
+		)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception as e:
+		frappe.log_error(title="WhatsApp Bridge: Failed to update note", message=str(e))
+		return {"ok": False}
+
+
+@frappe.whitelist()
+def delete_chat_note(jid, note_id):
+	"""Delete a note from a WhatsApp chat."""
+	validate_access()
+	if not jid or not note_id or not _use_bridge():
+		return {"ok": False}
+
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+
+	try:
+		from urllib.parse import quote
+		resp = requests.delete(
+			f"{bridge_url}/chats/{quote(jid, safe='')}/notes/{note_id}",
+			timeout=10,
+		)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception as e:
+		frappe.log_error(title="WhatsApp Bridge: Failed to delete note", message=str(e))
+		return {"ok": False}
+
+
+@frappe.whitelist()
+def get_chat_templates():
+	"""Get all chat templates."""
+	validate_access()
+	if not _use_bridge():
+		return []
+
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+
+	try:
+		resp = requests.get(f"{bridge_url}/templates", timeout=10)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception:
+		return []
+
+
+@frappe.whitelist()
+def add_chat_template(name, content):
+	"""Create a new chat template. Admin only."""
+	validate_access()
+	if not any(role in ["System Manager"] for role in frappe.get_roles()):
+		frappe.throw(_("Only admins can manage templates."), frappe.PermissionError)
+
+	if not name or not content or not _use_bridge():
+		return {"ok": False}
+
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+
+	try:
+		resp = requests.post(
+			f"{bridge_url}/templates",
+			json={"name": name, "content": content, "created_by": frappe.session.user},
+			timeout=10,
+		)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception as e:
+		frappe.log_error(title="WhatsApp Bridge: Failed to add template", message=str(e))
+		return {"ok": False}
+
+
+@frappe.whitelist()
+def update_chat_template(template_id, name, content):
+	"""Update a chat template. Admin only."""
+	validate_access()
+	if not any(role in ["System Manager"] for role in frappe.get_roles()):
+		frappe.throw(_("Only admins can manage templates."), frappe.PermissionError)
+
+	if not template_id or not name or not content or not _use_bridge():
+		return {"ok": False}
+
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+
+	try:
+		resp = requests.put(
+			f"{bridge_url}/templates/{template_id}",
+			json={"name": name, "content": content},
+			timeout=10,
+		)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception as e:
+		frappe.log_error(title="WhatsApp Bridge: Failed to update template", message=str(e))
+		return {"ok": False}
+
+
+@frappe.whitelist()
+def delete_chat_template(template_id):
+	"""Delete a chat template. Admin only."""
+	validate_access()
+	if not any(role in ["System Manager"] for role in frappe.get_roles()):
+		frappe.throw(_("Only admins can manage templates."), frappe.PermissionError)
+
+	if not template_id or not _use_bridge():
+		return {"ok": False}
+
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+
+	try:
+		resp = requests.delete(f"{bridge_url}/templates/{template_id}", timeout=10)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception as e:
+		frappe.log_error(title="WhatsApp Bridge: Failed to delete template", message=str(e))
+		return {"ok": False}
 
 
 def parse_template_parameters(string, parameters):

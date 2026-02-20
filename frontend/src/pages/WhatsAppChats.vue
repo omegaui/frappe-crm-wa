@@ -17,6 +17,14 @@
         <template #prefix><FeatherIcon name="git-merge" class="h-4" /></template>
       </Button>
       <Button
+        v-if="isAdmin()"
+        variant="subtle"
+        :label="__('Templates')"
+        @click="showTemplatesDialog = true"
+      >
+        <template #prefix><FeatherIcon name="file-text" class="h-4" /></template>
+      </Button>
+      <Button
         variant="solid"
         :label="__('New Chat')"
         @click="showNewChatDialog = true"
@@ -88,16 +96,23 @@
                 <span v-if="chat.last_message_is_from_me && chat.last_message_sender_name" class="font-medium text-ink-gray-6">{{ chat.last_message_sender_name.split(' ')[0] }}: </span>{{ chat.last_message || chat.phone }}
               </span>
               <div class="ml-1 flex flex-shrink-0 items-center gap-1">
-                <UserAvatar
+                <span
                   v-if="chat.assigned_to"
-                  :user="chat.assigned_to"
-                  size="xs"
-                />
+                  class="text-[10px] px-1.5 py-0.5 rounded-full font-medium truncate max-w-[80px]"
+                  :class="getAssigneeColor(chat.assigned_to)"
+                >
+                  {{ getUser(chat.assigned_to).full_name?.split(' ')[0] || chat.assigned_to }}
+                </span>
                 <span
                   v-if="unreadJids.has(chat.jid)"
                   class="h-2.5 w-2.5 rounded-full bg-green-500"
                 />
               </div>
+            </div>
+            <div v-if="chat.user_status || chat.plan || chat.shop_type" class="flex flex-wrap gap-1 mt-1">
+              <span v-if="chat.user_status" class="text-[9px] leading-tight px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700">{{ chat.user_status }}</span>
+              <span v-if="chat.plan" class="text-[9px] leading-tight px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700">{{ chat.plan }}</span>
+              <span v-if="chat.shop_type" class="text-[9px] leading-tight px-1.5 py-0.5 rounded-full bg-violet-100 text-violet-700">{{ chat.shop_type }}</span>
             </div>
           </div>
         </div>
@@ -215,6 +230,77 @@
               </template>
             </Button>
           </template>
+        </div>
+
+        <!-- Tags Row -->
+        <div :key="'tags-' + selectedJid" class="flex items-center gap-2 border-b px-4 py-1.5">
+          <span class="text-[10px] font-medium text-ink-gray-4 uppercase">Tags</span>
+          <FormControl
+            type="select"
+            :modelValue="selectedChat?.user_status || ''"
+            :options="[{label: 'Status...', value: ''}, ...TAG_OPTIONS.user_status.map(o => ({label: o, value: o}))]"
+            class="!text-xs !h-6"
+            size="sm"
+            @update:modelValue="(val) => updateTag('user_status', val)"
+          />
+          <FormControl
+            type="select"
+            :modelValue="selectedChat?.plan || ''"
+            :options="[{label: 'Plan...', value: ''}, ...TAG_OPTIONS.plan.map(o => ({label: o, value: o}))]"
+            class="!text-xs !h-6"
+            size="sm"
+            @update:modelValue="(val) => updateTag('plan', val)"
+          />
+          <FormControl
+            type="select"
+            :modelValue="selectedChat?.shop_type || ''"
+            :options="[{label: 'Shop...', value: ''}, ...TAG_OPTIONS.shop_type.map(o => ({label: o, value: o}))]"
+            class="!text-xs !h-6"
+            size="sm"
+            @update:modelValue="(val) => updateTag('shop_type', val)"
+          />
+        </div>
+
+        <!-- Notes Area -->
+        <div class="border-b px-4 py-2 max-h-32 overflow-y-auto bg-surface-gray-1">
+          <div v-for="note in chatNotes" :key="note.id" class="flex items-start gap-2 mb-1.5 group">
+            <template v-if="editingNoteId === note.id">
+              <TextInput
+                v-model="editingNoteContent"
+                class="flex-1 text-xs"
+                size="sm"
+                @keyup.enter="saveEditNote(note.id)"
+              />
+              <Button variant="subtle" size="sm" @click="saveEditNote(note.id)">
+                <template #icon><FeatherIcon name="check" class="h-3 w-3" /></template>
+              </Button>
+              <Button variant="ghost" size="sm" @click="editingNoteId = null">
+                <template #icon><FeatherIcon name="x" class="h-3 w-3" /></template>
+              </Button>
+            </template>
+            <template v-else>
+              <span class="flex-1 text-xs text-ink-gray-7">{{ note.content }}</span>
+              <span class="text-[10px] text-ink-gray-4 whitespace-nowrap">{{ note.created_by?.split('@')[0] }}</span>
+              <button class="text-ink-gray-4 hover:text-ink-gray-6 opacity-0 group-hover:opacity-100" @click="startEditNote(note)">
+                <FeatherIcon name="edit-2" class="h-3 w-3" />
+              </button>
+              <button class="text-ink-gray-4 hover:text-ink-red-3 opacity-0 group-hover:opacity-100" @click="deleteNote(note.id)">
+                <FeatherIcon name="x" class="h-3 w-3" />
+              </button>
+            </template>
+          </div>
+          <div class="flex gap-2 mt-1">
+            <TextInput
+              v-model="newNoteContent"
+              :placeholder="__('Add a note...')"
+              class="flex-1 text-xs"
+              size="sm"
+              @keyup.enter="addNote"
+            />
+            <Button variant="subtle" size="sm" :disabled="!newNoteContent.trim()" @click="addNote">
+              {{ __('Add') }}
+            </Button>
+          </div>
         </div>
 
         <!-- Messages Area -->
@@ -398,6 +484,14 @@
           :placeholder="__('+91 98765 43210')"
         />
         <FormControl
+          v-if="chatTemplates.length"
+          type="select"
+          :label="__('Template')"
+          :modelValue="selectedTemplateId"
+          :options="[{label: __('None'), value: ''}, ...chatTemplates.map(t => ({label: t.name, value: String(t.id)}))]"
+          @change="applyTemplate"
+        />
+        <FormControl
           v-model="newChatMessage"
           type="textarea"
           :label="__('Message')"
@@ -411,6 +505,65 @@
           :loading="sendingNewChat"
           @click="startNewChat"
         />
+      </div>
+    </template>
+  </Dialog>
+
+  <!-- Templates Management Dialog -->
+  <Dialog
+    v-model="showTemplatesDialog"
+    :options="{
+      title: __('Chat Templates'),
+      size: 'lg',
+    }"
+  >
+    <template #body-content>
+      <div class="flex flex-col gap-3">
+        <div v-for="tpl in chatTemplates" :key="tpl.id" class="flex items-start gap-2 rounded-lg border p-3">
+          <div class="flex-1">
+            <div class="text-sm font-medium text-ink-gray-9">{{ tpl.name }}</div>
+            <div class="mt-1 text-xs text-ink-gray-6 whitespace-pre-wrap">{{ tpl.content }}</div>
+          </div>
+          <Button variant="ghost" size="sm" @click="startEditTemplate(tpl)">
+            <template #icon><FeatherIcon name="edit-2" class="h-3.5 w-3.5" /></template>
+          </Button>
+          <Button variant="ghost" size="sm" @click="removeTemplate(tpl.id)">
+            <template #icon><FeatherIcon name="trash-2" class="h-3.5 w-3.5 text-ink-red-3" /></template>
+          </Button>
+        </div>
+        <div v-if="!chatTemplates.length" class="py-4 text-center text-sm text-ink-gray-4">
+          {{ __('No templates yet. Create one below.') }}
+        </div>
+        <div class="flex flex-col gap-2 rounded-lg border border-dashed p-3">
+          <div class="text-xs font-medium text-ink-gray-5">{{ editingTemplateId ? __('Edit Template') : __('New Template') }}</div>
+          <FormControl
+            v-model="templateName"
+            :placeholder="__('Template name')"
+            size="sm"
+          />
+          <FormControl
+            v-model="templateContent"
+            type="textarea"
+            :placeholder="__('Template message content...')"
+            rows="3"
+          />
+          <div class="flex gap-2">
+            <Button
+              variant="solid"
+              size="sm"
+              :label="editingTemplateId ? __('Update') : __('Create')"
+              :disabled="!templateName.trim() || !templateContent.trim()"
+              @click="saveTemplate"
+            />
+            <Button
+              v-if="editingTemplateId"
+              variant="ghost"
+              size="sm"
+              :label="__('Cancel')"
+              @click="cancelEditTemplate"
+            />
+          </div>
+        </div>
       </div>
     </template>
   </Dialog>
@@ -469,6 +622,7 @@ import { usersStore } from '@/stores/users'
 import { formatDate } from '@/utils'
 import {
   createResource,
+  call,
   Autocomplete,
   TextInput,
   FormControl,
@@ -482,6 +636,30 @@ import { ref, computed, nextTick, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 
 const { $socket } = globalStore()
+
+const ASSIGNEE_COLORS = [
+  'bg-blue-100 text-blue-700', 'bg-green-100 text-green-700',
+  'bg-purple-100 text-purple-700', 'bg-orange-100 text-orange-700',
+  'bg-pink-100 text-pink-700', 'bg-teal-100 text-teal-700',
+  'bg-red-100 text-red-700', 'bg-indigo-100 text-indigo-700',
+  'bg-yellow-100 text-yellow-700', 'bg-cyan-100 text-cyan-700',
+  'bg-rose-100 text-rose-700', 'bg-emerald-100 text-emerald-700',
+]
+
+function getAssigneeColor(email) {
+  let hash = 0
+  for (let i = 0; i < email.length; i++) {
+    hash = ((hash << 5) - hash) + email.charCodeAt(i)
+    hash |= 0
+  }
+  return ASSIGNEE_COLORS[Math.abs(hash) % ASSIGNEE_COLORS.length]
+}
+
+const TAG_OPTIONS = {
+  user_status: ['New User', "Didn't pick", 'Unreachable', 'Not Interested', 'Spoke will try app', 'Busy, Followup', 'Really Interested', 'Interested', 'Cut after BF mentioned', 'DND', 'Language issue'],
+  plan: ['LITE PLAN', 'PREMIUM', 'ULTRA', 'Confused'],
+  shop_type: ['grocery', 'hardware', 'petStore', 'cosmetics', 'electronics', 'bookStore', 'stationary', 'toysAndSports', 'restaurant', 'bakery', 'shoes', 'clothing', 'jewellery', 'others'],
+}
 
 const searchQuery = ref('')
 const selectedJid = ref(null)
@@ -502,10 +680,24 @@ const selectedChatPhoto = ref('')
 const contextMenu = ref({ visible: false, x: 0, y: 0, msg: null })
 
 const router = useRouter()
-const { getUser, users: usersResource, isManager } = usersStore()
+const { getUser, users: usersResource, isManager, isAdmin } = usersStore()
 const linkedDoc = ref(null)
 const convertingToLead = ref(false)
 const showAssignDropdown = ref(false)
+
+// Notes state
+const chatNotes = ref([])
+const newNoteContent = ref('')
+const editingNoteId = ref(null)
+const editingNoteContent = ref('')
+
+// Templates state
+const showTemplatesDialog = ref(false)
+const chatTemplates = ref([])
+const templateName = ref('')
+const templateContent = ref('')
+const editingTemplateId = ref(null)
+const selectedTemplateId = ref('')
 
 // Lead side panel sections (cached, shared with Lead page)
 const leadSections = createResource({
@@ -702,6 +894,7 @@ function selectChat(chat) {
   // Start with cached photo from chat list, then fetch fresh
   selectedChatPhoto.value = chat.photo_url || ''
   fetchProfilePhoto(chat.jid)
+  loadNotes(chat.jid)
 }
 
 function fetchProfilePhoto(jid) {
@@ -718,6 +911,169 @@ function fetchProfilePhoto(jid) {
       }
     },
   })
+}
+
+// -- Tags --
+function updateTag(tagType, value) {
+  if (!selectedJid.value) return
+  const jid = selectedJid.value
+  const params = { jid }
+  params[tagType] = value || ''
+  call('crm.api.whatsapp.set_chat_tags', params)
+    .then(() => {
+      if (selectedChat.value) selectedChat.value[tagType] = value
+      const chatEntry = chatList.data?.find((c) => c.jid === jid)
+      if (chatEntry) chatEntry[tagType] = value
+    })
+    .catch((e) => {
+      console.error('Failed to save tag:', tagType, value, e)
+      toast.error(__('Failed to save tag'))
+    })
+}
+
+// -- Notes --
+function loadNotes(jid) {
+  chatNotes.value = []
+  newNoteContent.value = ''
+  editingNoteId.value = null
+  if (!jid) return
+  createResource({
+    url: 'crm.api.whatsapp.get_chat_notes',
+    params: { jid },
+    auto: true,
+    onSuccess: (data) => {
+      if (selectedJid.value === jid) chatNotes.value = data || []
+    },
+  })
+}
+
+function addNote() {
+  const content = newNoteContent.value.trim()
+  if (!content || !selectedJid.value) return
+  newNoteContent.value = ''
+  createResource({
+    url: 'crm.api.whatsapp.add_chat_note',
+    params: { jid: selectedJid.value, content },
+    auto: true,
+    onSuccess: (note) => {
+      if (note && note.id) chatNotes.value.unshift(note)
+    },
+    onError: () => toast.error(__('Failed to add note')),
+  })
+}
+
+function startEditNote(note) {
+  editingNoteId.value = note.id
+  editingNoteContent.value = note.content
+}
+
+function saveEditNote(noteId) {
+  const content = editingNoteContent.value.trim()
+  if (!content || !selectedJid.value) return
+  createResource({
+    url: 'crm.api.whatsapp.update_chat_note',
+    params: { jid: selectedJid.value, note_id: noteId, content },
+    auto: true,
+    onSuccess: (updated) => {
+      editingNoteId.value = null
+      if (updated) {
+        const idx = chatNotes.value.findIndex((n) => n.id === noteId)
+        if (idx !== -1) chatNotes.value.splice(idx, 1, updated)
+      }
+    },
+    onError: () => toast.error(__('Failed to update note')),
+  })
+}
+
+function deleteNote(noteId) {
+  if (!selectedJid.value) return
+  createResource({
+    url: 'crm.api.whatsapp.delete_chat_note',
+    params: { jid: selectedJid.value, note_id: noteId },
+    auto: true,
+    onSuccess: () => {
+      chatNotes.value = chatNotes.value.filter((n) => n.id !== noteId)
+    },
+    onError: () => toast.error(__('Failed to delete note')),
+  })
+}
+
+// -- Templates --
+function loadTemplates() {
+  createResource({
+    url: 'crm.api.whatsapp.get_chat_templates',
+    params: {},
+    auto: true,
+    onSuccess: (data) => {
+      chatTemplates.value = data || []
+    },
+  })
+}
+
+function saveTemplate() {
+  const name = templateName.value.trim()
+  const content = templateContent.value.trim()
+  if (!name || !content) return
+
+  if (editingTemplateId.value) {
+    createResource({
+      url: 'crm.api.whatsapp.update_chat_template',
+      params: { template_id: editingTemplateId.value, name, content },
+      auto: true,
+      onSuccess: (updated) => {
+        if (updated) {
+          const idx = chatTemplates.value.findIndex((t) => t.id === editingTemplateId.value)
+          if (idx !== -1) chatTemplates.value.splice(idx, 1, updated)
+        }
+        cancelEditTemplate()
+      },
+      onError: () => toast.error(__('Failed to update template')),
+    })
+  } else {
+    createResource({
+      url: 'crm.api.whatsapp.add_chat_template',
+      params: { name, content },
+      auto: true,
+      onSuccess: (tpl) => {
+        if (tpl && tpl.id) chatTemplates.value.unshift(tpl)
+        templateName.value = ''
+        templateContent.value = ''
+      },
+      onError: () => toast.error(__('Failed to create template')),
+    })
+  }
+}
+
+function startEditTemplate(tpl) {
+  editingTemplateId.value = tpl.id
+  templateName.value = tpl.name
+  templateContent.value = tpl.content
+}
+
+function cancelEditTemplate() {
+  editingTemplateId.value = null
+  templateName.value = ''
+  templateContent.value = ''
+}
+
+function removeTemplate(id) {
+  createResource({
+    url: 'crm.api.whatsapp.delete_chat_template',
+    params: { template_id: id },
+    auto: true,
+    onSuccess: () => {
+      chatTemplates.value = chatTemplates.value.filter((t) => t.id !== id)
+    },
+    onError: () => toast.error(__('Failed to delete template')),
+  })
+}
+
+function applyTemplate(val) {
+  const id = typeof val === 'object' ? val.target?.value || '' : val
+  selectedTemplateId.value = id
+  if (!id) return
+  const tpl = chatTemplates.value.find((t) => String(t.id) === String(id))
+  if (tpl) newChatMessage.value = tpl.content
 }
 
 function handleComposerSubmit({ message, content_type, attach, reply_to }) {
@@ -1075,18 +1431,31 @@ const mentionNameMap = computed(() => {
 function formatMessage(text) {
   if (!text) return ''
   let msg = text
-  // Resolve @mentions: @919876543210 or @215414101512439 (LID) → @ContactName
-  msg = msg.replace(/@(\d{7,18})/g, (match, digits) => {
+  // 1. Extract URLs into placeholders (before other formatting to protect URL characters)
+  const urls = []
+  msg = msg.replace(/(https?:\/\/[^\s<]+)/g, (match) => {
+    urls.push(match)
+    return `__URL_${urls.length - 1}__`
+  })
+  // 2. Resolve @mentions: @919876543210 or @215414101512439 (LID) → @ContactName or @+phone
+  msg = msg.replace(/@(\d{7,20})/g, (match, digits) => {
     const name = mentionNameMap.value.get(digits)
     if (name) {
       return `<span class="font-semibold text-blue-600">@${name}</span>`
     }
-    return match
+    return `<span class="font-semibold text-blue-600">@+${digits}</span>`
   })
+  // 3. WhatsApp text formatting
   msg = msg.replace(/\*(.*?)\*/g, '<b>$1</b>')
   msg = msg.replace(/_(.*?)_/g, '<i>$1</i>')
   msg = msg.replace(/~(.*?)~/g, '<s>$1</s>')
   msg = msg.replace(/```(.*?)```/g, '<code>$1</code>')
+  // 4. Restore URLs as clickable links
+  msg = msg.replace(/__URL_(\d+)__/g, (_, i) => {
+    const url = urls[parseInt(i)]
+    return `<a href="${url}" target="_blank" rel="noopener" class="text-blue-600 underline break-all">${url}</a>`
+  })
+  // 5. Newlines
   msg = msg.replace(/\n/g, '<br>')
   return msg
 }
@@ -1156,6 +1525,7 @@ let syncInterval = null
 
 onMounted(() => {
   requestNotificationPermission()
+  loadTemplates()
   document.addEventListener('click', hideContextMenu)
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') hideContextMenu()

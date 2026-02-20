@@ -114,7 +114,7 @@
                   icon: 'more-horizontal',
                   onblur: (e) => {
                     e.stopPropagation()
-                    confirmRemove = false
+                    confirmRemove.value = null
                   },
                 }"
                 placement="right"
@@ -217,7 +217,7 @@ const usersList = computed(() => {
     })
 })
 
-const confirmRemove = ref(false)
+const confirmRemove = ref(null)
 
 function getMoreOptions(user) {
   return [
@@ -227,16 +227,16 @@ function getMoreOptions(user) {
       onClick: (e) => {
         e.preventDefault()
         e.stopPropagation()
-        confirmRemove.value = true
+        confirmRemove.value = user.name
       },
-      condition: () => !confirmRemove.value,
+      condition: () => confirmRemove.value !== user.name,
     },
     {
       label: __('Confirm remove'),
       icon: 'trash-2',
       theme: 'red',
-      onClick: () => removeUser(user, true),
-      condition: () => confirmRemove.value,
+      onClick: () => removeUser(user),
+      condition: () => confirmRemove.value === user.name,
     },
   ]
 }
@@ -306,10 +306,12 @@ function removeUser(user) {
     user: user.name,
   })
     .then(() => {
+      confirmRemove.value = null
       toast.success(__('User {0} has been removed', [user.full_name]))
       users.reload()
     })
     .catch((e) => {
+      confirmRemove.value = null
       toast.error(e?.messages?.[0] || __('Something went wrong'))
     })
 }
