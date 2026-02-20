@@ -40,6 +40,12 @@ let globalComponents = {
 // create a pinia instance
 let pinia = createPinia()
 
+// Default to light theme if no preference is stored
+if (!localStorage.getItem('theme')) {
+  document.documentElement.setAttribute('data-theme', 'light')
+  localStorage.setItem('theme', 'light')
+}
+
 let app = createApp(App)
 
 setConfig('resourceFetcher', frappeRequest)

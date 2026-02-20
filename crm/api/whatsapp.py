@@ -503,6 +503,8 @@ def get_chat_list(search=None):
 			"is_group": is_group,
 			"last_message_time": bc.get("last_message_time") or "",
 			"last_message": bc.get("last_message") or "",
+			"last_message_is_from_me": bool(bc.get("last_message_is_from_me")),
+			"last_message_sender_name": bc.get("last_message_sender_name") or "",
 			"assigned_to": bc.get("assigned_to") or "",
 			"photo_url": bc.get("photo_url") or "",
 		})
@@ -686,6 +688,8 @@ def send_chat_message(phone, message="", attach="", content_type="text", jid="",
 		"chat_update": {
 			"last_message": (message or "")[:100],
 			"last_message_time": now_iso,
+			"last_message_is_from_me": True,
+			"last_message_sender_name": sender_name,
 		},
 	})
 
@@ -803,6 +807,32 @@ def get_profile_photo(jid):
 
 
 @frappe.whitelist()
+def delete_chat(jid):
+	"""Delete an entire chat and all its messages from the bridge."""
+	validate_access()
+	if not any(role in ["System Manager", "Sales Manager"] for role in frappe.get_roles()):
+		frappe.throw(_("Only admins and managers can delete chats."), frappe.PermissionError)
+
+	if not jid or not _use_bridge():
+		return {"ok": False}
+
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+
+	try:
+		from urllib.parse import quote
+		resp = requests.delete(
+			f"{bridge_url}/chats/{quote(jid, safe='')}",
+			timeout=10,
+		)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception as e:
+		frappe.log_error(title="WhatsApp Bridge: Failed to delete chat", message=str(e))
+		return {"ok": False}
+
+
+@frappe.whitelist()
 def delete_chat_message(jid, message_id):
 	"""Delete a message from the bridge's local store."""
 	validate_access()
@@ -821,6 +851,28 @@ def delete_chat_message(jid, message_id):
 	except Exception as e:
 		frappe.log_error(title="WhatsApp Bridge: Failed to delete message", message=str(e))
 		return {"ok": False}
+
+
+@frappe.whitelist()
+def merge_duplicate_chats():
+	"""Merge duplicate WhatsApp chats that share the same phone number."""
+	validate_access()
+	if not any(role in ["System Manager", "Sales Manager"] for role in frappe.get_roles()):
+		frappe.throw(_("Only admins and managers can merge chats."), frappe.PermissionError)
+
+	if not _use_bridge():
+		return {"ok": False, "merged": 0}
+
+	settings = frappe.get_single("CRM WhatsApp Bridge Settings")
+	bridge_url = (settings.bridge_url or "").rstrip("/")
+
+	try:
+		resp = requests.post(f"{bridge_url}/chats/merge-duplicates", timeout=30)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception as e:
+		frappe.log_error(title="WhatsApp Bridge: Failed to merge duplicate chats", message=str(e))
+		return {"ok": False, "merged": 0}
 
 
 def parse_template_parameters(string, parameters):

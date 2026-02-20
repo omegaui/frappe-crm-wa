@@ -4,6 +4,18 @@
       <ViewBreadcrumbs routeName="Chats" />
     </template>
     <template #right-header>
+      <Button variant="ghost" @click="chatList.reload()" :loading="chatList.loading">
+        <template #icon><FeatherIcon name="refresh-cw" class="h-4" /></template>
+      </Button>
+      <Button
+        v-if="isManager()"
+        variant="subtle"
+        :label="__('Merge Duplicates')"
+        :loading="mergingDuplicates"
+        @click="mergeDuplicateChats"
+      >
+        <template #prefix><FeatherIcon name="git-merge" class="h-4" /></template>
+      </Button>
       <Button
         variant="solid"
         :label="__('New Chat')"
@@ -73,7 +85,7 @@
             </div>
             <div class="flex items-center justify-between">
               <span class="truncate text-xs text-ink-gray-5">
-                {{ chat.last_message || chat.phone }}
+                <span v-if="chat.last_message_is_from_me && chat.last_message_sender_name" class="font-medium text-ink-gray-6">{{ chat.last_message_sender_name.split(' ')[0] }}: </span>{{ chat.last_message || chat.phone }}
               </span>
               <div class="ml-1 flex flex-shrink-0 items-center gap-1">
                 <UserAvatar
@@ -114,8 +126,14 @@
             <div class="text-sm font-medium text-ink-gray-9">
               {{ selectedChat?.contact_name || selectedChatPhone || __('Unknown') }}
             </div>
-            <div v-if="selectedChatPhone" class="text-xs text-ink-gray-5">
-              {{ selectedChatPhone }}
+            <div v-if="selectedChatPhone" class="flex items-center gap-1 text-xs text-ink-gray-5">
+              <span>{{ selectedChatPhone }}</span>
+              <button
+                class="rounded p-0.5 text-ink-gray-4 hover:bg-surface-gray-2 hover:text-ink-gray-6"
+                @click="copyPhone"
+              >
+                <FeatherIcon name="copy" class="h-3 w-3" />
+              </button>
             </div>
           </div>
           <!-- Assignment -->
@@ -159,6 +177,18 @@
               />
             </div>
           </div>
+
+          <!-- Delete Chat -->
+          <Button
+            v-if="isManager()"
+            variant="ghost"
+            size="sm"
+            @click="confirmDeleteChat"
+          >
+            <template #icon>
+              <FeatherIcon name="trash-2" class="h-3.5 w-3.5 text-ink-red-3" />
+            </template>
+          </Button>
 
           <template v-if="!selectedChat?.is_group">
             <router-link
@@ -314,6 +344,42 @@
         </p>
       </div>
     </div>
+
+    <!-- Right Panel: Lead Details -->
+    <Resizer
+      v-if="linkedDoc && linkedDoc.doctype === 'CRM Lead'"
+      :key="linkedDoc.name"
+      class="flex flex-col overflow-hidden border-l"
+      side="right"
+      :defaultWidth="320"
+      :minWidth="280"
+      :maxWidth="480"
+    >
+      <div class="flex h-[45px] items-center justify-between border-b px-4">
+        <router-link
+          :to="{ name: 'Lead', params: { leadId: linkedDoc.name } }"
+          class="flex items-center gap-1.5 text-sm font-medium text-ink-gray-7 hover:text-ink-gray-9"
+        >
+          {{ linkedDoc.name }}
+          <FeatherIcon name="external-link" class="h-3 w-3" />
+        </router-link>
+      </div>
+      <div
+        v-if="leadSections.data"
+        class="flex flex-1 flex-col overflow-hidden"
+      >
+        <SidePanelLayout
+          :key="linkedDoc.name"
+          :sections="leadSections.data"
+          doctype="CRM Lead"
+          :docname="linkedDoc.name"
+          @reload="leadSections.reload"
+        />
+      </div>
+      <div v-else class="flex flex-1 items-center justify-center">
+        <LoadingIndicator class="h-5 w-5" />
+      </div>
+    </Resizer>
   </div>
 
   <!-- New Chat Dialog -->
@@ -396,6 +462,8 @@ import ChatComposer from '@/components/ChatComposer.vue'
 import WhatsAppIcon from '@/components/Icons/WhatsAppIcon.vue'
 import CheckIcon from '@/components/Icons/CheckIcon.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
+import Resizer from '@/components/Resizer.vue'
+import SidePanelLayout from '@/components/SidePanelLayout.vue'
 import { globalStore } from '@/stores/global'
 import { usersStore } from '@/stores/users'
 import { formatDate } from '@/utils'
@@ -424,6 +492,7 @@ const showNewChatDialog = ref(false)
 const newChatPhone = ref('')
 const newChatMessage = ref('')
 const sendingNewChat = ref(false)
+const mergingDuplicates = ref(false)
 const fullscreenImage = ref(null)
 const unreadJids = ref(new Set())
 const lastSeenTimes = ref(new Map())
@@ -437,6 +506,14 @@ const { getUser, users: usersResource, isManager } = usersStore()
 const linkedDoc = ref(null)
 const convertingToLead = ref(false)
 const showAssignDropdown = ref(false)
+
+// Lead side panel sections (cached, shared with Lead page)
+const leadSections = createResource({
+  url: 'crm.fcrm.doctype.crm_fields_layout.crm_fields_layout.get_sidepanel_sections',
+  cache: ['sidePanelSections', 'CRM Lead'],
+  params: { doctype: 'CRM Lead' },
+  auto: true,
+})
 
 const selectedChatPhone = computed(() => {
   if (!selectedChat.value) return ''
@@ -483,6 +560,12 @@ function unassignChat() {
       chatList.reload()
     },
   })
+}
+
+function copyPhone() {
+  if (!selectedChatPhone.value) return
+  navigator.clipboard.writeText(selectedChatPhone.value)
+  toast.success(__('Phone number copied'))
 }
 
 // Check if the selected chat's phone is linked to a Lead/Deal
@@ -557,6 +640,14 @@ const chatList = createResource({
           unreadJids.value.add(chat.jid)
           unreadJids.value = new Set(unreadJids.value)
           lastSeenTimes.value.set(chat.jid, chat.last_message_time)
+          // Desktop notification for incoming messages detected via polling
+          if (!chat.last_message_is_from_me) {
+            showDesktopNotification({
+              chat_jid: chat.jid,
+              phone: chat.phone,
+              message: { message: chat.last_message, type: 'Incoming' },
+            })
+          }
         }
       }
     }
@@ -725,6 +816,12 @@ function updateChatListEntry(data) {
     chat.last_message = data.chat_update.last_message || chat.last_message
     chat.last_message_time =
       data.chat_update.last_message_time || chat.last_message_time
+    if (data.chat_update.last_message_is_from_me !== undefined) {
+      chat.last_message_is_from_me = data.chat_update.last_message_is_from_me
+    }
+    if (data.chat_update.last_message_sender_name !== undefined) {
+      chat.last_message_sender_name = data.chat_update.last_message_sender_name
+    }
   }
 
   // Move chat to top of list
@@ -826,6 +923,60 @@ function confirmDeleteMessage() {
     },
     onError: () => {
       toast.error(__('Failed to delete message'))
+    },
+  })
+}
+
+function mergeDuplicateChats() {
+  mergingDuplicates.value = true
+  createResource({
+    url: 'crm.api.whatsapp.merge_duplicate_chats',
+    params: {},
+    auto: true,
+    onSuccess: (data) => {
+      mergingDuplicates.value = false
+      const merged = data?.merged || 0
+      if (merged > 0) {
+        toast.success(__('Merged {0} duplicate chat(s)', [merged]))
+        chatList.reload()
+        // Clear selection since the selected chat may have been merged
+        selectedJid.value = null
+        selectedChat.value = null
+        messages.value = []
+      } else {
+        toast.info(__('No duplicate chats found'))
+      }
+    },
+    onError: () => {
+      mergingDuplicates.value = false
+      toast.error(__('Failed to merge duplicate chats'))
+    },
+  })
+}
+
+function confirmDeleteChat() {
+  if (!selectedChat.value || !selectedJid.value) return
+  const chatName = selectedChat.value.contact_name || selectedChat.value.phone || __('this chat')
+  if (!window.confirm(__('Delete chat with {0}? This will remove all messages.', [chatName]))) return
+
+  createResource({
+    url: 'crm.api.whatsapp.delete_chat',
+    params: { jid: selectedJid.value },
+    auto: true,
+    onSuccess: () => {
+      // Remove from local list
+      if (chatList.data) {
+        const idx = chatList.data.findIndex((c) => c.jid === selectedJid.value)
+        if (idx !== -1) chatList.data.splice(idx, 1)
+      }
+      selectedJid.value = null
+      selectedChat.value = null
+      messages.value = []
+      linkedDoc.value = null
+      toast.success(__('Chat deleted'))
+    },
+    onError: () => {
+      toast.error(__('Failed to delete chat'))
     },
   })
 }
@@ -939,10 +1090,40 @@ function formatMessage(text) {
   return msg
 }
 
+// Desktop notifications for incoming messages
+function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission()
+  }
+}
+
+function showDesktopNotification(data) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return
+
+  const msg = data.message || {}
+  const chatJid = data.chat_jid || ''
+  // Resolve contact name from chat list
+  const chat = chatList.data?.find((c) => c.jid === chatJid)
+  const title = chat?.contact_name || data.phone || __('New WhatsApp Message')
+  const body = msg.message || msg.content_type || ''
+
+  const notification = new Notification(title, {
+    body,
+    icon: chat?.photo_url || '/assets/crm/frontend/images/whatsapp.png',
+    tag: chatJid,
+  })
+  notification.onclick = () => {
+    window.focus()
+    if (chat) selectChat(chat)
+    notification.close()
+  }
+}
+
 // Realtime updates via socket
 let syncInterval = null
 
 onMounted(() => {
+  requestNotificationPermission()
   document.addEventListener('click', hideContextMenu)
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') hideContextMenu()
@@ -957,15 +1138,19 @@ onMounted(() => {
       } else if (data.chat_jid) {
         unreadJids.value.add(data.chat_jid)
         unreadJids.value = new Set(unreadJids.value)
+        // Desktop notification for unseen incoming messages
+        if (data.message?.type === 'Incoming') {
+          showDesktopNotification(data)
+        }
       }
     }
   })
 
-  // 15s fallback sync for chat list — also triggers message reload
+  // 5s fallback sync for chat list — also triggers message reload
   // for selected chat if new messages detected (covers missed socket events)
   syncInterval = setInterval(() => {
     chatList.reload()
-  }, 15000)
+  }, 5000)
 })
 
 onBeforeUnmount(() => {

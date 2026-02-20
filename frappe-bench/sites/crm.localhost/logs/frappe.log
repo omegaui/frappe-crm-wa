@@ -81,3 +81,74 @@ Traceback (most recent call last):
     waitdiff = datetime.utcnow() - job.enqueued_at
                ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
 TypeError: can't subtract offset-naive and offset-aware datetimes
+2026-02-19 09:16:03,102 ERROR frappe Failed to capture exception
+Site: crm.localhost
+Form Dict: {}
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/desk/doctype/notification_log/notification_log.py", line 41, in after_insert
+    send_notification_email(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/desk/doctype/notification_log/notification_log.py", line 138, in send_notification_email
+    frappe.sendmail(
+    ~~~~~~~~~~~~~~~^
+    	recipients=user.email,
+     ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    	now=frappe.in_test,
+     ^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/__init__.py", line 251, in sendmail
+    q = builder.process(send_now=False)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_queue/email_queue.py", line 772, in process
+    queue_data = self.as_dict(include_recipients=False)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_queue/email_queue.py", line 820, in as_dict
+    email_account = self.get_outgoing_email_account()
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_queue/email_queue.py", line 667, in get_outgoing_email_account
+    self._email_account = EmailAccount.find_outgoing(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+    	match_by_doctype=self.reference_doctype, match_by_email=self._sender, _raise_error=True
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_account/email_account.py", line 44, in wrapper_cache_email_account
+    matched_accounts = func(*args, **kwargs)
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/email/doctype/email_account/email_account.py", line 432, in find_outgoing
+    frappe.throw(
+    ~~~~~~~~~~~~^
+    	_("Please setup default outgoing Email Account from Tools > Email Account"),
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    	frappe.OutgoingEmailError,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/messages.py", line 148, in throw
+    msgprint(
+    ~~~~~~~~^
+    	msg,
+     ^^^^
+    ...<6 lines>...
+    	primary_action=primary_action,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/messages.py", line 109, in msgprint
+    _raise_exception()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/messages.py", line 58, in _raise_exception
+    raise exc
+frappe.exceptions.OutgoingEmailError: Please setup default outgoing Email Account from Tools > Email Account
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/sentry.py", line 117, in capture_exception
+    set_scope(scope)
+    ~~~~~~~~~^^^^^^^
+  File "/home/omegaui/Projects/crm/frappe-bench/apps/frappe/frappe/utils/sentry.py", line 59, in set_scope
+    waitdiff = datetime.utcnow() - job.enqueued_at
+               ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+TypeError: can't subtract offset-naive and offset-aware datetimes
+2026-02-19 12:22:39,556 ERROR frappe New Exception collected in error log
+Site: crm.localhost
+Form Dict: {'emails': 'kumar@kiranafast.com', 'role': 'Sales User', 'cmd': 'crm.api.invite_by_email'}

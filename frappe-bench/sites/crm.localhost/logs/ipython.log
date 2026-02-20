@@ -1,0 +1,22 @@
+2026-02-19 09:40:49,001 INFO ipython === bench console session ===
+2026-02-19 09:40:49,002 INFO ipython import frappe
+2026-02-19 09:40:49,002 INFO ipython # Check recent Error Log entries related to WhatsApp
+2026-02-19 09:40:49,002 INFO ipython errors = frappe.get_all("Error Log", 
+    filters={"error": ["like", "%whatsapp%"]},
+    fields=["name", "method", "error"],
+    order_by="creation desc",
+    limit=5
+)
+2026-02-19 09:40:49,002 INFO ipython === session end ===
+2026-02-19 09:40:51,630 INFO ipython === bench console session ===
+2026-02-19 09:40:51,631 INFO ipython import frappe
+2026-02-19 09:40:51,631 INFO ipython # Check recent Error Log entries (any)
+2026-02-19 09:40:51,631 INFO ipython errors = frappe.get_all("Error Log", 
+    fields=["name", "method", "creation"],
+    order_by="creation desc",
+    limit=10
+)
+2026-02-19 09:40:51,632 INFO ipython === session end ===
+2026-02-19 09:46:54,856 INFO ipython === bench console session ===
+2026-02-19 09:46:54,857 INFO ipython print(frappe.conf.developer_mode)
+2026-02-19 09:46:54,857 INFO ipython === session end ===

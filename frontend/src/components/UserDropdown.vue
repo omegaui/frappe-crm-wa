@@ -70,7 +70,7 @@ const props = defineProps({
 
 const { settings, brand } = getSettings()
 const { logout } = sessionStore()
-const { getUser } = usersStore()
+const { getUser, isAdmin } = usersStore()
 const { currentTheme, toggleTheme } = useTheme()
 
 const user = computed(() => getUser() || {})
@@ -143,7 +143,7 @@ function getStandardItem(item) {
         icon: item.icon,
         label: __(item.label),
         onClick: () => (showSettings.value = true),
-        condition: () => !isMobileView.value,
+        condition: () => !isMobileView.value && isAdmin(),
       }
     case 'login_to_fc':
       return {

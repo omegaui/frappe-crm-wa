@@ -14,7 +14,7 @@ WhatsApp ←→ Baileys Bridge (:3100) ←→ HTTP/Webhooks ←→ Frappe CRM (:
 - **Frappe CRM**: Python/Vue CRM on Frappe framework.
   - Source (working dir): `/home/omegaui/Projects/crm/`
   - Bench (deployed): `/home/omegaui/Projects/crm/frappe-bench/apps/crm/`
-  - Bench binary: `/home/omegaui/Projects/crm/.venv/bin/bench`
+  - Bench binary: `/home/omegaui/.local/bin/bench`
   - Site: `crm.localhost`
 
 ## Deployment Workflow (CRITICAL)
@@ -27,10 +27,10 @@ rsync -a /home/omegaui/Projects/crm/crm/ /home/omegaui/Projects/crm/frappe-bench
 rsync -a /home/omegaui/Projects/crm/frontend/src/ /home/omegaui/Projects/crm/frappe-bench/apps/crm/frontend/src/
 
 # 2. Clear cache
-cd /home/omegaui/Projects/crm/frappe-bench && /home/omegaui/Projects/crm/.venv/bin/bench --site crm.localhost clear-cache
+cd /home/omegaui/Projects/crm/frappe-bench && /home/omegaui/.local/bin/bench --site crm.localhost clear-cache
 
 # 3. Build frontend (--force to bust cache)
-/home/omegaui/Projects/crm/.venv/bin/bench build --app crm --force
+/home/omegaui/.local/bin/bench build --app crm --force
 
 # 4. User restarts bench + bridge manually
 ```
