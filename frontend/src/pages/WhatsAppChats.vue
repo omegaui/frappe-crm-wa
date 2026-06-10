@@ -667,7 +667,7 @@ const selectedChat = ref(null)
 const messagesContainer = ref(null)
 
 const showNewChatDialog = ref(false)
-const newChatPhone = ref('')
+const newChatPhone = ref('+91 ')
 const newChatMessage = ref('')
 const sendingNewChat = ref(false)
 const mergingDuplicates = ref(false)
@@ -1338,14 +1338,45 @@ function confirmDeleteChat() {
   })
 }
 
-function startNewChat() {
-  let phone = newChatPhone.value.trim().replace(/[\s-]/g, '')
-  if (!phone) return
-  if (!phone.startsWith('+')) {
-    phone = '+' + phone
+// Normalize a sales-rep-entered phone to E.164, defaulting to India (+91).
+// Handles spaces/dashes, a missing '+', a missing country code, a leading '0',
+// and a '00' prefix. Explicit non-+91 international numbers are passed through.
+function normalizePhoneInput(input) {
+  const raw = String(input || '').trim()
+  if (!raw) return { ok: false, error: __('Please enter a phone number') }
+
+  // Explicit international number (starts with '+' but not '+91') — trust it.
+  if (raw.startsWith('+') && !raw.replace(/\s/g, '').startsWith('+91')) {
+    const intl = raw.replace(/\D/g, '')
+    if (intl.length >= 8 && intl.length <= 15) return { ok: true, e164: '+' + intl }
+    return { ok: false, error: __('Enter a valid phone number') }
   }
+
+  // India (default): reduce to the 10-digit mobile, then add +91.
+  let digits = raw.replace(/\D/g, '')
+  if (digits.startsWith('00')) digits = digits.slice(2)
+  if (digits.length === 12 && digits.startsWith('91')) digits = digits.slice(2)
+  else if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1)
+
+  if (!/^[6-9]\d{9}$/.test(digits)) {
+    return { ok: false, error: __('Enter a valid 10-digit Indian mobile number') }
+  }
+  return { ok: true, e164: '+91' + digits }
+}
+
+function startNewChat() {
+  const result = normalizePhoneInput(newChatPhone.value)
+  if (!result.ok) {
+    toast.error(result.error)
+    return
+  }
+  const phone = result.e164
+
   const message = newChatMessage.value.trim()
-  if (!message) return
+  if (!message) {
+    toast.error(__('Please type a message'))
+    return
+  }
 
   sendingNewChat.value = true
   const capturedPhone = phone
@@ -1357,7 +1388,7 @@ function startNewChat() {
     onSuccess: async (data) => {
       const chatJid = data?.chat_jid || ''
       showNewChatDialog.value = false
-      newChatPhone.value = ''
+      newChatPhone.value = '+91 '
       newChatMessage.value = ''
       sendingNewChat.value = false
 

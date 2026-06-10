@@ -1,4 +1,5 @@
 import json
+import re
 
 import frappe
 import requests
@@ -522,9 +523,47 @@ def _jid_to_phone(jid):
 	return jid
 
 
+def normalize_phone(phone, default_country="IN"):
+	"""Normalize a user-entered phone number to E.164 (e.g. '+919876543210').
+
+	Handles the messy input a non-technical sales team produces: spaces, dashes,
+	missing '+', missing country code, a leading national '0', or a '00' prefix.
+	Defaults to India (+91) when no country code is present. Returns the E.164
+	string, or None if the input can't be turned into a plausible number.
+	"""
+	if not phone:
+		return None
+	raw = str(phone).strip()
+
+	# Try the phonenumbers library first (authoritative).
+	try:
+		import phonenumbers
+
+		parsed = phonenumbers.parse(raw, default_country)
+		if phonenumbers.is_valid_number(parsed) or phonenumbers.is_possible_number(parsed):
+			return phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.E164)
+	except Exception:
+		pass
+
+	# Fallback: digit-only heuristic assuming India.
+	had_plus = raw.startswith("+")
+	digits = re.sub(r"\D", "", raw)
+	if not digits:
+		return None
+	if not had_plus:
+		if digits.startswith("00"):
+			digits = digits[2:]
+		elif len(digits) == 10:
+			digits = "91" + digits
+		elif len(digits) == 11 and digits.startswith("0"):
+			digits = "91" + digits[1:]
+	return "+" + digits
+
+
 def _phone_to_jid(phone):
 	"""Convert phone number to WhatsApp JID: '+919876543210' -> '919876543210@s.whatsapp.net'"""
-	cleaned = phone.replace("+", "").replace(" ", "").replace("-", "")
+	normalized = normalize_phone(phone) or phone
+	cleaned = normalized.replace("+", "").replace(" ", "").replace("-", "")
 	return f"{cleaned}@s.whatsapp.net"
 
 
@@ -641,6 +680,14 @@ def send_chat_message(phone, message="", attach="", content_type="text", jid="",
 		frappe.throw(_("Chat messaging is only supported with the WhatsApp Bridge integration."))
 
 	from crm.integrations.whatsapp.handler import send_file_via_bridge, send_message_via_bridge
+
+	# Normalize the phone for new chats (no jid given) so the conversation always
+	# keys off the canonical E.164 number (+91… by default) and never forks a duplicate.
+	if phone and not jid:
+		normalized = normalize_phone(phone)
+		if not normalized:
+			frappe.throw(_("Please enter a valid phone number (e.g. +91 98765 43210)."))
+		phone = normalized
 
 	# Use the JID directly if provided (preserves @lid, @g.us, etc.)
 	# Fall back to phone number if no JID given
