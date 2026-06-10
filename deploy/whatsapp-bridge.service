@@ -1,0 +1,20 @@
+[Unit]
+Description=WhatsApp Bridge (Baileys) for Frappe CRM
+After=network.target frappe-crm.service
+
+[Service]
+Type=simple
+User=omegaui
+Group=omegaui
+WorkingDirectory=/home/omegaui/Projects/whatsapp-bridge
+Environment=PORT=3100
+Environment=WEBHOOK_URL=http://localhost:8000/api/method/crm.integrations.whatsapp.handler.webhook
+Environment=WEBHOOK_SECRET=9c06d62c9b8cce994d313d2788ef8f1566e2543d00227a4002cab64fb02c4304
+Environment=STORE_DIR=/home/omegaui/Projects/whatsapp-bridge/store
+Environment=LOG_LEVEL=info
+ExecStart=/usr/bin/node /home/omegaui/Projects/whatsapp-bridge/dist/server.js
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

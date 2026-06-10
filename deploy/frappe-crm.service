@@ -1,0 +1,20 @@
+[Unit]
+Description=Frappe CRM bench (crm.localhost) - web, socketio, workers, scheduler
+After=network.target mariadb.service
+Wants=mariadb.service
+
+[Service]
+Type=simple
+User=omegaui
+Group=omegaui
+WorkingDirectory=/home/omegaui/Projects/crm/frappe-bench
+# venv bin first so the Procfile's bare `bench ...` commands resolve
+Environment=PATH=/home/omegaui/Projects/crm/frappe-bench/env/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/home/omegaui/Projects/crm/frappe-bench/env/bin/bench start
+Restart=always
+RestartSec=10
+KillMode=mixed
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

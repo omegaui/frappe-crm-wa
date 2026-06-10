@@ -1,7 +1,8 @@
 {
- "db_name": "_87b2526e1b735cca",
- "db_password": "TmciYGWTFMa9Hj0p",
+ "db_name": "_66487445162710b4",
+ "db_password": "VhjX9dX6u9eUyXKl",
  "db_type": "mariadb",
- "db_user": "_87b2526e1b735cca",
- "encryption_key": "g3ce4yokMiFjCre_DT9arnZkZTAXTvNo92SptFW0rjw="
+ "db_user": "_66487445162710b4",
+ "encryption_key": "yaaxI-FAo0JneXZ2FHFHvwDeoRYaiMVCPppNPCwVtdE=",
+ "host_name": "https://whatsapp.billingfast.com"
 }
