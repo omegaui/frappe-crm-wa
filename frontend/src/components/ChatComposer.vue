@@ -19,6 +19,26 @@
     </div>
     <Button variant="ghost" icon="x" @click="reply = {}" />
   </div>
+  <div
+    v-if="attachUrl"
+    class="flex items-center gap-2 px-3 pt-2 sm:px-10"
+  >
+    <div
+      class="flex items-center gap-2 rounded bg-surface-gray-2 px-2 py-1 text-sm text-ink-gray-7"
+    >
+      <FeatherIcon
+        :name="fileType === 'image' ? 'image' : fileType === 'video' ? 'video' : 'file'"
+        class="h-4 w-4 flex-shrink-0 text-ink-gray-5"
+      />
+      <span class="max-w-[200px] truncate">{{ attachName || __('Attachment') }}</span>
+      <FeatherIcon
+        name="x"
+        class="h-4 w-4 flex-shrink-0 cursor-pointer text-ink-gray-5"
+        @click="clearAttachment"
+      />
+    </div>
+    <span class="text-xs text-ink-gray-5">{{ __('Sent with your message') }}</span>
+  </div>
   <div class="flex items-end gap-2 px-3 py-2.5 sm:px-10">
     <div class="flex h-8 items-center gap-2">
       <FileUploader @success="(file) => uploadFile(file)">
@@ -83,6 +103,7 @@ import {
   Textarea,
   FileUploader,
   Dropdown,
+  FeatherIcon,
   LoadingIndicator,
 } from 'frappe-ui'
 import { ref, watch } from 'vue'
@@ -103,23 +124,38 @@ const emoji = ref('')
 const content = ref('')
 const fileType = ref('')
 const attachUrl = ref('')
+const attachName = ref('')
 
+// Stage the uploaded file instead of sending it immediately, so the user can
+// type a caption and the image+text go out as ONE WhatsApp message.
 function uploadFile(file) {
   attachUrl.value = file.file_url
+  attachName.value =
+    file.file_name || (file.file_url || '').split('/').pop() || ''
   fileType.value = fileType.value || 'document'
-  submit()
+  textareaRef.value?.el?.focus()
+}
+
+function clearAttachment() {
+  attachUrl.value = ''
+  attachName.value = ''
+  fileType.value = ''
 }
 
 function submit() {
   const message = content.value
-  const content_type = fileType.value || 'text'
   const attach = attachUrl.value || ''
+  // Nothing to send
+  if (!message.trim() && !attach) return
+
+  const content_type = attach ? fileType.value || 'document' : 'text'
   const reply_to = reply.value?.name || ''
 
   // Reset composer state before emitting so UI clears instantly
   content.value = ''
   fileType.value = ''
   attachUrl.value = ''
+  attachName.value = ''
   reply.value = {}
 
   emit('submit', { message, content_type, attach, reply_to })

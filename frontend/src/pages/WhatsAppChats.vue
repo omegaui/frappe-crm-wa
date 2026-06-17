@@ -1459,34 +1459,43 @@ const mentionNameMap = computed(() => {
   return map
 })
 
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
 function formatMessage(text) {
   if (!text) return ''
-  let msg = text
-  // 1. Extract URLs into placeholders (before other formatting to protect URL characters)
   const urls = []
-  msg = msg.replace(/(https?:\/\/[^\s<]+)/g, (match) => {
+  // 1. Pull URLs out of the RAW text first, into a sentinel that no later step
+  //    touches (\x00<n>\x00). Using underscores here was the old bug: the italic
+  //    rule (_x_) ate them and the URL rendered as "URL0_".
+  let msg = String(text).replace(/(https?:\/\/[^\s<]+)/g, (match) => {
     urls.push(match)
-    return `__URL_${urls.length - 1}__`
+    return `\x00${urls.length - 1}\x00`
   })
-  // 2. Resolve @mentions: @919876543210 or @215414101512439 (LID) → @ContactName or @+phone
+  // 2. Escape HTML so an incoming message can't inject markup (XSS-safe).
+  msg = escapeHtml(msg)
+  // 3. Resolve @mentions: @919876543210 / @215414101512439 (LID) → @ContactName / @+phone
   msg = msg.replace(/@(\d{7,20})/g, (match, digits) => {
     const name = mentionNameMap.value.get(digits)
-    if (name) {
-      return `<span class="font-semibold text-blue-600">@${name}</span>`
-    }
-    return `<span class="font-semibold text-blue-600">@+${digits}</span>`
+    const label = name ? `@${name}` : `@+${digits}`
+    return `<span class="font-semibold text-blue-600">${escapeHtml(label)}</span>`
   })
-  // 3. WhatsApp text formatting
+  // 4. WhatsApp text formatting
   msg = msg.replace(/\*(.*?)\*/g, '<b>$1</b>')
   msg = msg.replace(/_(.*?)_/g, '<i>$1</i>')
   msg = msg.replace(/~(.*?)~/g, '<s>$1</s>')
   msg = msg.replace(/```(.*?)```/g, '<code>$1</code>')
-  // 4. Restore URLs as clickable links
-  msg = msg.replace(/__URL_(\d+)__/g, (_, i) => {
-    const url = urls[parseInt(i)]
-    return `<a href="${url}" target="_blank" rel="noopener" class="text-blue-600 underline break-all">${url}</a>`
+  // 5. Restore URLs as clickable links
+  msg = msg.replace(/\x00(\d+)\x00/g, (_, i) => {
+    const safe = escapeHtml(urls[parseInt(i)])
+    return `<a href="${safe}" target="_blank" rel="noopener" class="text-blue-600 underline break-all">${safe}</a>`
   })
-  // 5. Newlines
+  // 6. Newlines
   msg = msg.replace(/\n/g, '<br>')
   return msg
 }
