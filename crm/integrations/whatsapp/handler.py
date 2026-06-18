@@ -289,3 +289,37 @@ def get_qr_code():
 		return resp.json()
 	except Exception as e:
 		return {"error": str(e)}
+
+
+def _require_wa_manager():
+	if not any(r in ["System Manager", "Sales Manager"] for r in frappe.get_roles()):
+		frappe.throw(_("Only admins and managers can manage the WhatsApp connection."), frappe.PermissionError)
+
+
+@frappe.whitelist()
+def relink_bridge():
+	"""Start a fresh WhatsApp pairing (clears the dead session so a new QR appears).
+	Used by the CRM 'Connect / Re-link' button to recover from a logout."""
+	_require_wa_manager()
+	settings = get_bridge_settings()
+	try:
+		resp = requests.post(f"{settings.bridge_url.rstrip('/')}/relink", timeout=20)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception as e:
+		frappe.log_error(title="WhatsApp Bridge: relink failed", message=str(e))
+		return {"ok": False, "error": str(e)}
+
+
+@frappe.whitelist()
+def logout_bridge():
+	"""Unlink the WhatsApp device and clear the saved session."""
+	_require_wa_manager()
+	settings = get_bridge_settings()
+	try:
+		resp = requests.post(f"{settings.bridge_url.rstrip('/')}/logout", timeout=20)
+		resp.raise_for_status()
+		return resp.json()
+	except Exception as e:
+		frappe.log_error(title="WhatsApp Bridge: logout failed", message=str(e))
+		return {"ok": False, "error": str(e)}

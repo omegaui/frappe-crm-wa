@@ -750,6 +750,147 @@ def send_chat_message(phone, message="", attach="", content_type="text", jid="",
 
 
 @frappe.whitelist()
+def send_broadcast(recipients, message="", attach="", content_type="text"):
+	"""Send the same message to many recipients individually (WhatsApp broadcast style).
+
+	Each recipient receives it as a normal 1:1 chat, and every send goes through the
+	bridge's rate-limited queue — so a broadcast can't blow past the anti-ban throttle.
+
+	`recipients` is a JSON list (or newline/comma separated string) of phone numbers
+	and/or chat JIDs.
+	"""
+	validate_access()
+	if not _use_bridge():
+		frappe.throw(_("Broadcast is only supported with the WhatsApp Bridge integration."))
+
+	if isinstance(recipients, str):
+		try:
+			recipients = json.loads(recipients)
+		except Exception:
+			recipients = [r.strip() for r in recipients.replace(",", "\n").splitlines() if r.strip()]
+	if not isinstance(recipients, (list, tuple)) or not recipients:
+		frappe.throw(_("Please select or enter at least one recipient."))
+	if not message and not attach:
+		frappe.throw(_("Please enter a message or attach a file."))
+
+	from crm.integrations.whatsapp.handler import send_file_via_bridge, send_message_via_bridge
+
+	sender_name = frappe.utils.get_fullname(frappe.session.user) or frappe.session.user
+	queued = 0
+	skipped = []
+	seen = set()
+
+	for raw in recipients:
+		target = (raw or "").strip()
+		if not target:
+			continue
+		# Keep JIDs (group/@lid) as-is; normalize bare phone numbers to E.164.
+		if "@" in target:
+			send_to = target
+		else:
+			send_to = normalize_phone(target)
+			if not send_to:
+				skipped.append(target)
+				continue
+		if send_to in seen:
+			continue
+		seen.add(send_to)
+		try:
+			if attach and content_type in ("image", "document", "video", "audio"):
+				send_file_via_bridge(send_to, attach, attach.split("/")[-1], message or "", sender_name=sender_name)
+			else:
+				send_message_via_bridge(send_to, message, sender_name=sender_name)
+			queued += 1
+		except Exception as e:
+			frappe.log_error(title="WhatsApp Broadcast send error", message=f"{target}: {e}")
+			skipped.append(target)
+
+	return {"ok": True, "queued": queued, "skipped": skipped, "total": len(seen)}
+
+
+@frappe.whitelist()
+def parse_contacts_file(file_url):
+	"""Parse an uploaded Excel (.xlsx) or CSV of contacts into normalized phone numbers.
+
+	Returns {"contacts": [{"name": str, "phone": "+91..."}], "count": n, "skipped": m}.
+	Detects a phone-like column (header containing phone/mobile/number/contact/whatsapp);
+	if there's no recognizable header it scans every cell for the first phone-like value.
+	Numbers are normalized to E.164 (India default) and de-duplicated. Nothing is saved.
+	"""
+	validate_access()
+	if not file_url:
+		frappe.throw(_("No file provided."))
+
+	file_doc = frappe.get_doc("File", {"file_url": file_url})
+	content = file_doc.get_content()
+	fname = (file_doc.file_name or file_url or "").lower()
+
+	rows = []
+	if fname.endswith(".xlsx"):
+		import io
+
+		from openpyxl import load_workbook
+
+		data = content if isinstance(content, bytes) else content.encode()
+		wb = load_workbook(io.BytesIO(data), read_only=True, data_only=True)
+		ws = wb.active
+		for row in ws.iter_rows(values_only=True):
+			rows.append(["" if c is None else str(c) for c in row])
+	elif fname.endswith(".csv"):
+		import csv
+		import io
+
+		text = content.decode("utf-8", errors="replace") if isinstance(content, bytes) else content
+		rows = [list(r) for r in csv.reader(io.StringIO(text))]
+	else:
+		frappe.throw(_("Unsupported file type. Please upload a .xlsx or .csv file."))
+
+	if not rows:
+		return {"contacts": [], "count": 0, "skipped": 0}
+
+	header = [str(h).strip().lower() for h in rows[0]]
+	phone_keys = ["phone", "mobile", "number", "contact", "whatsapp", "msisdn", "cell"]
+	phone_idx = next((i for i, h in enumerate(header) if any(k in h for k in phone_keys)), None)
+	name_idx = next((i for i, h in enumerate(header) if "name" in h), None)
+	has_header = phone_idx is not None
+	data_rows = rows[1:] if has_header else rows
+
+	contacts = []
+	skipped = 0
+	seen = set()
+	for r in data_rows:
+		name = ""
+		phone_raw = ""
+		if has_header:
+			phone_raw = r[phone_idx] if phone_idx < len(r) else ""
+			if name_idx is not None and name_idx < len(r):
+				name = str(r[name_idx]).strip()
+		else:
+			for c in r:
+				if len(re.sub(r"\D", "", str(c))) >= 8:
+					phone_raw = c
+					break
+			for c in r:
+				cs = str(c).strip()
+				if cs and cs != str(phone_raw).strip() and not cs.replace("+", "").replace(" ", "").isdigit():
+					name = cs
+					break
+
+		if not str(phone_raw).strip():
+			continue
+		norm = normalize_phone(str(phone_raw))
+		if not norm:
+			skipped += 1
+			continue
+		if norm in seen:
+			continue
+		seen.add(norm)
+		contacts.append({"name": name, "phone": norm})
+
+	return {"contacts": contacts, "count": len(contacts), "skipped": skipped}
+
+
+@frappe.whitelist()
 def assign_chat(jid, user=""):
 	"""Assign a CRM user to a WhatsApp chat. Only admins and managers can assign."""
 	validate_access()

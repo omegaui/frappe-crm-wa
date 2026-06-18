@@ -206,6 +206,46 @@ sudo certbot --nginx -d whatsapp.billingfast.com
 
 ---
 
+## WhatsApp hardening + features (2026-06-17)
+
+Big round of anti-ban + feature work after WhatsApp logged the device out (`device_removed`,
+caused by bulk cold-sending). All in the bridge (`~/Projects/whatsapp-bridge`, its own repo) +
+the CRM app.
+
+- **Throttled send queue** (bridge `send_queue` table + paced worker). Every send is enqueued and
+  dispatched under a **ceiling**: messages go out immediately until `RATE_MAX` have been sent in
+  the last `RATE_WINDOW_MS`, then wait just enough to stay under the cap (NOT a per-message pacer).
+  Defaults: **10 per 1 min** (strict). Env knobs (set in `deploy/whatsapp-bridge.service`):
+  `WA_RATE_MAX`, `WA_RATE_WINDOW_MS`, `WA_DAILY_CAP` (0=off), `WA_VERIFY_ON_WHATSAPP` (1=on),
+  `WA_PAUSE_ON_WARNING_MS`. API returns `{queued:true}` instantly; `GET /queue/status` for visibility.
+- **Human-behaviour emulation**: before each send the bridge shows a "typing…" presence for a
+  length-based, randomized duration (`WA_TYPING`=1 default; `WA_TYPING_MIN_MS`/`_MAX_MS`/`_PER_CHAR_MS`).
+- **HTTP server starts before the WhatsApp connection** (`server.ts main()`), so `/status`, `/qr`,
+  `/relink` are reachable even when logged out — required for QR pairing from the CRM.
+- **Guards**: verify recipient is on WhatsApp before sending (skips dead numbers); auto-pause sending
+  for a cooldown when WhatsApp returns rate/forbidden errors.
+- **Image + caption = one message** (frontend `ChatComposer.vue` now stages the attachment instead
+  of auto-sending it; bridge already supported caption).
+- **Incoming URL rendering fixed** + **HTML-escaped** (XSS) in `formatMessage` (WhatsAppChats.vue).
+- **WhatsApp login/auth from the CRM**: bridge `POST /relink` (clear dead session → new QR) and
+  `POST /logout`; backend `handler.relink_bridge` / `handler.logout_bridge` (manager-only);
+  `Settings → WhatsApp` shows status + QR (auto-polling) + **Connect/Re-link** + **Disconnect**.
+  So no more terminal `npm run auth` needed for re-pairing.
+- **Excel/CSV contact import** (`crm.api.whatsapp.parse_contacts_file`, ad-hoc, nothing saved):
+  auto-detects a phone column (or scans cells), normalizes to E.164. Wired into the **New Chat**
+  dialog (bulk-start chats: one message → many imported numbers) and the **Broadcast** dialog
+  (adds parsed numbers to recipients). Needs `openpyxl` (present, 3.1.5).
+- **Broadcast** (WhatsApp-broadcast style): `Broadcast` button in the Chats header → pick existing
+  chats + paste numbers + message + optional image → `crm.api.whatsapp.send_broadcast` enqueues each
+  recipient through the throttle (so a broadcast can't breach the rate limit). Each recipient gets a
+  normal 1:1 message.
+
+> After any of these changes: `sudo systemctl restart whatsapp-bridge frappe-crm`. The bridge keeps
+> its session across restarts (no re-pair) **unless** WhatsApp removed the device — then use the
+> Settings → WhatsApp → Connect/Re-link button (or `npm run auth`).
+> ⚠️ The throttle massively lowers ban risk but is not a license to bulk-cold-message; that's what
+> got the device removed in the first place.
+
 ## Service / port reference
 
 | Service         | Port  | Notes |

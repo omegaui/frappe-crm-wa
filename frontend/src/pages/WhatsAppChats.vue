@@ -31,6 +31,13 @@
       >
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
+      <Button
+        variant="subtle"
+        :label="__('Broadcast')"
+        @click="openBroadcast"
+      >
+        <template #prefix><FeatherIcon name="radio" class="h-4" /></template>
+      </Button>
     </template>
   </LayoutHeader>
   <div class="flex flex-1 overflow-hidden">
@@ -482,7 +489,26 @@
           v-model="newChatPhone"
           :label="__('Phone Number')"
           :placeholder="__('+91 98765 43210')"
+          :disabled="newChatImport.length > 0"
         />
+        <div class="flex items-center gap-2">
+          <FileUploader @success="(f) => importNewChatFile(f)">
+            <template #default="{ openFileSelector, uploading }">
+              <Button
+                :loading="uploading || importingFile"
+                variant="subtle"
+                :label="__('Upload Excel / CSV')"
+                @click="openFileSelector('.xlsx,.csv')"
+              >
+                <template #prefix><FeatherIcon name="upload" class="h-4" /></template>
+              </Button>
+            </template>
+          </FileUploader>
+          <span v-if="newChatImport.length" class="flex items-center gap-1 text-xs text-ink-gray-6">
+            {{ __('{0} contacts loaded', [newChatImport.length]) }}
+            <FeatherIcon name="x" class="h-3.5 w-3.5 cursor-pointer" @click="clearNewChatImport" />
+          </span>
+        </div>
         <FormControl
           v-if="chatTemplates.length"
           type="select"
@@ -500,10 +526,116 @@
         />
         <Button
           variant="solid"
-          :label="__('Start Chat')"
-          :disabled="!newChatPhone || !newChatMessage.trim() || sendingNewChat"
+          :label="newChatImport.length ? __('Start {0} chats', [newChatImport.length]) : __('Start Chat')"
+          :disabled="(newChatImport.length ? !newChatMessage.trim() : (!newChatPhone || !newChatMessage.trim())) || sendingNewChat"
           :loading="sendingNewChat"
           @click="startNewChat"
+        />
+      </div>
+    </template>
+  </Dialog>
+
+  <!-- Broadcast Dialog -->
+  <Dialog
+    v-model="showBroadcastDialog"
+    :options="{ title: __('Broadcast Message'), size: '2xl' }"
+  >
+    <template #body-content>
+      <div class="flex flex-col gap-4">
+        <div>
+          <div class="mb-2 flex items-center justify-between">
+            <span class="text-sm font-medium text-ink-gray-7">
+              {{ __('Recipients') }} ({{ broadcastCount }})
+            </span>
+            <button class="text-xs text-blue-600" @click="toggleSelectAllChats">
+              {{ allChatsSelected ? __('Clear all') : __('Select all') }}
+            </button>
+          </div>
+          <TextInput
+            v-model="broadcastSearch"
+            :placeholder="__('Search chats...')"
+            class="mb-2"
+          />
+          <div class="max-h-48 divide-y overflow-y-auto rounded border">
+            <label
+              v-for="c in broadcastChatOptions"
+              :key="c.jid"
+              class="flex cursor-pointer items-center gap-2 px-2 py-1.5 hover:bg-surface-gray-1"
+            >
+              <input
+                type="checkbox"
+                :checked="selectedRecipients.has(c.jid)"
+                @change="toggleRecipient(c.jid)"
+              />
+              <span class="text-sm text-ink-gray-8">{{ c.contact_name || c.phone || c.jid }}</span>
+              <span v-if="c.contact_name && c.phone" class="text-xs text-ink-gray-4">{{ c.phone }}</span>
+            </label>
+            <div v-if="!broadcastChatOptions.length" class="px-2 py-3 text-xs text-ink-gray-4">
+              {{ __('No chats found') }}
+            </div>
+          </div>
+        </div>
+        <FormControl
+          type="textarea"
+          :label="__('Add numbers (one per line or comma-separated)')"
+          v-model="broadcastNumbers"
+          :placeholder="__('+91 98765 43210')"
+          rows="2"
+        />
+        <div class="flex items-center gap-2">
+          <FileUploader @success="(f) => importBroadcastFile(f)">
+            <template #default="{ openFileSelector, uploading }">
+              <Button
+                :loading="uploading || importingFile"
+                variant="subtle"
+                :label="__('Upload Excel / CSV')"
+                @click="openFileSelector('.xlsx,.csv')"
+              >
+                <template #prefix><FeatherIcon name="upload" class="h-4" /></template>
+              </Button>
+            </template>
+          </FileUploader>
+          <span class="text-xs text-ink-gray-5">{{ __('Adds numbers from a spreadsheet (phone column auto-detected)') }}</span>
+        </div>
+        <FormControl
+          type="textarea"
+          :label="__('Message')"
+          v-model="broadcastMessage"
+          :placeholder="__('Type your broadcast message...')"
+          rows="3"
+        />
+        <div class="flex items-center gap-2">
+          <FileUploader @success="(f) => onBroadcastFile(f)">
+            <template #default="{ openFileSelector, uploading }">
+              <Button
+                :loading="uploading"
+                :label="broadcastAttach ? __('Change image') : __('Attach image')"
+                variant="subtle"
+                @click="openFileSelector('image/*')"
+              >
+                <template #prefix><FeatherIcon name="image" class="h-4" /></template>
+              </Button>
+            </template>
+          </FileUploader>
+          <span v-if="broadcastAttachName" class="max-w-[180px] truncate text-xs text-ink-gray-6">
+            {{ broadcastAttachName }}
+          </span>
+          <FeatherIcon
+            v-if="broadcastAttach"
+            name="x"
+            class="h-4 w-4 cursor-pointer text-ink-gray-5"
+            @click="clearBroadcastFile"
+          />
+        </div>
+        <div class="rounded bg-amber-50 px-3 py-2 text-xs text-amber-700">
+          {{ __('Each recipient gets a normal 1:1 message via the rate-limited queue — large lists deliver gradually to protect your number.') }}
+        </div>
+        <Button
+          variant="solid"
+          :label="__('Send to {0} recipient(s)', [broadcastCount])"
+          :disabled="!broadcastCount || (!broadcastMessage.trim() && !broadcastAttach) || sendingBroadcast"
+          :loading="sendingBroadcast"
+          @click="startBroadcast"
         />
       </div>
     </template>
@@ -627,6 +759,7 @@ import {
   TextInput,
   FormControl,
   Dialog,
+  FileUploader,
   LoadingIndicator,
   FeatherIcon,
   Button,
@@ -670,7 +803,19 @@ const showNewChatDialog = ref(false)
 const newChatPhone = ref('+91 ')
 const newChatMessage = ref('')
 const sendingNewChat = ref(false)
+const newChatImport = ref([]) // [{name, phone}] parsed from an uploaded Excel/CSV
+const importingFile = ref(false)
 const mergingDuplicates = ref(false)
+// Broadcast
+const showBroadcastDialog = ref(false)
+const broadcastSearch = ref('')
+const selectedRecipients = ref(new Set())
+const broadcastNumbers = ref('')
+const broadcastMessage = ref('')
+const broadcastAttach = ref('')
+const broadcastAttachName = ref('')
+const broadcastFileType = ref('image')
+const sendingBroadcast = ref(false)
 const fullscreenImage = ref(null)
 const unreadJids = ref(new Set())
 const lastSeenTimes = ref(new Map())
@@ -1364,7 +1509,66 @@ function normalizePhoneInput(input) {
   return { ok: true, e164: '+91' + digits }
 }
 
+function importNewChatFile(f) {
+  importingFile.value = true
+  call('crm.api.whatsapp.parse_contacts_file', { file_url: f.file_url })
+    .then((data) => {
+      importingFile.value = false
+      const contacts = data?.contacts || []
+      if (!contacts.length) {
+        toast.error(__('No valid numbers found in file'))
+        return
+      }
+      newChatImport.value = contacts
+      toast.success(
+        __('Loaded {0} contacts', [contacts.length]) +
+          (data.skipped ? ` · ${data.skipped} ${__('skipped')}` : ''),
+      )
+    })
+    .catch((e) => {
+      importingFile.value = false
+      toast.error(e?.messages?.[0] || __('Failed to read file'))
+    })
+}
+
+function clearNewChatImport() {
+  newChatImport.value = []
+}
+
 function startNewChat() {
+  // Bulk mode: contacts imported from Excel/CSV → send the message to each
+  if (newChatImport.value.length) {
+    const message = newChatMessage.value.trim()
+    if (!message) {
+      toast.error(__('Please type a message'))
+      return
+    }
+    sendingNewChat.value = true
+    call('crm.api.whatsapp.send_broadcast', {
+      recipients: JSON.stringify(newChatImport.value.map((c) => c.phone)),
+      message,
+      content_type: 'text',
+    })
+      .then((data) => {
+        sendingNewChat.value = false
+        const sk = (data?.skipped || []).length
+        toast.success(
+          __('Started {0} chats', [data?.queued || 0]) +
+            (sk ? ` · ${sk} ${__('skipped')}` : ''),
+        )
+        showNewChatDialog.value = false
+        clearNewChatImport()
+        newChatPhone.value = '+91 '
+        newChatMessage.value = ''
+        chatList.reload()
+      })
+      .catch((e) => {
+        sendingNewChat.value = false
+        toast.error(e?.messages?.[0] || __('Failed to start chats'))
+      })
+    return
+  }
+
   const result = normalizePhoneInput(newChatPhone.value)
   if (!result.ok) {
     toast.error(result.error)
@@ -1406,6 +1610,139 @@ function startNewChat() {
       toast.error(error.messages?.[0] || __('Failed to send message'))
     },
   })
+}
+
+// --- Broadcast ---
+const broadcastChatOptions = computed(() => {
+  const q = broadcastSearch.value.trim().toLowerCase()
+  const chats = (chatList.data || []).filter((c) => !c.is_group)
+  if (!q) return chats
+  return chats.filter(
+    (c) =>
+      (c.contact_name || '').toLowerCase().includes(q) ||
+      (c.phone || '').includes(q),
+  )
+})
+
+const manualNumbers = computed(() =>
+  broadcastNumbers.value
+    .split(/[\n,]/)
+    .map((s) => s.trim())
+    .filter(Boolean),
+)
+
+const broadcastCount = computed(
+  () => selectedRecipients.value.size + manualNumbers.value.length,
+)
+
+const allChatsSelected = computed(
+  () =>
+    broadcastChatOptions.value.length > 0 &&
+    broadcastChatOptions.value.every((c) => selectedRecipients.value.has(c.jid)),
+)
+
+function openBroadcast() {
+  if (!chatList.data?.length) chatList.reload()
+  showBroadcastDialog.value = true
+}
+
+function toggleRecipient(jid) {
+  const s = new Set(selectedRecipients.value)
+  s.has(jid) ? s.delete(jid) : s.add(jid)
+  selectedRecipients.value = s
+}
+
+function toggleSelectAllChats() {
+  const s = new Set(selectedRecipients.value)
+  if (allChatsSelected.value) {
+    broadcastChatOptions.value.forEach((c) => s.delete(c.jid))
+  } else {
+    broadcastChatOptions.value.forEach((c) => s.add(c.jid))
+  }
+  selectedRecipients.value = s
+}
+
+function onBroadcastFile(f) {
+  broadcastAttach.value = f.file_url
+  broadcastAttachName.value =
+    f.file_name || (f.file_url || '').split('/').pop() || ''
+  broadcastFileType.value = 'image'
+}
+
+function clearBroadcastFile() {
+  broadcastAttach.value = ''
+  broadcastAttachName.value = ''
+}
+
+function startBroadcast() {
+  const chats = chatList.data || []
+  const recipients = []
+  selectedRecipients.value.forEach((jid) => {
+    const c = chats.find((x) => x.jid === jid)
+    recipients.push(c && c.phone ? c.phone : jid)
+  })
+  manualNumbers.value.forEach((n) => recipients.push(n))
+
+  if (!recipients.length) {
+    toast.error(__('Select at least one recipient'))
+    return
+  }
+  if (!broadcastMessage.value.trim() && !broadcastAttach.value) {
+    toast.error(__('Enter a message or attach an image'))
+    return
+  }
+
+  sendingBroadcast.value = true
+  call('crm.api.whatsapp.send_broadcast', {
+    recipients: JSON.stringify(recipients),
+    message: broadcastMessage.value,
+    attach: broadcastAttach.value || '',
+    content_type: broadcastAttach.value ? broadcastFileType.value : 'text',
+  })
+    .then((data) => {
+      sendingBroadcast.value = false
+      const q = data?.queued || 0
+      const sk = (data?.skipped || []).length
+      toast.success(
+        __('Broadcast queued to {0} recipient(s)', [q]) +
+          (sk ? ` · ${sk} ${__('skipped')}` : ''),
+      )
+      showBroadcastDialog.value = false
+      selectedRecipients.value = new Set()
+      broadcastNumbers.value = ''
+      broadcastMessage.value = ''
+      broadcastAttach.value = ''
+      broadcastAttachName.value = ''
+      broadcastSearch.value = ''
+    })
+    .catch((e) => {
+      sendingBroadcast.value = false
+      toast.error(e?.messages?.[0] || __('Broadcast failed'))
+    })
+}
+
+function importBroadcastFile(f) {
+  importingFile.value = true
+  call('crm.api.whatsapp.parse_contacts_file', { file_url: f.file_url })
+    .then((data) => {
+      importingFile.value = false
+      const phones = (data?.contacts || []).map((c) => c.phone)
+      if (!phones.length) {
+        toast.error(__('No valid numbers found in file'))
+        return
+      }
+      const existing = broadcastNumbers.value.trim()
+      broadcastNumbers.value =
+        (existing ? existing + '\n' : '') + phones.join('\n')
+      toast.success(
+        __('Added {0} contacts', [phones.length]) +
+          (data.skipped ? ` · ${data.skipped} ${__('skipped')}` : ''),
+      )
+    })
+    .catch((e) => {
+      importingFile.value = false
+      toast.error(e?.messages?.[0] || __('Failed to read file'))
+    })
 }
 
 function toLocalStr(dateStr) {
